@@ -61,7 +61,10 @@ class _LoginViewState extends State<LoginView> {
                   borderRadius: BorderRadius.circular(2)
                 ),
                 onPressed: (){
-                  Navigator.pushNamed(context, '/main');
+                  Map<String, dynamic> args = {
+                    'numero': 8
+                  };
+                  Navigator.pushNamed(context, '/main', arguments: "teste de argumento");
                 
               })
 
