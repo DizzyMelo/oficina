@@ -19,10 +19,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/main',
+      initialRoute: '/login',
       onGenerateRoute: (RouteSettings settings){
         var page;
-        print(settings.name);
 
         switch (settings.name) {
           case "/login":

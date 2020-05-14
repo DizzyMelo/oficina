@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:oficina/service/user_service.dart';
 import 'package:oficina/shared/style.dart';
 
 class LoginView extends StatefulWidget {
@@ -7,6 +9,9 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
+  TextEditingController ctrPass = TextEditingController(text: 'mo123');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,9 +30,10 @@ class _LoginViewState extends State<LoginView> {
             children: [
 
               TextField(
+                controller: ctrUser,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email, color: Colors.grey[400],),
-                  hintText: "E-mail",
+                  prefixIcon: Icon(LineIcons.user, color: Colors.grey[400],),
+                  hintText: "Usuário",
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                       width: 1,
@@ -40,9 +46,10 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(height: 10),
 
               TextField(
+                controller: ctrPass,
                 obscureText: true,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock, color: Colors.grey[400],),
+                  prefixIcon: Icon(LineIcons.lock, color: Colors.grey[400],),
                   hintText: "Senha",
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -60,18 +67,35 @@ class _LoginViewState extends State<LoginView> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(2)
                 ),
-                onPressed: (){
-                  Map<String, dynamic> args = {
-                    'numero': 8
-                  };
-                  Navigator.pushNamed(context, '/main', arguments: "teste de argumento");
-                
-              })
+                onPressed: login)
 
             ],
           ),
         ),
       ),
     );
+  }
+
+  bool validateInfo() {
+    if(ctrUser.text.isEmpty){
+      print("usuario vazio");
+      return false;
+    }else if(ctrPass.text.isEmpty){
+      print("senha vazio");
+      return false;
+    }
+    return true;
+  }
+
+  login() async {
+    if(validateInfo() == false) return;
+
+    UserService.login(ctrUser.text, ctrPass.text);
+
+    // Map<String, dynamic> args = {
+    //                 'numero': 8
+    //               };
+    //               Navigator.pushNamed(context, '/main', arguments: "teste de argumento");
+
   }
 }
