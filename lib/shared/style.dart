@@ -7,4 +7,5 @@ class Style {
 
 
   static TextStyle loginButton = TextStyle(color: Colors.grey[600]);
+  static TextStyle serviceButton = TextStyle(color: Colors.white);
 }
