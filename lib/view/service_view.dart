@@ -1,19 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/model/added_item_model.dart';
+import 'package:oficina/model/item_model.dart';
+import 'package:oficina/model/service_model.dart';
+import 'package:oficina/service/item_service.dart';
+import 'package:oficina/service/service_service.dart';
 import 'package:oficina/shared/print.dart';
 import 'package:oficina/shared/style.dart';
+import 'package:oficina/shared/utils.dart';
 
 class ServiceView extends StatefulWidget {
+  final ServiceModel serviceModel;
+
+  ServiceView({this.serviceModel});
   @override
   _ServiceViewState createState() => _ServiceViewState();
 }
 
 class _ServiceViewState extends State<ServiceView> {
   TextEditingController ctrSearch = TextEditingController();
+  ItemAdicionadoModel addedItems;
+  Valores valores;
+  List<ItemModel> items = new List();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
         body: SingleChildScrollView(
       child: Container(
         child: Column(
@@ -58,13 +72,14 @@ class _ServiceViewState extends State<ServiceView> {
                                   child: Column(
                                     children: [
                                       TextField(
+                                        onSubmitted: searchItems,
                                         controller: ctrSearch,
                                         decoration: InputDecoration(
                                             prefixIcon: Icon(
                                               Icons.search,
                                               color: Colors.grey[400],
                                             ),
-                                            hintText: "Buscar...",
+                                            hintText: "Buscar Produto ...",
                                             enabledBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                               width: 1,
@@ -77,18 +92,39 @@ class _ServiceViewState extends State<ServiceView> {
                                       Container(
                                         height: 400,
                                         child: ListView.builder(
-                                            itemCount: 10,
+                                            itemCount: items.length,
                                             itemBuilder: (context, index) {
+                                              ItemModel item = items[index];
                                               return ListTile(
-                                                title: Text("produto"),
-                                                trailing: Text("R\$100,00"),
+                                                onTap: (){
+                                                  addItem(item, 2);
+                                                },
+                                                title: Text(item.nome ?? 'no-data'),
+                                                trailing: Text(item.valorVenda ?? 'no-data'),
                                               );
                                             }),
                                       )
                                     ],
                                   ),
                                 )),
-                            Flexible(flex: 1, child: Container()),
+                            Flexible(flex: 1, child: Container(
+                              child: Column(
+                                children: [
+                                  Container(
+                                        height: 400,
+                                        child: ListView.builder(
+                                            itemCount: addedItems == null ? 0 : addedItems.produtosAdicionados.length,
+                                            itemBuilder: (context, index) {
+                                              ProdutosAdicionado p = addedItems.produtosAdicionados[index];
+                                              return ListTile(
+                                                title: Text(p.nome),
+                                                trailing: Text(p.valorTotal),
+                                              );
+                                            }),
+                                      )
+                                ],
+                              ),
+                            )),
                           ],
                         ),
                       ),
@@ -107,7 +143,7 @@ class _ServiceViewState extends State<ServiceView> {
                                       decoration: BoxDecoration(
                                     border: Border(
                                         right: BorderSide(
-                                            color: Colors.grey[800]))),
+                                            color: Colors.grey[300]))),
                                     ),
                                   ),
                                   Flexible(
@@ -123,7 +159,7 @@ class _ServiceViewState extends State<ServiceView> {
                                 decoration: BoxDecoration(
                                     border: Border(
                                         top: BorderSide(
-                                            color: Colors.grey[800]))),
+                                            color: Colors.grey[300]))),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -177,5 +213,48 @@ class _ServiceViewState extends State<ServiceView> {
         ),
       ),
     ));
+  }
+
+  getAddedItems() async {
+    ItemAdicionadoModel tempItems = await ServiceService.getAddedItems(widget.serviceModel.idServico);
+
+    if(tempItems != null){
+      setState(() {
+        addedItems = tempItems;
+        valores = tempItems.valores;
+      });
+    }
+  }
+
+  addItem(ItemModel item, int qtd) async {
+    double valorTotal = double.parse(item.valorVenda) * qtd;
+    ItemAdicionadoModel tempItems = await ServiceService.addItem(item, widget.serviceModel.idServico, qtd, valorTotal);
+
+    if(tempItems != null){
+      setState(() {
+        addedItems = tempItems;
+        valores = tempItems.valores;
+      });
+    }
+  }
+
+  searchItems(String txt) async {
+
+    if(txt.length < 3){
+      Utils.showInSnackBar('Digite pelo menos três letras', Colors.red, _scaffoldKey);
+    }
+    List<ItemModel> tempItems = await ItemService.searchItems('1', txt);
+
+    if(tempItems != null){
+      setState(() {
+        items = tempItems;
+      });
+    }
+  }
+
+  @override
+  void initState() { 
+    super.initState();
+    this.getAddedItems();
   }
 }

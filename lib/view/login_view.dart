@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/model/user_model.dart';
 import 'package:oficina/service/user_service.dart';
 import 'package:oficina/shared/style.dart';
+import 'package:oficina/shared/utils.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -11,10 +13,12 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
   TextEditingController ctrPass = TextEditingController(text: 'mo123');
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Style.primary,
       body: Center(
         child: Container(
@@ -78,24 +82,25 @@ class _LoginViewState extends State<LoginView> {
 
   bool validateInfo() {
     if(ctrUser.text.isEmpty){
-      print("usuario vazio");
+      Utils.showInSnackBar('Por favor, informe o nome de usuário', Colors.red, _scaffoldKey);
       return false;
     }else if(ctrPass.text.isEmpty){
-      print("senha vazio");
+      Utils.showInSnackBar('Por favor, informe a senha', Colors.red, _scaffoldKey);
       return false;
     }
     return true;
   }
 
   login() async {
-    if(validateInfo() == false) return;
+    if(validateInfo()) {
+      UserModel user = await UserService.login(ctrUser.text, ctrPass.text);
+      if(user != null){
+        Navigator.pushNamed(context, '/main', arguments: user);
+      }else{
+        Utils.showInSnackBar('Usuário ou senha inválidos', Colors.red, _scaffoldKey);
+      }
+    }
 
-    UserService.login(ctrUser.text, ctrPass.text);
-
-    // Map<String, dynamic> args = {
-    //                 'numero': 8
-    //               };
-    //               Navigator.pushNamed(context, '/main', arguments: "teste de argumento");
-
+    
   }
 }
