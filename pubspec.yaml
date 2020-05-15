@@ -28,6 +28,7 @@ dependencies:
   printing: ^3.4.0
   pdf: ^1.8.0
   dio: ^3.0.9
+  flutter_money_formatter: ^0.8.3
 
 
   # The following adds the Cupertino Icons font to your application.

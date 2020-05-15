@@ -92,6 +92,8 @@ class _ServiceViewState extends State<ServiceView> {
                                       Container(
                                         height: 400,
                                         child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemExtent: 45,
                                             itemCount: items.length,
                                             itemBuilder: (context, index) {
                                               ItemModel item = items[index];
@@ -99,8 +101,9 @@ class _ServiceViewState extends State<ServiceView> {
                                                 onTap: (){
                                                   addItem(item, 2);
                                                 },
-                                                title: Text(item.nome ?? 'no-data'),
-                                                trailing: Text(item.valorVenda ?? 'no-data'),
+                                                title: Text(item.nome ?? 'no-data', style: Style.itemNameText),
+                                                trailing: Text(Utils.formatMoney(double.parse(item.valorVenda)) ?? 'no-data', style: Style.itemValueText),
+                                                subtitle: Text('Qtd.: ${item.qtd} - Qtd. Min.: ${item.qtdMin}' ?? 'no-data', style: Style.itemValueText),
                                               );
                                             }),
                                       )
@@ -108,17 +111,29 @@ class _ServiceViewState extends State<ServiceView> {
                                   ),
                                 )),
                             Flexible(flex: 1, child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
                               child: Column(
                                 children: [
+                                  Center(
+                                    child: Text('Itens Adicionados'),
+                                  ),
+                                  SizedBox(height: 24,),
+                                  Divider(
+                                    color: Colors.grey[800],
+                                    thickness: 2,
+                                  ),
                                   Container(
                                         height: 400,
                                         child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemExtent: 45,
                                             itemCount: addedItems == null ? 0 : addedItems.produtosAdicionados.length,
                                             itemBuilder: (context, index) {
                                               ProdutosAdicionado p = addedItems.produtosAdicionados[index];
                                               return ListTile(
-                                                title: Text(p.nome),
-                                                trailing: Text(p.valorTotal),
+                                                title: Text(p.nome, style: Style.itemNameText,),
+                                                subtitle: Text("(${p.qtd} x ${Utils.formatMoney(double.parse(p.valorVenda))})", style: Style.itemValueText,),
+                                                trailing: Text("${Utils.formatMoney(double.parse(p.valorTotal))}", style: Style.itemValueText,),
                                               );
                                             }),
                                       )
@@ -149,7 +164,35 @@ class _ServiceViewState extends State<ServiceView> {
                                   Flexible(
                                     flex: 1,
                                     child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 10),
                                       height: 100,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Desconto:'),
+                                              Text(valores == null ? 'no-data' : Utils.formatMoney(double.parse(valores.desconto))),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Mão de obra:'),
+                                              Text(valores == null ? 'no-data' : Utils.formatMoney(double.parse(valores.mdo))),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('Valor Total:'),
+                                              Text(valores == null ? 'no-data' : Utils.formatMoney(double.parse(valores.valorTotal))),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -242,6 +285,7 @@ class _ServiceViewState extends State<ServiceView> {
 
     if(txt.length < 3){
       Utils.showInSnackBar('Digite pelo menos três letras', Colors.red, _scaffoldKey);
+      return;
     }
     List<ItemModel> tempItems = await ItemService.searchItems('1', txt);
 
