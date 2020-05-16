@@ -5,6 +5,7 @@ import 'package:oficina/model/user_model.dart';
 import 'package:oficina/view/land_view.dart';
 import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
+import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/service_view.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/main',
+      initialRoute: '/new_service',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
             break;
           case "/service":
             page = MaterialPageRoute(builder: (context) => ServiceView(serviceModel: settings.arguments,));
+            break;
+          case "/new_service":
+            page = MaterialPageRoute(builder: (context) => NewServiceView());
             break;
         }
 

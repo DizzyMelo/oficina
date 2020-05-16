@@ -62,15 +62,17 @@ class _MainViewState extends State<MainView> {
                       height: screen.height - 200,
                       child: Scrollbar(
                           child: ListView.builder(
+                              itemExtent: 55,
                               itemCount: services.length,
                               itemBuilder: (context, index) {
                                 ServiceModel serviceModel = services[index];
                                 return ListTile(
                                   onTap: () =>
                                       Navigator.pushNamed(context, '/service', arguments: serviceModel),
-                                  title: Text(serviceModel.nomeCliente),
+                                  title: Text(serviceModel.nomeCliente.toUpperCase(), style: Style.mainClientNameText,),
                                   subtitle: Text(
-                                      "${serviceModel.modelo} - ${serviceModel.telefone1}"),
+                                      "${serviceModel.modelo.toUpperCase()} - ${serviceModel.telefone1}"),
+                                  trailing: Text(serviceModel.nomeColaborador, style: Style.workerNameText,),
                                 );
                               })),
                     ))

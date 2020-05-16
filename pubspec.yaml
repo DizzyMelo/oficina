@@ -29,6 +29,7 @@ dependencies:
   pdf: ^1.8.0
   dio: ^3.0.9
   flutter_money_formatter: ^0.8.3
+  flutter_masked_text: ^0.8.0
 
 
   # The following adds the Cupertino Icons font to your application.
