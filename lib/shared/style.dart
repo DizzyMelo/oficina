@@ -23,4 +23,22 @@ class Style {
   //Main Page
   static TextStyle mainClientNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
   static TextStyle workerNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600, fontSize: 12));
+
+  //New Service Page
+
+  static TextStyle clientNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
+  static TextStyle carText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400, fontSize: 13));
+  static TextStyle workerNameServiceText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
+  static TextStyle selectWorkerTitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 15));
+
+  // Stock Page
+
+  static TextStyle qtdOkText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w800, fontSize: 13));
+  static TextStyle qtdOkWarning = GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange, fontWeight: FontWeight.w800, fontSize: 13));
+  static TextStyle qtdOkDanger = GoogleFonts.lato(textStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.w800, fontSize: 13));
+
+  static TextStyle labelValueText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w700, fontSize: 12));
+  static TextStyle valuePaidText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.w700, fontSize: 12));
+  static TextStyle valueSaleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w700, fontSize: 12));
+  static TextStyle valueProfitText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange, fontWeight: FontWeight.w700, fontSize: 12));
 }

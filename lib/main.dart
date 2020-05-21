@@ -7,6 +7,7 @@ import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
 import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/service_view.dart';
+import 'package:oficina/view/stock_view.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,12 +19,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Oficina na Mão',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/new_service',
+      initialRoute: '/stock',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -53,6 +54,9 @@ class MyApp extends StatelessWidget {
             break;
           case "/new_service":
             page = MaterialPageRoute(builder: (context) => NewServiceView());
+            break;
+          case "/stock":
+            page = MaterialPageRoute(builder: (context) => StockView());
             break;
         }
 

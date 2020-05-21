@@ -16,7 +16,7 @@ class WorkerModel {
     String token;
     String lojaId;
     String endereco;
-    bool selecionado = false;
+    bool selecionado;
 
     WorkerModel({
         this.id,
@@ -26,12 +26,12 @@ class WorkerModel {
         this.token,
         this.lojaId,
         this.endereco,
-        this.selecionado
+        this.selecionado = false
     });
 
     factory WorkerModel.fromJson(Map<String, dynamic> json) => WorkerModel(
         id: json["id"],
-        nome: json["nome"],
+        nome: json["nome"].toUpperCase(),
         telefone: json["telefone"],
         funcaoId: json["funcao_id"],
         token: json["token"],

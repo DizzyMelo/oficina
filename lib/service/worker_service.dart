@@ -14,7 +14,6 @@ class WorkerService {
       queryParameters: {
         'id': loja
       });
-      print(response.data);
 
       json.decode(response.data).forEach((element) {
         workers.add(WorkerModel.fromJson(element));
