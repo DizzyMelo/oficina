@@ -22,7 +22,12 @@ class Style {
 
   //Main Page
   static TextStyle mainClientNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
+  static TextStyle carNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w500, fontSize: 12));
   static TextStyle workerNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600, fontSize: 12));
+  static TextStyle totalValueText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w700, fontSize: 12));
+  static TextStyle mdoText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w700, fontSize: 12));
+  static TextStyle phoneText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 13));
+  static TextStyle plateText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 12));
 
   //New Service Page
 

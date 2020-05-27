@@ -8,6 +8,7 @@ import 'package:oficina/view/main_view.dart';
 import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/stock_view.dart';
+import 'package:oficina/view/worker_view.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/stock',
+      initialRoute: '/main',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -57,6 +58,9 @@ class MyApp extends StatelessWidget {
             break;
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());
+            break;
+          case "/worker":
+            page = MaterialPageRoute(builder: (context) => WorkerView());
             break;
         }
 

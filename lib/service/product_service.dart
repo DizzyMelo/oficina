@@ -32,14 +32,14 @@ class ProductService {
     String url = '${Urls.baseUrl}estoque/adicionar.php';
     Dio dio = new Dio();
     FormData formData = new FormData.fromMap({
-      'nome': p.nome,
-      'aplicacao': p.aplicacao,
+      'nome': p.nome.toUpperCase(),
+      'aplicacao': p.aplicacao.toUpperCase(),
       'valorPago': p.valorPago,
       'valorVenda': p.valorVenda,
       'qtd': p.qtd,
       'qtdMin': p.qtdMin,
       'loja': p.lojaId,
-      'codigo': p.codigo
+      'codigo': p.codigo.toUpperCase()
     });
     try {
       var response = await dio.post(url, data: formData);
@@ -57,14 +57,14 @@ class ProductService {
     Dio dio = new Dio();
     FormData formData = new FormData.fromMap({
       'id': p.id,
-      'nome': p.nome,
-      'aplicacao': p.aplicacao,
+      'nome': p.nome.toUpperCase(),
+      'aplicacao': p.aplicacao.toUpperCase(),
       'valorPago': p.valorPago,
       'valorVenda': p.valorVenda,
       'qtd': p.qtd,
       'qtdMin': p.qtdMin,
       'loja': p.lojaId,
-      'codigo': p.codigo
+      'codigo': p.codigo.toUpperCase()
     });
     try {
       var response = await dio.post(url, data: formData);
