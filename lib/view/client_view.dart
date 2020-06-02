@@ -8,12 +8,12 @@ import 'package:oficina/service/worker_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
-class NewServiceView extends StatefulWidget {
+class ClientView extends StatefulWidget {
   @override
-  _NewServiceViewState createState() => _NewServiceViewState();
+  _ClientViewState createState() => _ClientViewState();
 }
 
-class _NewServiceViewState extends State<NewServiceView> {
+class _ClientViewState extends State<ClientView> {
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrName = TextEditingController();
   TextEditingController ctrPhone =
@@ -22,6 +22,7 @@ class _NewServiceViewState extends State<NewServiceView> {
   TextEditingController ctrCar = TextEditingController();
   TextEditingController ctrPlate = MaskedTextController(mask: '***-0*00');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _selectedCar = '';
 
   List<WorkerModel> workers = new List();
   List<ClientModel> clients = new List();
@@ -38,7 +39,7 @@ class _NewServiceViewState extends State<NewServiceView> {
     ctrName.text = client.informacoes.clienteNome ?? '';
     ctrPhone.text = client.informacoes.telefone1 ?? '';
     ctrEmail.text = client.informacoes.email ?? '';
-    //ctrCar.text = client.carro ?? '';
+    //ctrCar.text = client.informacoes.carro ?? '';
     //ctrPlate.text = client.placa ?? '';
   }
 
@@ -110,6 +111,31 @@ class _NewServiceViewState extends State<NewServiceView> {
                             createTextField('Carro', ctrCar, LineIcons.car),
                             createTextField(
                                 'Placa', ctrPlate, LineIcons.square_o),
+                            selectedClient != null &&
+                                    selectedClient.carros.length > 0
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(child: Text('Carros')),
+                                      Flexible(
+                                          child: DropdownButton<String>(
+                                        items: selectedClient.carros
+                                            .map((carro) => DropdownMenuItem(
+                                                value: carro.id.toString(),
+                                                child: Text(carro.modelo)))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedCar = value;
+                                          });
+                                        },
+                                        value: _selectedCar,
+                                        isExpanded: true,
+                                      ))
+                                    ],
+                                  )
+                                : Container(),
                             SizedBox(
                               height: 10,
                             ),
@@ -262,6 +288,8 @@ class _NewServiceViewState extends State<NewServiceView> {
                                         unselectAllClients();
                                         clientModel.selecionado =
                                             !clientModel.selecionado;
+                                        _selectedCar =
+                                            clientModel.carros.first.id;
                                         selectedClient = clientModel;
                                         if (clientModel.selecionado) {
                                           selectClient(clientModel);
@@ -273,8 +301,8 @@ class _NewServiceViewState extends State<NewServiceView> {
                                       style: Style.clientNameText,
                                     ),
                                     subtitle: Text(
-                                      //'${clientModel.carro} - ${clientModel.placa}',
                                       'carro',
+                                      //'${clientModel.carros.first.modelo} - ${clientModel.carros.first.placa}',
                                       style: Style.carText,
                                     ),
                                     trailing: Icon(clientModel.selecionado
@@ -287,51 +315,6 @@ class _NewServiceViewState extends State<NewServiceView> {
                           ],
                         ),
                       )),
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                          child: Column(
-                        children: [
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            'COLABORADOR RESPONSÁVEL',
-                            style: Style.selectWorkerTitle,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Divider(
-                            height: 20,
-                            thickness: 2,
-                            color: Colors.grey[500],
-                            indent: 20,
-                            endIndent: 20,
-                          ),
-                          Expanded(
-                              child: Container(
-                                  child: Scrollbar(
-                            child: ListView.builder(
-                              itemCount: workers.length,
-                              itemBuilder: (context, index) {
-                                WorkerModel workerModel = workers[index];
-                                return ListTile(
-                                  onTap: () {
-                                    setState(() {
-                                      worker = workerModel;
-                                    });
-                                  },
-                                  title: Text(
-                                    workerModel.nome,
-                                    style: Style.workerNameServiceText,
-                                  ),
-                                );
-                              },
-                            ),
-                          )))
-                        ],
-                      ))),
                 ],
               ),
             ))

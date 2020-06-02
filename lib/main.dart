@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:oficina/model/user_model.dart';
+import 'package:oficina/view/client_view.dart';
 import 'package:oficina/view/land_view.dart';
 import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
         var page;
 
         switch (settings.name) {
+          case "/land":
+            page = MaterialPageRoute(builder: (context) => LandView());
+            break;
           case "/login":
             page = MaterialPageRoute(builder: (context) => LoginView());
             break;
@@ -61,6 +65,9 @@ class MyApp extends StatelessWidget {
             break;
           case "/worker":
             page = MaterialPageRoute(builder: (context) => WorkerView());
+            break;
+          case "/client":
+            page = MaterialPageRoute(builder: (context) => ClientView());
             break;
         }
 
