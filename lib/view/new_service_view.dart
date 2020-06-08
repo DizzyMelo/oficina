@@ -26,6 +26,7 @@ class _NewServiceViewState extends State<NewServiceView> {
   List<WorkerModel> workers = new List();
   List<ClientModel> clients = new List();
   ClientModel selectedClient;
+  String _selectedCar = '';
   WorkerModel worker;
 
   unselectAllClients() {
@@ -107,12 +108,37 @@ class _NewServiceViewState extends State<NewServiceView> {
                                 'Telefone', ctrPhone, LineIcons.phone),
                             createTextField(
                                 'Email', ctrEmail, LineIcons.envelope_o),
-                            createTextField('Carro', ctrCar, LineIcons.car),
-                            createTextField(
-                                'Placa', ctrPlate, LineIcons.square_o),
                             SizedBox(
                               height: 10,
                             ),
+
+                            selectedClient != null &&
+                                    selectedClient.carros.length > 0
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(child: Text('Carros')),
+                                      Flexible(
+                                          child: DropdownButton<String>(
+                                        items: selectedClient.carros
+                                            .map((carro) => DropdownMenuItem(
+                                                value: carro.id.toString(),
+                                                child: Text(carro.modelo)))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedCar = value;
+                                          });
+                                        },
+                                        value: _selectedCar,
+                                        isExpanded: true,
+                                      ))
+                                    ],
+                                  )
+                                : Container(),
+
+                              SizedBox(height: 10,),
                             Row(
                               children: [
                                 SizedBox(
@@ -141,14 +167,14 @@ class _NewServiceViewState extends State<NewServiceView> {
                                 selectedClient == null
                                     ? Container()
                                     : RaisedButton(
-                                        color: Colors.red,
+                                        color: Colors.blue,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(3)),
                                         child: Row(
                                           children: [
                                             Icon(
-                                              LineIcons.user,
+                                              LineIcons.car,
                                               color: Colors.white,
                                               size: 15,
                                             ),
@@ -156,17 +182,18 @@ class _NewServiceViewState extends State<NewServiceView> {
                                               width: 10,
                                             ),
                                             Text(
-                                              "Cadastrar Cliente",
+                                              "Adicionar Carro",
                                               style: Style.serviceButton,
                                             ),
                                           ],
                                         ),
                                         onPressed: () {
-                                          setState(() {
-                                            selectedClient = null;
-                                            unselectAllClients();
-                                            clearClient();
-                                          });
+                                          Navigator.pushNamed(context, '/new_car', arguments: selectedClient);
+                                          // setState(() {
+                                          //   selectedClient = null;
+                                          //   unselectAllClients();
+                                          //   clearClient();
+                                          // });
                                         }),
                                 SizedBox(
                                   width: 10,
@@ -262,6 +289,7 @@ class _NewServiceViewState extends State<NewServiceView> {
                                         unselectAllClients();
                                         clientModel.selecionado =
                                             !clientModel.selecionado;
+                                        _selectedCar =  clientModel.carros.length > 0 ? clientModel.carros.first.id : null;
                                         selectedClient = clientModel;
                                         if (clientModel.selecionado) {
                                           selectClient(clientModel);

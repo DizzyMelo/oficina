@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/model/added_item_model.dart';
 import 'package:oficina/model/item_model.dart';
@@ -20,6 +21,12 @@ class ServiceView extends StatefulWidget {
 
 class _ServiceViewState extends State<ServiceView> {
   TextEditingController ctrSearch = TextEditingController();
+  TextEditingController ctrDiscount = MoneyMaskedTextController(
+      leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
+  
+  TextEditingController ctrManPower = MoneyMaskedTextController(
+      leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
+
   ItemAdicionadoModel addedItems;
   Valores valores;
   List<ItemModel> items = new List();
@@ -211,14 +218,14 @@ class _ServiceViewState extends State<ServiceView> {
                                                   'CLIENTE',
                                                   widget
                                                       .serviceModel.nomeCliente
-                                                      .toUpperCase()),
+                                                      .toUpperCase(), (){}, LineIcons.user),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               ServiceInfoWidget(
                                                   'CARRO',
                                                   widget.serviceModel.modelo
-                                                      .toUpperCase()),
+                                                      .toUpperCase(), (){}, LineIcons.car),
                                               SizedBox(
                                                 height: 10,
                                               ),
@@ -226,7 +233,7 @@ class _ServiceViewState extends State<ServiceView> {
                                                   'COLABORADOR',
                                                   widget.serviceModel
                                                       .nomeColaborador
-                                                      .toUpperCase()),
+                                                      .toUpperCase(), (){}, LineIcons.wrench),
                                               SizedBox(
                                                 height: 10,
                                               ),
@@ -243,34 +250,34 @@ class _ServiceViewState extends State<ServiceView> {
                                           child: Column(
                                             children: [
                                               ServiceInfoWidget(
-                                                'DESCONTO:',
+                                                'DESCONTO',
                                                 valores == null
                                                     ? 'no-data'
                                                     : Utils.formatMoney(
                                                         double.parse(
-                                                            valores.desconto)),
+                                                            valores.desconto)), _discount, LineIcons.money
                                               ),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               ServiceInfoWidget(
-                                                'MÃO DE OBRA:',
+                                                'MÃO DE OBRA',
                                                 valores == null
                                                     ? 'no-data'
                                                     : Utils.formatMoney(
                                                         double.parse(
-                                                            valores.mdo)),
+                                                            valores.mdo)), _manpower, LineIcons.hand_grab_o
                                               ),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               ServiceInfoWidget(
-                                                'VALOR TOTAL:',
+                                                'VALOR TOTAL',
                                                 valores == null
                                                     ? 'no-data'
                                                     : Utils.formatMoney(
                                                         double.parse(
-                                                            valores.valorTotal)),
+                                                            valores.valorTotal)), (){}, LineIcons.money
                                               ),
                                             ],
                                           ),
@@ -328,7 +335,9 @@ class _ServiceViewState extends State<ServiceView> {
                     'Concluir',
                     style: Style.serviceButton,
                   ),
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/finish_service', arguments: widget.serviceModel);
+                  }),
             ],
           ),
         ));
@@ -378,5 +387,87 @@ class _ServiceViewState extends State<ServiceView> {
   void initState() {
     super.initState();
     this.getAddedItems();
+  }
+
+  void _discount() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Desconto"),
+          content: TextField(
+            controller: ctrDiscount,
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("FECHAR"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("ADICIONAR"),
+              onPressed: addDiscount,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _manpower() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Mão de Obra"),
+          content: TextField(
+            controller: ctrManPower,
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("FECHAR"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("ADICIONAR"),
+              onPressed: addManPower,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  addDiscount() async {
+    double discount = double.parse(ctrDiscount.text.replaceAll('.', '').replaceAll(',', '.').replaceAll('R\$', '').trim());
+    bool res = await ServiceService.discount(widget.serviceModel.idServico, discount);
+
+    if(res){
+      Utils.showInSnackBar('Desconto adicionado', Colors.green, _scaffoldKey);
+    }else{
+      Utils.showInSnackBar('Erro ao adicionar desconto', Colors.red, _scaffoldKey);
+    }
+  }
+
+  addManPower() async {
+    double mdo = double.parse(ctrManPower.text.replaceAll('.', '').replaceAll(',', '.').replaceAll('R\$', '').trim());
+    bool res = await ServiceService.manPower(widget.serviceModel.idServico, mdo);
+
+    if(res){
+      Utils.showInSnackBar('Mão de obra adicionada', Colors.green, _scaffoldKey);
+    }else{
+      Utils.showInSnackBar('Erro ao adicionar mão de obra', Colors.red, _scaffoldKey);
+    }
   }
 }

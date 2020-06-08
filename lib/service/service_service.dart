@@ -41,6 +41,40 @@ class ServiceService {
     }
   }
 
+  static Future<bool> discount(servico, double desconto) async {
+    String url = '${Urls.baseUrl}servico/desconto.php';
+    Dio dio = new Dio();
+
+    FormData formData = new FormData.fromMap(
+        {'servico': servico, 'desconto': desconto});
+
+    try {
+      await dio.post(url, data: formData);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> manPower(servico, double mdo) async {
+    String url = '${Urls.baseUrl}servico/maodeobra.php';
+    Dio dio = new Dio();
+
+    FormData formData = new FormData.fromMap(
+        {'servico': servico, 'mdo': mdo});
+
+    print(servico);
+    print(mdo);
+
+    try {
+      var res  = await dio.post(url, data: formData);
+      print(res.data);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   static Future<ItemAdicionadoModel> getAddedItems(String id) async {
     String url = '${Urls.baseUrl}servico/itensAdicionados.php';
     Dio dio = new Dio();

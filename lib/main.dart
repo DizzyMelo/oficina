@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:oficina/model/user_model.dart';
 import 'package:oficina/view/client_view.dart';
+import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
 import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
+import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/stock_view.dart';
@@ -60,6 +62,9 @@ class MyApp extends StatelessWidget {
           case "/new_service":
             page = MaterialPageRoute(builder: (context) => NewServiceView());
             break;
+          case "/new_car":
+            page = MaterialPageRoute(builder: (context) => NewCarView(client: settings.arguments,));
+            break;
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());
             break;
@@ -68,6 +73,10 @@ class MyApp extends StatelessWidget {
             break;
           case "/client":
             page = MaterialPageRoute(builder: (context) => ClientView());
+            break;
+
+          case "/finish_service":
+            page = MaterialPageRoute(builder: (context) => FinishServiceView(service: settings.arguments,));
             break;
         }
 

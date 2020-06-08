@@ -288,8 +288,7 @@ class _ClientViewState extends State<ClientView> {
                                         unselectAllClients();
                                         clientModel.selecionado =
                                             !clientModel.selecionado;
-                                        _selectedCar =
-                                            clientModel.carros.first.id;
+                                        _selectedCar =  clientModel.carros.length > 0 ? clientModel.carros.first.id : null;
                                         selectedClient = clientModel;
                                         if (clientModel.selecionado) {
                                           selectClient(clientModel);
