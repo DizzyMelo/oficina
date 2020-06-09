@@ -453,6 +453,7 @@ class _ServiceViewState extends State<ServiceView> {
     double discount = double.parse(ctrDiscount.text.replaceAll('.', '').replaceAll(',', '.').replaceAll('R\$', '').trim());
     bool res = await ServiceService.discount(widget.serviceModel.idServico, discount);
 
+    Navigator.pop(context);
     if(res){
       Utils.showInSnackBar('Desconto adicionado', Colors.green, _scaffoldKey);
     }else{
@@ -464,6 +465,7 @@ class _ServiceViewState extends State<ServiceView> {
     double mdo = double.parse(ctrManPower.text.replaceAll('.', '').replaceAll(',', '.').replaceAll('R\$', '').trim());
     bool res = await ServiceService.manPower(widget.serviceModel.idServico, mdo);
 
+    Navigator.pop(context);
     if(res){
       Utils.showInSnackBar('Mão de obra adicionada', Colors.green, _scaffoldKey);
     }else{

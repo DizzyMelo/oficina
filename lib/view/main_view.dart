@@ -155,11 +155,11 @@ class _MainViewState extends State<MainView> {
                                                       serviceModel.telefone1,
                                                       style: Style.phoneText,
                                                     ),
-                                                    Text(
-                                                      serviceModel.placa
-                                                          .toUpperCase(),
-                                                      style: Style.plateText,
-                                                    ),
+                                                    // Text(
+                                                    //   serviceModel.placa
+                                                    //       .toUpperCase(),
+                                                    //   style: Style.plateText,
+                                                    // ),
                                                   ]),
                                             )),
                                         Flexible(

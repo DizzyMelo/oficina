@@ -13,6 +13,7 @@ class Style {
 
   static TextStyle itemNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 12));
   static TextStyle itemValueText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 12));
+  static TextStyle paymenyDateText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 10));
   static TextStyle mediumText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 14));
 
   static TextStyle valueTitleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600, fontSize: 12));
@@ -35,6 +36,7 @@ class Style {
   static TextStyle carText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400, fontSize: 13));
   static TextStyle workerNameServiceText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
   static TextStyle selectWorkerTitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 15));
+  static TextStyle paymentFormatTitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13));
 
 
   //Client Page

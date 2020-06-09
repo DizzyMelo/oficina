@@ -26,7 +26,7 @@ class Utils {
 
   static String formatMoney(double value) {
     FlutterMoneyFormatter fmf = new FlutterMoneyFormatter(
-        amount: value,
+        amount: value ?? 0,
         settings: MoneyFormatterSettings(
           symbol: 'R\$',
           thousandSeparator: '.',
@@ -37,6 +37,10 @@ class Utils {
         ));
 
     return fmf.output.symbolOnLeft;
+  }
+
+  static String formatDate(DateTime dt){
+    return '${dt.day}/${dt.month}/${dt.year} às ${dt.hour}:${dt.minute}';
   }
 
   static Text validadeAmount(ProductModel p) {
