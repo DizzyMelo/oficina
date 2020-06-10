@@ -23,7 +23,7 @@ class _ServiceViewState extends State<ServiceView> {
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrDiscount = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
-  
+
   TextEditingController ctrManPower = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
 
@@ -101,36 +101,57 @@ class _ServiceViewState extends State<ServiceView> {
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          Container(
-                                            height: 400,
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemExtent: 45,
-                                                itemCount: items.length,
-                                                itemBuilder: (context, index) {
-                                                  ItemModel item = items[index];
-                                                  return ListTile(
-                                                    onTap: () {
-                                                      addItem(item, 2);
-                                                    },
-                                                    title: Text(
-                                                        item.nome ?? 'no-data',
-                                                        style:
-                                                            Style.itemNameText),
-                                                    trailing: Text(
-                                                        Utils.formatMoney(double
-                                                                .parse(item
-                                                                    .valorVenda)) ??
-                                                            'no-data',
-                                                        style: Style
-                                                            .itemValueText),
-                                                    subtitle: Text(
-                                                        'Qtd.: ${item.qtd} - Qtd. Min.: ${item.qtdMin}' ??
-                                                            'no-data',
-                                                        style: Style
-                                                            .itemValueText),
-                                                  );
-                                                }),
+                                          Expanded(
+                                            child: items.length > 0
+                                                ? ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemExtent: 45,
+                                                    itemCount: items.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      ItemModel item =
+                                                          items[index];
+                                                      return ListTile(
+                                                        onTap: () {
+                                                          addItem(item, 2);
+                                                        },
+                                                        title: Text(
+                                                            item.nome ??
+                                                                'no-data',
+                                                            style: Style
+                                                                .itemNameText),
+                                                        trailing: Text(
+                                                            Utils.formatMoney(double
+                                                                    .parse(item
+                                                                        .valorVenda)) ??
+                                                                'no-data',
+                                                            style: Style
+                                                                .itemValueText),
+                                                        subtitle: Text(
+                                                            'Qtd.: ${item.qtd} - Qtd. Min.: ${item.qtdMin}' ??
+                                                                'no-data',
+                                                            style: Style
+                                                                .itemValueText),
+                                                      );
+                                                    })
+                                                : Center(
+                                                    child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.search,
+                                                        color: Colors.grey[400],
+                                                        size: 80,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                          'Busque itens na barra acima!'),
+                                                    ],
+                                                  )),
                                           )
                                         ],
                                       ),
@@ -155,37 +176,63 @@ class _ServiceViewState extends State<ServiceView> {
                                             color: Colors.grey[500],
                                             thickness: 2,
                                           ),
-                                          Container(
-                                            height: 400,
-                                            child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemExtent: 45,
-                                                itemCount: addedItems == null
-                                                    ? 0
-                                                    : addedItems
-                                                        .produtosAdicionados
-                                                        .length,
-                                                itemBuilder: (context, index) {
-                                                  ProdutosAdicionado p = addedItems
-                                                          .produtosAdicionados[
-                                                      index];
-                                                  return ListTile(
-                                                    title: Text(
-                                                      p.nome,
-                                                      style: Style.itemNameText,
-                                                    ),
-                                                    subtitle: Text(
-                                                      "(${p.qtd} x ${Utils.formatMoney(double.parse(p.valorVenda))})",
-                                                      style:
-                                                          Style.itemValueText,
-                                                    ),
-                                                    trailing: Text(
-                                                      "${Utils.formatMoney(double.parse(p.valorTotal))}",
-                                                      style:
-                                                          Style.itemValueText,
-                                                    ),
-                                                  );
-                                                }),
+                                          Expanded(
+                                            child: addedItems != null &&
+                                                    addedItems
+                                                            .produtosAdicionados
+                                                            .length >
+                                                        0
+                                                ? ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemExtent: 45,
+                                                    itemCount: addedItems ==
+                                                            null
+                                                        ? 0
+                                                        : addedItems
+                                                            .produtosAdicionados
+                                                            .length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      ProdutosAdicionado p =
+                                                          addedItems
+                                                                  .produtosAdicionados[
+                                                              index];
+                                                      return ListTile(
+                                                        title: Text(
+                                                          p.nome,
+                                                          style: Style
+                                                              .itemNameText,
+                                                        ),
+                                                        subtitle: Text(
+                                                          "(${p.qtd} x ${Utils.formatMoney(double.parse(p.valorVenda))})",
+                                                          style: Style
+                                                              .itemValueText,
+                                                        ),
+                                                        trailing: Text(
+                                                          "${Utils.formatMoney(double.parse(p.valorTotal))}",
+                                                          style: Style
+                                                              .itemValueText,
+                                                        ),
+                                                      );
+                                                    })
+                                                : Center(
+                                                    child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        LineIcons.cart_arrow_down,
+                                                        color: Colors.grey[400],
+                                                        size: 80,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                          'Nenhum item adicionado'),
+                                                    ],
+                                                  )),
                                           )
                                         ],
                                       ),
@@ -218,14 +265,18 @@ class _ServiceViewState extends State<ServiceView> {
                                                   'CLIENTE',
                                                   widget
                                                       .serviceModel.nomeCliente
-                                                      .toUpperCase(), (){}, LineIcons.user),
+                                                      .toUpperCase(),
+                                                  () {},
+                                                  LineIcons.user),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               ServiceInfoWidget(
                                                   'CARRO',
                                                   widget.serviceModel.modelo
-                                                      .toUpperCase(), (){}, LineIcons.car),
+                                                      .toUpperCase(),
+                                                  () {},
+                                                  LineIcons.car),
                                               SizedBox(
                                                 height: 10,
                                               ),
@@ -233,7 +284,9 @@ class _ServiceViewState extends State<ServiceView> {
                                                   'COLABORADOR',
                                                   widget.serviceModel
                                                       .nomeColaborador
-                                                      .toUpperCase(), (){}, LineIcons.wrench),
+                                                      .toUpperCase(),
+                                                  () {},
+                                                  LineIcons.wrench),
                                               SizedBox(
                                                 height: 10,
                                               ),
@@ -250,35 +303,38 @@ class _ServiceViewState extends State<ServiceView> {
                                           child: Column(
                                             children: [
                                               ServiceInfoWidget(
-                                                'DESCONTO',
-                                                valores == null
-                                                    ? 'no-data'
-                                                    : Utils.formatMoney(
-                                                        double.parse(
-                                                            valores.desconto)), _discount, LineIcons.money
-                                              ),
+                                                  'DESCONTO',
+                                                  valores == null
+                                                      ? 'no-data'
+                                                      : Utils.formatMoney(
+                                                          double.parse(valores
+                                                              .desconto)),
+                                                  _discount,
+                                                  LineIcons.money),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               ServiceInfoWidget(
-                                                'MÃO DE OBRA',
-                                                valores == null
-                                                    ? 'no-data'
-                                                    : Utils.formatMoney(
-                                                        double.parse(
-                                                            valores.mdo)), _manpower, LineIcons.hand_grab_o
-                                              ),
+                                                  'MÃO DE OBRA',
+                                                  valores == null
+                                                      ? 'no-data'
+                                                      : Utils.formatMoney(
+                                                          double.parse(
+                                                              valores.mdo)),
+                                                  _manpower,
+                                                  LineIcons.hand_grab_o),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                               ServiceInfoWidget(
-                                                'VALOR TOTAL',
-                                                valores == null
-                                                    ? 'no-data'
-                                                    : Utils.formatMoney(
-                                                        double.parse(
-                                                            valores.valorTotal)), (){}, LineIcons.money
-                                              ),
+                                                  'VALOR TOTAL',
+                                                  valores == null
+                                                      ? 'no-data'
+                                                      : Utils.formatMoney(
+                                                          double.parse(valores
+                                                              .valorTotal)),
+                                                  () {},
+                                                  LineIcons.money),
                                             ],
                                           ),
                                         ),
@@ -307,7 +363,16 @@ class _ServiceViewState extends State<ServiceView> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(3)),
                   color: Colors.red,
-                  child: Text('Cancelar', style: Style.serviceButton),
+                  child: Row(
+                    children: [
+                      Icon(
+                        LineIcons.close,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10,),
+                      Text('Cancelar', style: Style.serviceButton)
+                    ],
+                  ),
                   onPressed: () {}),
               SizedBox(width: 10),
               RaisedButton(
@@ -320,6 +385,7 @@ class _ServiceViewState extends State<ServiceView> {
                         LineIcons.print,
                         color: Colors.white,
                       ),
+                      SizedBox(width: 10,),
                       Text('Imprimir', style: Style.serviceButton)
                     ],
                   ),
@@ -331,12 +397,19 @@ class _ServiceViewState extends State<ServiceView> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(3)),
                   color: Colors.green,
-                  child: Text(
-                    'Concluir',
-                    style: Style.serviceButton,
+                  child: Row(
+                    children: [
+                      Icon(
+                        LineIcons.check,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 10,),
+                      Text('Concluir', style: Style.serviceButton)
+                    ],
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/finish_service', arguments: widget.serviceModel);
+                    Navigator.pushNamed(context, '/finish_service',
+                        arguments: widget.serviceModel);
                   }),
             ],
           ),
@@ -450,26 +523,39 @@ class _ServiceViewState extends State<ServiceView> {
   }
 
   addDiscount() async {
-    double discount = double.parse(ctrDiscount.text.replaceAll('.', '').replaceAll(',', '.').replaceAll('R\$', '').trim());
-    bool res = await ServiceService.discount(widget.serviceModel.idServico, discount);
+    double discount = double.parse(ctrDiscount.text
+        .replaceAll('.', '')
+        .replaceAll(',', '.')
+        .replaceAll('R\$', '')
+        .trim());
+    bool res =
+        await ServiceService.discount(widget.serviceModel.idServico, discount);
 
     Navigator.pop(context);
-    if(res){
+    if (res) {
       Utils.showInSnackBar('Desconto adicionado', Colors.green, _scaffoldKey);
-    }else{
-      Utils.showInSnackBar('Erro ao adicionar desconto', Colors.red, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao adicionar desconto', Colors.red, _scaffoldKey);
     }
   }
 
   addManPower() async {
-    double mdo = double.parse(ctrManPower.text.replaceAll('.', '').replaceAll(',', '.').replaceAll('R\$', '').trim());
-    bool res = await ServiceService.manPower(widget.serviceModel.idServico, mdo);
+    double mdo = double.parse(ctrManPower.text
+        .replaceAll('.', '')
+        .replaceAll(',', '.')
+        .replaceAll('R\$', '')
+        .trim());
+    bool res =
+        await ServiceService.manPower(widget.serviceModel.idServico, mdo);
 
     Navigator.pop(context);
-    if(res){
-      Utils.showInSnackBar('Mão de obra adicionada', Colors.green, _scaffoldKey);
-    }else{
-      Utils.showInSnackBar('Erro ao adicionar mão de obra', Colors.red, _scaffoldKey);
+    if (res) {
+      Utils.showInSnackBar(
+          'Mão de obra adicionada', Colors.green, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao adicionar mão de obra', Colors.red, _scaffoldKey);
     }
   }
 }

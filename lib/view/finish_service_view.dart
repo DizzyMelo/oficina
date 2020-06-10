@@ -121,8 +121,9 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                         },
                                         child: AnimatedContainer(
                                           duration: Duration(milliseconds: 200),
-                                          margin: EdgeInsets.symmetric( horizontal:
-                                              p.selected ? 5 : 15, vertical: 5),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: p.selected ? 5 : 15,
+                                              vertical: 5),
                                           width: double.infinity,
                                           height: 40,
                                           color: Colors.blue,
@@ -162,12 +163,21 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                     itemExtent: 50,
                                     itemCount: payments.length,
                                     itemBuilder: (context, index) {
-                                      PaymentModel p =
-                                          payments[index];
+                                      PaymentModel p = payments[index];
                                       return ListTile(
-                                        title: Text(Utils.formatMoney(double.parse(p.valor)), style: Style.itemValueText,),
-                                        subtitle: Text(Utils.formatDate(p.dataPagamento), style: Style.paymenyDateText,),
-                                        trailing: Text(p.formaId, style: Style.itemNameText,),
+                                        title: Text(
+                                          Utils.formatMoney(
+                                              double.parse(p.valor)),
+                                          style: Style.itemValueText,
+                                        ),
+                                        subtitle: Text(
+                                          Utils.formatDate(p.dataPagamento),
+                                          style: Style.paymenyDateText,
+                                        ),
+                                        trailing: Text(
+                                          p.formaId,
+                                          style: Style.itemNameText,
+                                        ),
                                       );
                                     }))
                           ],
@@ -177,7 +187,37 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                       flex: 1,
                       child: Container(
                         padding: EdgeInsets.all(10),
-                        color: Colors.pink,
+                        child: Column(
+                          children: [
+                            Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.all(0),
+                                  // decoration: BoxDecoration(
+                                  //   shape: BoxShape.circle,
+                                  //   border: Border.all(width: 1, color: Colors.orange)
+                                  // ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      LineIcons.money,
+                                      color: Colors.green,
+                                      size: 80,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      Utils.formatMoney(250),
+                                      style: Style.totalValuePaid,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ))
+                          ],
+                        ),
                       ))
                 ],
               ))
@@ -197,8 +237,9 @@ class _FinishServiceViewState extends State<FinishServiceView> {
   }
 
   getPayments() async {
-    List<PaymentModel> temp = await PaymentService.getPayments(int.parse(widget.service.idServico));
-    
+    List<PaymentModel> temp =
+        await PaymentService.getPayments(int.parse(widget.service.idServico));
+
     if (temp != null) {
       setState(() {
         payments = temp;
@@ -220,13 +261,15 @@ class _FinishServiceViewState extends State<FinishServiceView> {
       }
     });
 
-    if(format == 0) {
-      Utils.showInSnackBar('Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
+    if (format == 0) {
+      Utils.showInSnackBar(
+          'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
       return;
     }
-    
-    if(valor == 0) {
-      Utils.showInSnackBar('O valor deve ser maior que 0!', Colors.red, _scaffoldKey);
+
+    if (valor == 0) {
+      Utils.showInSnackBar(
+          'O valor deve ser maior que 0!', Colors.red, _scaffoldKey);
       return;
     }
     bool res =

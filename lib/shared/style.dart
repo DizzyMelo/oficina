@@ -53,4 +53,9 @@ class Style {
   static TextStyle valuePaidText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.w700, fontSize: 12));
   static TextStyle valueSaleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w700, fontSize: 12));
   static TextStyle valueProfitText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange, fontWeight: FontWeight.w700, fontSize: 12));
+
+  // Payment Page
+
+  static TextStyle totalValuePaid = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w700, fontSize: 20));
+
 }
