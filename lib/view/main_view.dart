@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/service_group_component.dart';
+import 'package:oficina/components/service_row_component.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/model/user_model.dart';
 import 'package:oficina/service/service_service.dart';
@@ -18,35 +20,31 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
+  bool s1 = true;
+  bool s2 = false;
+  bool s3 = false;
+
+  PageController controller = PageController(initialPage: 0);
+  TextEditingController ctrSearch = TextEditingController();
+
   List<ServiceModel> services = new List();
+  List<ServiceModel> supportServices = new List();
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-            child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Icon(LineIcons.close),
-                  onPressed: () => Navigator.pop(context)),
-            ),
-            Row(
+            height: screen.height,
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
-                  flex: 3,
+                  flex: 2,
                   child: Container(
                     height: screen.height,
-                    color: Colors.pink,
                     child: Column(
                       children: [
-                        Container(
-                          height: 1,
-                          width: double.infinity,
-                        ),
                         Expanded(
                             child: AnimationLimiter(
                                 child: GridView.builder(
@@ -55,20 +53,33 @@ class _MainViewState extends State<MainView> {
                                             crossAxisCount: 2),
                                     itemCount: MenuList.listMenu.length,
                                     itemBuilder: (context, index) {
-
                                       MenuItem item = MenuList.listMenu[index];
 
                                       return AnimationConfiguration
                                           .staggeredGrid(
                                               position: index,
-                                              columnCount: MenuList.listMenu.length,
+                                              columnCount:
+                                                  MenuList.listMenu.length,
                                               child: SlideAnimation(
                                                   verticalOffset: 50,
                                                   child: FadeInAnimation(
                                                     child: InkWell(
-                                                      onTap: () => Navigator.pushNamed(context, item.screen),
+                                                      onTap: () =>
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              item.screen),
                                                       child: Container(
-                                                        margin: index.isEven ? EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10) : EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 5),
+                                                        margin: index.isEven
+                                                            ? EdgeInsets.only(
+                                                                top: 10,
+                                                                bottom: 10,
+                                                                right: 5,
+                                                                left: 10)
+                                                            : EdgeInsets.only(
+                                                                top: 10,
+                                                                bottom: 10,
+                                                                right: 10,
+                                                                left: 5),
                                                         width: 100,
                                                         height: 100,
                                                         decoration: BoxDecoration(
@@ -78,7 +89,9 @@ class _MainViewState extends State<MainView> {
                                                                     .circular(
                                                                         4)),
                                                         child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
                                                           children: [
                                                             Icon(item.icon),
                                                             Text(item.title)
@@ -93,138 +106,166 @@ class _MainViewState extends State<MainView> {
                   ),
                 ),
                 Flexible(
-                    flex: 7,
-                    child: Container(
-                      //width: screen.width * 0.7,
-                      height: screen.height - 200,
-                      child: Scrollbar(
-                          child: ListView.builder(
-                              itemExtent: 55,
-                              itemCount: services.length,
-                              itemBuilder: (context, index) {
-                                ServiceModel serviceModel = services[index];
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ServiceView(
-                                                  serviceModel: serviceModel,
-                                                )));
-                                  },
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    height: 70,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                            flex: 1,
-                                            child: Container(
-                                              width: double.infinity,
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      serviceModel.nomeCliente
-                                                          .toUpperCase(),
-                                                      style: Style
-                                                          .mainClientNameText,
-                                                    ),
-                                                    Text(
-                                                      serviceModel.modelo
-                                                          .toUpperCase(),
-                                                      style: Style.carNameText,
-                                                    ),
-                                                  ]),
-                                            )),
-                                        Flexible(
-                                            flex: 1,
-                                            child: Container(
-                                              width: double.infinity,
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      serviceModel.telefone1,
-                                                      style: Style.phoneText,
-                                                    ),
-                                                    // Text(
-                                                    //   serviceModel.placa
-                                                    //       .toUpperCase(),
-                                                    //   style: Style.plateText,
-                                                    // ),
-                                                  ]),
-                                            )),
-                                        Flexible(
-                                            flex: 1,
-                                            child: Container(
-                                              width: double.infinity,
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                      serviceModel
-                                                          .nomeColaborador
-                                                          .toUpperCase(),
-                                                      style: Style
-                                                          .mainClientNameText,
-                                                    ),
-                                                  ]),
-                                            )),
-                                        Flexible(
-                                            flex: 1,
-                                            child: Container(
-                                              width: double.infinity,
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                      Utils.formatMoney(
-                                                          double.parse(
-                                                              serviceModel
-                                                                  .valor)),
-                                                      style:
-                                                          Style.totalValueText,
-                                                    ),
-                                                    Text(
-                                                      Utils.formatMoney(
-                                                          double.parse(
-                                                              serviceModel
-                                                                  .mdo)),
-                                                      style: Style.mdoText,
-                                                    ),
-                                                  ]),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              })),
-                    ))
+                  flex: 7,
+                  child: Container(
+                      child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        height: 50,
+                        child: Row(
+                          children: [
+                            ServiceGroupComponent('Em Progresso', () {
+                              selectGroup(1);
+                            }, s1),
+                            ServiceGroupComponent('Em Espera', () {
+                              selectGroup(2);
+                            }, s2),
+                            ServiceGroupComponent('Concluído', () {
+                              selectGroup(3);
+                            }, s3),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: TextField(
+                          onChanged: searchServices,
+                          controller: ctrSearch,
+                          style: Style.searchText,
+                          decoration: InputDecoration(
+                              hintText: 'Buscar Serviço...',
+                              hintStyle: Style.searchText,
+                              prefixIcon: Icon(Icons.search)),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: PageView(
+                          controller: controller,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: [
+                            ListView.builder(
+                                itemExtent: 55,
+                                itemCount: services.length,
+                                itemBuilder: (context, index) {
+                                  ServiceModel serviceModel = services[index];
+                                  return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ServiceView(
+                                                      serviceModel:
+                                                          serviceModel,
+                                                    )));
+                                      },
+                                      child: ServiceRowComponent(serviceModel));
+                                }),
+                            ListView.builder(
+                                itemExtent: 55,
+                                itemCount: services.length,
+                                itemBuilder: (context, index) {
+                                  ServiceModel serviceModel = services[index];
+                                  return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ServiceView(
+                                                      serviceModel:
+                                                          serviceModel,
+                                                    )));
+                                      },
+                                      child: ServiceRowComponent(serviceModel));
+                                }),
+                            ListView.builder(
+                                itemExtent: 55,
+                                itemCount: services.length,
+                                itemBuilder: (context, index) {
+                                  ServiceModel serviceModel = services[index];
+                                  return InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ServiceView(
+                                                      serviceModel:
+                                                          serviceModel,
+                                                    )));
+                                      },
+                                      child: ServiceRowComponent(serviceModel));
+                                }),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+                )
               ],
-            )
-          ],
-        )),
+            )),
       ),
     );
+  }
+
+  selectGroup(int s) {
+    controller.animateToPage(s - 1,
+        duration: Duration(milliseconds: 700), curve: Curves.easeIn);
+    setState(() {
+      s1 = false;
+      s2 = false;
+      s3 = false;
+
+      switch (s) {
+        case 1:
+          s1 = true;
+          break;
+
+        case 2:
+          s2 = true;
+          break;
+
+        case 3:
+          s3 = true;
+          break;
+        default:
+      }
+    });
   }
 
   getServices() async {
     List<ServiceModel> s = await ServiceService.getServices(widget.user.lojaId);
     if (s != null) {
       setState(() {
+        supportServices = s;
         services = s;
       });
     }
+  }
+
+  searchServices(String str) {
+    List<ServiceModel> tempServices = new List();
+    supportServices.forEach((element) {
+      if(element.nomeCliente.toLowerCase().contains(str.toLowerCase()) || 
+          element.nomeColaborador.toLowerCase().contains(str.toLowerCase()) ||
+          element.modelo.toLowerCase().contains(str.toLowerCase()) ||
+          element.telefone1.toLowerCase().contains(str.toLowerCase())){
+        tempServices.add(element);
+      }
+    });
+
+    setState(() {
+      services = tempServices;
+    });
+
   }
 
   @override

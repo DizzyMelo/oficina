@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/model/car_model.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/shared/style.dart';
 
@@ -15,6 +16,7 @@ class _NewCarViewState extends State<NewCarView> {
   TextEditingController ctrModel = TextEditingController();
   TextEditingController ctrPlate = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<CarModel> cars = new List();
 
   Widget createTextField(
       String hint, TextEditingController controller, IconData icon) {
@@ -60,51 +62,64 @@ class _NewCarViewState extends State<NewCarView> {
                     }),
               ),
               Container(
-                padding: EdgeInsets.all(10),
-                height: 500,
-                width: 500,
-                decoration: BoxDecoration(color: Colors.white),
-                child: Column(
-                  children: [
-                    Text(
-                      'ADICIONAR CARRO',
-                      style: Style.clientTitle,
-                    ),
-                    SizedBox(height: 20,),
-                    createTextField('Modelo', ctrModel, LineIcons.car),
-                    createTextField('Placa', ctrPlate, LineIcons.square_o),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        RaisedButton(
-                        color: Colors.green,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(3)),
-                        child: Row(
+                  padding: EdgeInsets.all(10),
+                  height: 500,
+                  width: 700,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Row(
+                    children: [
+                      Flexible(
+                          child: Container(
+                        child: Column(
                           children: [
-                            Icon(
-                              LineIcons.plus,
-                              color: Colors.white,
-                              size: 15,
+                            Text(
+                              'ADICIONAR CARRO',
+                              style: Style.clientTitle,
                             ),
                             SizedBox(
-                              width: 10,
+                              height: 20,
                             ),
-                            Text(
-                              "Adicionar",
-                              style: Style.serviceButton,
+                            createTextField('Modelo', ctrModel, LineIcons.car),
+                            createTextField(
+                                'Placa', ctrPlate, LineIcons.square_o),
+                            SizedBox(
+                              height: 10,
                             ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RaisedButton(
+                                    color: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(3)),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          LineIcons.plus,
+                                          color: Colors.white,
+                                          size: 15,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "Adicionar",
+                                          style: Style.serviceButton,
+                                        ),
+                                      ],
+                                    ),
+                                    onPressed: () {}),
+                              ],
+                            )
                           ],
                         ),
-                        onPressed: () {}),
-                      ],
-                    )
-                  ],
-                ),
-              )
+                      )),
+                      Flexible(
+                        child: Container(
+                        color: Colors.pink,
+                      ))
+                    ],
+                  ))
             ],
           ),
         ));
