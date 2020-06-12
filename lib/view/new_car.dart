@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/model/car_model.dart';
 import 'package:oficina/model/client_model.dart';
+import 'package:oficina/service/car_service.dart';
 import 'package:oficina/shared/style.dart';
+import 'package:oficina/shared/utils.dart';
 
 class NewCarView extends StatefulWidget {
   final ClientModel client;
@@ -14,7 +17,7 @@ class NewCarView extends StatefulWidget {
 
 class _NewCarViewState extends State<NewCarView> {
   TextEditingController ctrModel = TextEditingController();
-  TextEditingController ctrPlate = TextEditingController();
+  TextEditingController ctrPlate = MaskedTextController(mask: '***-0*00');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<CarModel> cars = new List();
 
@@ -108,7 +111,7 @@ class _NewCarViewState extends State<NewCarView> {
                                         ),
                                       ],
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: addCar),
                               ],
                             )
                           ],
@@ -116,12 +119,48 @@ class _NewCarViewState extends State<NewCarView> {
                       )),
                       Flexible(
                         child: Container(
-                        color: Colors.pink,
+                          child: ListView.builder(
+                              itemCount: cars.length,
+                              itemBuilder: (context, index){
+                                CarModel car = cars[index];
+                                return ListTile(title: Text(car.modelo),);
+                          }),
                       ))
                     ],
                   ))
             ],
           ),
         ));
+  }
+
+  getCars() async {
+    List<CarModel> temp = await CarService.getCars(int.parse(widget.client.informacoes.clienteId));
+
+    if(temp != null){
+      setState(() {
+        cars = temp;
+      });
+    }
+  }
+
+
+  addCar() async {
+    List<CarModel> temp = await CarService.addCar(int.parse(widget.client.informacoes.clienteId), ctrModel.text, ctrPlate.text);
+
+    if(temp != null){
+      Utils.showInSnackBar('Carro adicionado', Colors.green, _scaffoldKey);
+      setState(() {
+        cars = temp;
+      });
+    }else{
+      Utils.showInSnackBar('Erro ao adionar carro', Colors.red, _scaffoldKey);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this.getCars();
   }
 }
