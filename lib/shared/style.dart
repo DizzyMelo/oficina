@@ -29,9 +29,12 @@ class Style {
   static TextStyle mdoText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w700, fontSize: 11));
   static TextStyle phoneText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 11));
   static TextStyle plateText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 11));
-  static TextStyle selectedGroupServiceText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 11));
-  static TextStyle unselectedGroupServiceText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 11));
+  static TextStyle selectedGroupServiceText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13));
+  static TextStyle unselectedGroupServiceText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w600, fontSize: 13));
   static TextStyle searchText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 12));
+  static TextStyle messageText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 12));
+
+  static TextStyle menuItemText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13));
 
   //New Service Page
 

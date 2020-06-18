@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/menu_item_component.dart';
 import 'package:oficina/components/service_group_component.dart';
-import 'package:oficina/components/service_row_component.dart';
+import 'package:oficina/components/service_list_component.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/model/user_model.dart';
 import 'package:oficina/service/service_service.dart';
 import 'package:oficina/shared/menu_list.dart';
 import 'package:oficina/shared/style.dart';
-import 'package:oficina/shared/utils.dart';
-import 'package:oficina/view/service_view.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class MainView extends StatefulWidget {
@@ -28,6 +27,13 @@ class _MainViewState extends State<MainView> {
   TextEditingController ctrSearch = TextEditingController();
 
   List<ServiceModel> services = new List();
+  List<ServiceModel> servicesWaiting = new List();
+  List<ServiceModel> servicesConcluded = new List();
+
+  int qtdProgress = 0;
+  int qtdWaiting = 0;
+  int qtdConcluded = 0;
+
   List<ServiceModel> supportServices = new List();
   @override
   Widget build(BuildContext context) {
@@ -63,42 +69,7 @@ class _MainViewState extends State<MainView> {
                                               child: SlideAnimation(
                                                   verticalOffset: 50,
                                                   child: FadeInAnimation(
-                                                    child: InkWell(
-                                                      onTap: () =>
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              item.screen),
-                                                      child: Container(
-                                                        margin: index.isEven
-                                                            ? EdgeInsets.only(
-                                                                top: 10,
-                                                                bottom: 10,
-                                                                right: 5,
-                                                                left: 10)
-                                                            : EdgeInsets.only(
-                                                                top: 10,
-                                                                bottom: 10,
-                                                                right: 10,
-                                                                left: 5),
-                                                        width: 100,
-                                                        height: 100,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        4)),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                          children: [
-                                                            Icon(item.icon),
-                                                            Text(item.title)
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    child: MenuItemComponent(item, index)
                                                   )));
                                     })))
                       ],
@@ -115,13 +86,13 @@ class _MainViewState extends State<MainView> {
                         height: 50,
                         child: Row(
                           children: [
-                            ServiceGroupComponent('Em Progresso', () {
+                            ServiceGroupComponent('Em Progresso  -  $qtdProgress', () {
                               selectGroup(1);
                             }, s1),
-                            ServiceGroupComponent('Em Espera', () {
+                            ServiceGroupComponent('Em Espera  -  $qtdWaiting', () {
                               selectGroup(2);
                             }, s2),
-                            ServiceGroupComponent('Concluído', () {
+                            ServiceGroupComponent('Concluído  -  $qtdConcluded', () {
                               selectGroup(3);
                             }, s3),
                           ],
@@ -150,66 +121,46 @@ class _MainViewState extends State<MainView> {
                           controller: controller,
                           physics: NeverScrollableScrollPhysics(),
                           children: [
-                            ListView.builder(
-                                itemExtent: 55,
-                                itemCount: services.length,
-                                itemBuilder: (context, index) {
-                                  ServiceModel serviceModel = services[index];
-                                  return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ServiceView(
-                                                      serviceModel:
-                                                          serviceModel,
-                                                    )));
-                                      },
-                                      child: ServiceRowComponent(serviceModel));
-                                }),
-                            ListView.builder(
-                                itemExtent: 55,
-                                itemCount: services.length,
-                                itemBuilder: (context, index) {
-                                  ServiceModel serviceModel = services[index];
-                                  return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ServiceView(
-                                                      serviceModel:
-                                                          serviceModel,
-                                                    )));
-                                      },
-                                      child: ServiceRowComponent(serviceModel));
-                                }),
-                            ListView.builder(
-                                itemExtent: 55,
-                                itemCount: services.length,
-                                itemBuilder: (context, index) {
-                                  ServiceModel serviceModel = services[index];
-                                  return InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ServiceView(
-                                                      serviceModel:
-                                                          serviceModel,
-                                                    )));
-                                      },
-                                      child: ServiceRowComponent(serviceModel));
-                                }),
+                            ServiceListComponent(services),
+                            ServiceListComponent(servicesWaiting),
+                            ServiceListComponent(servicesConcluded)
                           ],
                         ),
                       ),
                     ],
                   )),
-                )
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100]
+                    ),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Container(
+                        )),
+
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextField(
+                                  style: Style.messageText,
+                                  decoration: InputDecoration(
+                                    suffixIcon: IconButton(icon: Icon(LineIcons.paper_plane_o), onPressed: (){})
+                                  ),
+                                )
+                              ],
+                            ),
+                        )),
+                      ],
+                    ),
+                  ))
               ],
             )),
       ),
@@ -243,10 +194,32 @@ class _MainViewState extends State<MainView> {
 
   getServices() async {
     List<ServiceModel> s = await ServiceService.getServices(widget.user.lojaId);
+
+    List<ServiceModel> temp1 = new List();
+    List<ServiceModel> temp2 = new List();
+    List<ServiceModel> temp4 = new List();
+
     if (s != null) {
+
+      s.forEach((element) {
+        if (element.sts == 'Em espera') {
+          temp1.add(element);
+        }else if(element.sts == 'Iniciado'){
+          temp2.add(element);
+        }else if(element.sts == 'Concluido'){
+          temp4.add(element);
+        }  
+      });
+
       setState(() {
         supportServices = s;
-        services = s;
+        services = temp2;
+        servicesWaiting = temp1;
+        servicesConcluded = temp4;
+
+        qtdProgress = services.length;
+        qtdWaiting = servicesWaiting.length;
+        qtdConcluded = servicesConcluded.length;
       });
     }
   }
@@ -254,10 +227,10 @@ class _MainViewState extends State<MainView> {
   searchServices(String str) {
     List<ServiceModel> tempServices = new List();
     supportServices.forEach((element) {
-      if(element.nomeCliente.toLowerCase().contains(str.toLowerCase()) || 
+      if (element.nomeCliente.toLowerCase().contains(str.toLowerCase()) ||
           element.nomeColaborador.toLowerCase().contains(str.toLowerCase()) ||
           element.modelo.toLowerCase().contains(str.toLowerCase()) ||
-          element.telefone1.toLowerCase().contains(str.toLowerCase())){
+          element.telefone1.toLowerCase().contains(str.toLowerCase())) {
         tempServices.add(element);
       }
     });
@@ -265,7 +238,6 @@ class _MainViewState extends State<MainView> {
     setState(() {
       services = tempServices;
     });
-
   }
 
   @override

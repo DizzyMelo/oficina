@@ -11,6 +11,7 @@ import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/stock_view.dart';
+import 'package:oficina/view/test_view.dart';
 import 'package:oficina/view/worker_view.dart';
 
 void main() {
@@ -77,6 +78,10 @@ class MyApp extends StatelessWidget {
 
           case "/finish_service":
             page = MaterialPageRoute(builder: (context) => FinishServiceView(service: settings.arguments,));
+            break;
+
+          case "/test":
+            page = MaterialPageRoute(builder: (context) => TestView());
             break;
         }
 

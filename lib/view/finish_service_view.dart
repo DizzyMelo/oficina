@@ -18,6 +18,8 @@ class FinishServiceView extends StatefulWidget {
 
 class _FinishServiceViewState extends State<FinishServiceView> {
   List<PaymentFormatModel> paymentFormats = new List();
+
+  PaymentFormatModel selectedFormat;
   List<PaymentModel> payments = new List();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController ctrPayment = MoneyMaskedTextController(
@@ -115,6 +117,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                       return InkWell(
                                         onTap: () {
                                           this.unSetPaymentFormat();
+                                          selectedFormat = p;
                                           setState(() {
                                             p.selected = !p.selected;
                                           });
@@ -272,8 +275,14 @@ class _FinishServiceViewState extends State<FinishServiceView> {
           'O valor deve ser maior que 0!', Colors.red, _scaffoldKey);
       return;
     }
+
+    if (selectedFormat == null) {
+      Utils.showInSnackBar(
+          'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
+      return;
+    }
     bool res =
-        await PaymentService.addPayment(widget.service.idServico, 1, valor);
+        await PaymentService.addPayment(widget.service.idServico, int.parse(selectedFormat.id), valor);
 
     if (res) {
       Utils.showInSnackBar('Pagamento adicionado', Colors.green, _scaffoldKey);
