@@ -94,19 +94,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/*
-{
-	"id": "1",
-	"nome": "daniel freitas de melo",
-	"telefone": "(23)34645-7565",
-	"endereco": "rua teste 123",
-	"funcao_id": "1",
-	"senha": "mo123",
-	"token": "token",
-	"loja_id": "1",
-	"sts": "1",
-	"login": "daniel.melo",
-	"lojaNome": "ZN Radiadores"
-}
-
-*/

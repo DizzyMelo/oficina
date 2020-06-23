@@ -25,6 +25,11 @@ class Style {
   static TextStyle mainClientNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 11));
   static TextStyle carNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w500, fontSize: 10));
   static TextStyle workerNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 11));
+
+  static TextStyle optionTitleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[900], fontWeight: FontWeight.w400, fontSize: 13));
+
+  static TextStyle userNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 13));
+  static TextStyle shopNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 15));
   static TextStyle totalValueText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w700, fontSize: 11));
   static TextStyle mdoText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w700, fontSize: 11));
   static TextStyle phoneText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w400, fontSize: 11));
@@ -60,8 +65,9 @@ class Style {
   static TextStyle valueSaleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w700, fontSize: 12));
   static TextStyle valueProfitText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange, fontWeight: FontWeight.w700, fontSize: 12));
 
-  // Payment Page
+  // Finish Page
 
-  static TextStyle totalValuePaid = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w700, fontSize: 20));
+  static TextStyle totalValuePaid = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w700, fontSize: 12));
+  static TextStyle warrantyText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 12));
 
 }

@@ -4,7 +4,10 @@ import 'package:line_icons/line_icons.dart';
 import 'package:oficina/model/payment_format_model.dart';
 import 'package:oficina/model/payment_model.dart';
 import 'package:oficina/model/service_model.dart';
+import 'package:oficina/model/warranty_model.dart';
 import 'package:oficina/service/payment_service.dart';
+import 'package:oficina/service/service_service.dart';
+import 'package:oficina/service/warranty_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -18,8 +21,11 @@ class FinishServiceView extends StatefulWidget {
 
 class _FinishServiceViewState extends State<FinishServiceView> {
   List<PaymentFormatModel> paymentFormats = new List();
+  List<WarrantyModel> warranties = new List();
+  double totalPaid = 0;
 
   PaymentFormatModel selectedFormat;
+  WarrantyModel selectedWarranty;
   List<PaymentModel> payments = new List();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController ctrPayment = MoneyMaskedTextController(
@@ -27,6 +33,14 @@ class _FinishServiceViewState extends State<FinishServiceView> {
 
   unSetPaymentFormat() {
     paymentFormats.forEach((element) {
+      setState(() {
+        element.selected = false;
+      });
+    });
+  }
+
+  unsetWarranty() {
+    warranties.forEach((element) {
       setState(() {
         element.selected = false;
       });
@@ -67,6 +81,8 @@ class _FinishServiceViewState extends State<FinishServiceView> {
 
   @override
   Widget build(BuildContext context) {
+    Size screen = MediaQuery.of(context).size;
+
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
@@ -100,10 +116,6 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                             ),
                             SizedBox(
                               height: 20,
-                            ),
-                            Divider(
-                              color: Colors.grey[500],
-                              thickness: 2,
                             ),
                             createTextField(
                                 'Pagamento', ctrPayment, LineIcons.money,
@@ -148,19 +160,30 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                         padding: EdgeInsets.all(10),
                         child: Column(
                           children: [
-                            Center(
-                              child: Text(
-                                'PAGAMENTOS',
-                                style: Style.mediumText,
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  LineIcons.money,
+                                  color: totalPaid < double.parse(widget.service.valor) ? Colors.orange : Colors.green,
+                                  size: 30,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  '${Utils.formatMoney(totalPaid)} / ${Utils.formatMoney(double.parse(widget.service.valor))}',
+                                  style: Style.totalValuePaid,
+                                ),
+                              ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 7,
                             ),
-                            Divider(
-                              color: Colors.grey[500],
-                              thickness: 2,
-                            ),
+                            // Divider(
+                            //   color: Colors.grey[500],
+                            //   thickness: 2,
+                            // ),
                             Expanded(
                                 child: ListView.builder(
                                     itemExtent: 50,
@@ -194,27 +217,71 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                           children: [
                             Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.all(0),
-                                  // decoration: BoxDecoration(
-                                  //   shape: BoxShape.circle,
-                                  //   border: Border.all(width: 1, color: Colors.orange)
-                                  // ),
+                              padding: EdgeInsets.all(0),
+                              // decoration: BoxDecoration(
+                              //   shape: BoxShape.circle,
+                              //   border: Border.all(width: 1, color: Colors.orange)
+                              // ),
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(
-                                      LineIcons.money,
-                                      color: Colors.green,
-                                      size: 80,
+                                    Center(
+                                      child: Text(
+                                        'GARANTIA',
+                                        style: Style.mediumText,
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        selectedWarranty == null
+                                            ? 'Não selecionado'
+                                            : '${selectedWarranty.garantia} meses',
+                                        style: Style.warrantyText,
+                                      ),
                                     ),
                                     SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
-                                    Text(
-                                      Utils.formatMoney(250),
-                                      style: Style.totalValuePaid,
-                                    ),
+                                    // Divider(
+                                    //   color: Colors.grey[500],
+                                    //   thickness: 2,
+                                    // ),
+                                    Expanded(
+                                        child: ListView.builder(
+                                            itemCount: warranties.length,
+                                            itemBuilder: (context, index) {
+                                              WarrantyModel p =
+                                                  warranties[index];
+                                              return InkWell(
+                                                onTap: () {
+                                                  this.unsetWarranty();
+                                                  selectedWarranty = p;
+                                                  setState(() {
+                                                    p.selected = !p.selected;
+                                                  });
+                                                },
+                                                child: AnimatedContainer(
+                                                  duration: Duration(
+                                                      milliseconds: 200),
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          p.selected ? 5 : 15,
+                                                      vertical: 5),
+                                                  width: double.infinity,
+                                                  height: 40,
+                                                  color: Colors.blue,
+                                                  child: Center(
+                                                    child: Text(
+                                                      '${p.garantia} meses' ??
+                                                          'no-data',
+                                                      style: Style
+                                                          .paymentFormatTitle,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }))
                                   ],
                                 ),
                               ),
@@ -223,7 +290,40 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                         ),
                       ))
                 ],
-              ))
+              )),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            height: 60,
+            width: 900,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                top: BorderSide(width: 0.5, color: Colors.grey[800])
+              )
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3)),
+                    color: Colors.green,
+                    child: Row(
+                      children: [
+                        Icon(
+                          LineIcons.check,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('Concluir Serviço', style: Style.serviceButton)
+                      ],
+                    ),
+                    onPressed: conclude),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -240,12 +340,27 @@ class _FinishServiceViewState extends State<FinishServiceView> {
   }
 
   getPayments() async {
+    double t = 0;
     List<PaymentModel> temp =
         await PaymentService.getPayments(int.parse(widget.service.idServico));
 
     if (temp != null) {
+      temp.forEach((element) {
+        t += double.parse(element.valor);
+      });
       setState(() {
         payments = temp;
+        totalPaid = t;
+      });
+    }
+  }
+
+  getWarranties() async {
+    List<WarrantyModel> temp = await WarrantyService.getWarranties();
+
+    if (temp != null) {
+      setState(() {
+        warranties = temp;
       });
     }
   }
@@ -281,8 +396,8 @@ class _FinishServiceViewState extends State<FinishServiceView> {
           'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
       return;
     }
-    bool res =
-        await PaymentService.addPayment(widget.service.idServico, int.parse(selectedFormat.id), valor);
+    bool res = await PaymentService.addPayment(
+        widget.service.idServico, int.parse(selectedFormat.id), valor);
 
     if (res) {
       Utils.showInSnackBar('Pagamento adicionado', Colors.green, _scaffoldKey);
@@ -292,11 +407,23 @@ class _FinishServiceViewState extends State<FinishServiceView> {
     }
   }
 
+  conclude() async {
+    bool res = await ServiceService.conclude(widget.service.idServico, 4);
+
+    if (res) {
+      Utils.showInSnackBar('Serviço concluído!', Colors.green, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao concluir serviço!', Colors.red, _scaffoldKey);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     this.getPaymentFormats();
     this.getPayments();
+    this.getWarranties();
   }
 }

@@ -56,6 +56,21 @@ class ServiceService {
     }
   }
 
+  static Future<bool> conclude(servico, int sts) async {
+    String url = '${Urls.baseUrl}servico/editarStatus.php';
+    Dio dio = new Dio();
+
+    FormData formData = new FormData.fromMap(
+        {'servico': servico, 'sts': sts});
+
+    try {
+      await dio.post(url, data: formData);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   static Future<bool> manPower(servico, double mdo) async {
     String url = '${Urls.baseUrl}servico/maodeobra.php';
     Dio dio = new Dio();
