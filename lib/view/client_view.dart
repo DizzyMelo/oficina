@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/model/client_model.dart';
-import 'package:oficina/model/worker_model.dart';
+import 'package:oficina/model/service_model.dart';
 import 'package:oficina/service/client_service.dart';
-import 'package:oficina/service/worker_service.dart';
+import 'package:oficina/service/service_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -24,10 +24,10 @@ class _ClientViewState extends State<ClientView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _selectedCar = '';
 
-  List<WorkerModel> workers = new List();
   List<ClientModel> clients = new List();
   ClientModel selectedClient;
-  WorkerModel worker;
+
+  List<ServiceModel> services = new List();
 
   unselectAllClients() {
     clients.forEach((c) {
@@ -98,7 +98,7 @@ class _ClientViewState extends State<ClientView> {
               child: Row(
                 children: [
                   Flexible(
-                      flex: 1,
+                      flex: 2,
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -108,9 +108,9 @@ class _ClientViewState extends State<ClientView> {
                                 'Telefone', ctrPhone, LineIcons.phone),
                             createTextField(
                                 'Email', ctrEmail, LineIcons.envelope_o),
-                            createTextField('Carro', ctrCar, LineIcons.car),
-                            createTextField(
-                                'Placa', ctrPlate, LineIcons.square_o),
+                            // createTextField('Carro', ctrCar, LineIcons.car),
+                            // createTextField(
+                            //     'Placa', ctrPlate, LineIcons.square_o),
                             selectedClient != null &&
                                     selectedClient.carros.length > 0
                                 ? Row(
@@ -136,28 +136,7 @@ class _ClientViewState extends State<ClientView> {
                                     ],
                                   )
                                 : Container(),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Icon(
-                                  LineIcons.wrench,
-                                  color: Colors.grey[400],
-                                  size: 20,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  worker == null ? 'Colaborador' : worker.nome,
-                                  style: Style.textField,
-                                ),
-                              ],
-                            ),
+                            
                             SizedBox(
                               height: 20,
                             ),
@@ -167,14 +146,14 @@ class _ClientViewState extends State<ClientView> {
                                 selectedClient == null
                                     ? Container()
                                     : RaisedButton(
-                                        color: Colors.red,
+                                        color: Colors.blue,
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(3)),
                                         child: Row(
                                           children: [
                                             Icon(
-                                              LineIcons.user,
+                                              LineIcons.clock_o,
                                               color: Colors.white,
                                               size: 15,
                                             ),
@@ -182,17 +161,13 @@ class _ClientViewState extends State<ClientView> {
                                               width: 10,
                                             ),
                                             Text(
-                                              "Cadastrar Cliente",
+                                              "Histórico de Serviços",
                                               style: Style.serviceButton,
                                             ),
                                           ],
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            selectedClient = null;
-                                            unselectAllClients();
-                                            clearClient();
-                                          });
+                                        onPressed: () async {
+                                          _services();
                                         }),
                                 SizedBox(
                                   width: 10,
@@ -217,7 +192,13 @@ class _ClientViewState extends State<ClientView> {
                                         ),
                                       ],
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      setState(() {
+                                        selectedClient = null;
+                                        unselectAllClients();
+                                        clearClient();
+                                      });
+                                    }),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -236,7 +217,7 @@ class _ClientViewState extends State<ClientView> {
                                           width: 10,
                                         ),
                                         Text(
-                                          "Iniciar",
+                                          "Cadastrar Cliente",
                                           style: Style.serviceButton,
                                         ),
                                       ],
@@ -248,7 +229,7 @@ class _ClientViewState extends State<ClientView> {
                         ),
                       )),
                   Flexible(
-                      flex: 1,
+                      flex: 3,
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -288,7 +269,10 @@ class _ClientViewState extends State<ClientView> {
                                         unselectAllClients();
                                         clientModel.selecionado =
                                             !clientModel.selecionado;
-                                        _selectedCar =  clientModel.carros.length > 0 ? clientModel.carros.first.id : null;
+                                        _selectedCar =
+                                            clientModel.carros.length > 0
+                                                ? clientModel.carros.first.id
+                                                : null;
                                         selectedClient = clientModel;
                                         if (clientModel.selecionado) {
                                           selectClient(clientModel);
@@ -323,16 +307,6 @@ class _ClientViewState extends State<ClientView> {
     );
   }
 
-  getWorkers() async {
-    List<WorkerModel> wk = await WorkerService.getWorkers('1');
-
-    if (wk != null && wk.length > 0) {
-      setState(() {
-        workers = wk;
-      });
-    }
-  }
-
   searchClients(String txt) async {
     if (txt.length < 3) {
       Utils.showInSnackBar(
@@ -347,9 +321,66 @@ class _ClientViewState extends State<ClientView> {
     }
   }
 
+  addClient() async {
+
+  }
+
+  void _services() async {
+    // flutter defined function
+    await getServices();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Histórico de serviços - ${selectedClient.informacoes.clienteNome}"),
+          content: Container(
+            height: 500,
+            width: 600,
+            child: services.isEmpty
+                ? Text('Buscando Serviços')
+                : ListView.builder(
+                  itemCount: services.length,
+                  itemBuilder: (context, index) {
+                    ServiceModel service = services[index];
+                    return ListTile(
+                      title: Text(service.nomeCliente),
+                      trailing: Text(service.dataInicio),
+                    );
+                  }),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("FECHAR"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("ADICIONAR"),
+              onPressed: () {},
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  getServices() async {
+    List<ServiceModel> s = await ServiceService.getServicesByClient(
+        '1', selectedClient.informacoes.clienteId);
+
+    if (s != null) {
+      setState(() {
+        services = s;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    this.getWorkers();
   }
 }

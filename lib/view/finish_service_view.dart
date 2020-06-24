@@ -117,9 +117,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                             SizedBox(
                               height: 20,
                             ),
-                            createTextField(
-                                'Pagamento', ctrPayment, LineIcons.money,
-                                function: makePayment),
+                            
                             Expanded(
                                 child: ListView.builder(
                                     itemCount: paymentFormats.length,
@@ -150,7 +148,11 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                           ),
                                         ),
                                       );
-                                    }))
+                                    })),
+
+                                    createTextField(
+                                'Pagamento', ctrPayment, LineIcons.money,
+                                function: makePayment),
                           ],
                         ),
                       )),
@@ -165,7 +167,10 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                               children: [
                                 Icon(
                                   LineIcons.money,
-                                  color: totalPaid < double.parse(widget.service.valor) ? Colors.orange : Colors.green,
+                                  color: totalPaid <
+                                          double.parse(widget.service.valor)
+                                      ? Colors.orange
+                                      : Colors.green,
                                   size: 30,
                                 ),
                                 SizedBox(
@@ -185,27 +190,33 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                             //   thickness: 2,
                             // ),
                             Expanded(
-                                child: ListView.builder(
-                                    itemExtent: 50,
-                                    itemCount: payments.length,
-                                    itemBuilder: (context, index) {
-                                      PaymentModel p = payments[index];
-                                      return ListTile(
-                                        title: Text(
-                                          Utils.formatMoney(
-                                              double.parse(p.valor)),
-                                          style: Style.itemValueText,
-                                        ),
-                                        subtitle: Text(
-                                          Utils.formatDate(p.dataPagamento),
-                                          style: Style.paymenyDateText,
-                                        ),
-                                        trailing: Text(
-                                          p.formaId,
-                                          style: Style.itemNameText,
-                                        ),
-                                      );
-                                    }))
+                              child: payments.length > 0
+                                  ? ListView.builder(
+                                      itemExtent: 50,
+                                      itemCount: payments.length,
+                                      itemBuilder: (context, index) {
+                                        PaymentModel p = payments[index];
+                                        return ListTile(
+                                          title: Text(
+                                            Utils.formatMoney(
+                                                double.parse(p.valor)),
+                                            style: Style.itemValueText,
+                                          ),
+                                          subtitle: Text(
+                                            Utils.formatDate(p.dataPagamento),
+                                            style: Style.paymenyDateText,
+                                          ),
+                                          trailing: Text(
+                                            p.formaId,
+                                            style: Style.itemNameText,
+                                          ),
+                                        );
+                                      })
+                                  : Text(
+                                      'Nenhum Pagamento Realizado',
+                                      style: Style.warrantyText,
+                                    ),
+                            )
                           ],
                         ),
                       )),
@@ -296,11 +307,9 @@ class _FinishServiceViewState extends State<FinishServiceView> {
             height: 60,
             width: 900,
             decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(width: 0.5, color: Colors.grey[800])
-              )
-            ),
+                color: Colors.white,
+                border: Border(
+                    top: BorderSide(width: 0.5, color: Colors.grey[800]))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

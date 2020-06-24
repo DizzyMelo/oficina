@@ -25,6 +25,24 @@ class ServiceService {
     }
   }
 
+  static Future<List<ServiceModel>> getServicesByClient(String store, String client) async {
+    List<ServiceModel> services = new List();
+    String url = '${Urls.baseUrl}servico/lista_cliente.php';
+    Dio dio = new Dio();
+
+    try {
+      var response = await dio.get(url, queryParameters: {'loja': store, 'cliente' : client});
+
+      json.decode(response.data).forEach((element) {
+        services.add(ServiceModel.fromJson(element));
+      });
+      return services;
+      //return UserModel.fromJson(json.decode(response.data));
+    } catch (e) {
+      return null;
+    }
+  }
+
   static Future<ItemAdicionadoModel> addItem(
       ItemModel item, servico, int qtd, double valor) async {
     String url = '${Urls.baseUrl}servico/adicionarProduto.php';
@@ -49,7 +67,8 @@ class ServiceService {
         {'servico': servico, 'desconto': desconto});
 
     try {
-      await dio.post(url, data: formData);
+      var res = await dio.post(url, data: formData);
+      print(res.data);
       return true;
     } catch (e) {
       return false;

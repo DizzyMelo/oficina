@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/painting.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/shared/urls.dart';
 
@@ -23,6 +24,28 @@ class ClientService {
       return clients;
     }catch(e){
       return null;
+    }
+  }
+
+
+  static Future<bool> addClient(String loja, nome, t1, t2, cpf, email) async {
+    String url = '${Urls.baseUrl}cliente/adicionar.php';
+    FormData formData = new FormData.fromMap(
+        {
+          'loja': loja, 
+          'nome': nome, 
+          'telefone1': t1, 
+          'telefone2': t2,
+          'cpf': cpf,
+          'email': email
+        });
+    Dio dio = new Dio();
+    try{
+      var response = await dio.post(url, data: formData);
+      print(response.data);
+      return true;
+    }catch(e){
+      return false;
     }
   }
 }

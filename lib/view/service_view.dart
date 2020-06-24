@@ -27,6 +27,8 @@ class _ServiceViewState extends State<ServiceView> {
   TextEditingController ctrManPower = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
 
+  TextEditingController ctrAmount = TextEditingController();
+
   ItemAdicionadoModel addedItems;
   Valores valores;
   List<ItemModel> items = new List();
@@ -113,7 +115,7 @@ class _ServiceViewState extends State<ServiceView> {
                                                           items[index];
                                                       return ListTile(
                                                         onTap: () {
-                                                          addItem(item, 2);
+                                                          _itemsAmount(item);
                                                         },
                                                         title: Text(
                                                             item.nome ??
@@ -438,6 +440,8 @@ class _ServiceViewState extends State<ServiceView> {
         addedItems = tempItems;
         valores = tempItems.valores;
       });
+
+      Navigator.pop(context);
     }
   }
 
@@ -460,6 +464,41 @@ class _ServiceViewState extends State<ServiceView> {
   void initState() {
     super.initState();
     this.getAddedItems();
+  }
+
+  void _itemsAmount(item) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Quantidade de Itens"),
+          content: TextField(
+            controller: ctrAmount,
+            decoration: InputDecoration(
+              hintText: 'Qtd.'
+            ),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("FECHAR"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("ADICIONAR"),
+              onPressed: (){
+                addItem(item, int.parse(ctrAmount.text));
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _discount() {
