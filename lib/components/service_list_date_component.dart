@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:oficina/components/service_row_component.dart';
+import 'package:oficina/components/service_row_date_component.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/view/service_view.dart';
 
-class ServiceListComponent extends StatelessWidget {
+class ServiceListDateComponent extends StatelessWidget {
   final List<ServiceModel> services;
 
-  ServiceListComponent(this.services);
+  ServiceListDateComponent(this.services);
   @override
   Widget build(BuildContext context) {
     return Scrollbar(
@@ -24,7 +24,7 @@ class ServiceListComponent extends StatelessWidget {
                                   serviceModel: serviceModel,
                                 )));
                   },
-                  child: ServiceRowComponent(serviceModel));
+                  child: ServiceRowDateComponent(serviceModel));
             }));
   }
 }

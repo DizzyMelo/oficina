@@ -53,6 +53,7 @@ class Style {
   //Client Page
 
   static TextStyle clientTitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 15));
+  static TextStyle carTextTitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
 
   // Stock Page
 

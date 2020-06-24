@@ -41,7 +41,8 @@ class PaymentService {
     }
   }
 
-  static Future<bool> addPayment(servico, int forma, double valor) async {
+  static Future<List<PaymentModel>> addPayment(servico, int forma, double valor) async {
+    List<PaymentModel> services = new List();
     String url = '${Urls.baseUrl}pagamento/adicionar.php';
     Dio dio = new Dio();
 
@@ -49,10 +50,15 @@ class PaymentService {
         {'forma': forma, 'servico': servico, 'valor': valor});
 
     var response = await dio.post(url, data: formData);
+    print(response.data);
     
-    if(response.data == 'true'){
-      return true;  
+    try {
+      json.decode(response.data).forEach((element) {
+        services.add(PaymentModel.fromJson(element));
+      });
+      return services;
+    } catch (e) {
+      return null;
     }
-    return false;
   }
 }

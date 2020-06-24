@@ -405,11 +405,23 @@ class _FinishServiceViewState extends State<FinishServiceView> {
           'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
       return;
     }
-    bool res = await PaymentService.addPayment(
+    List<PaymentModel> res = await PaymentService.addPayment(
         widget.service.idServico, int.parse(selectedFormat.id), valor);
 
-    if (res) {
+    if (res != null) {
+      double t = 0;
       Utils.showInSnackBar('Pagamento adicionado', Colors.green, _scaffoldKey);
+
+      setState(() {
+        res.forEach((element) {
+        t += double.parse(element.valor);
+      });
+      
+      setState(() {
+        payments = res;
+        totalPaid = t;
+      });
+      });
     } else {
       Utils.showInSnackBar(
           'Erro ao adicionar pagamento', Colors.red, _scaffoldKey);

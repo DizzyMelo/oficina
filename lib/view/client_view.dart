@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/service_model.dart';
@@ -16,6 +17,8 @@ class ClientView extends StatefulWidget {
 
 class _ClientViewState extends State<ClientView> {
   TextEditingController ctrSearch = TextEditingController();
+  TextEditingController ctrSearchService = TextEditingController();
+  //ctrSearchService
   TextEditingController ctrName = TextEditingController();
   TextEditingController ctrPhone =
       MaskedTextController(mask: '(00) 00000-0000');
@@ -125,13 +128,13 @@ class _ClientViewState extends State<ClientView> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(child: Text('Carros')),
+                                      Flexible(child: Text('Carros', style: Style.carTextTitle,)),
                                       Flexible(
                                           child: DropdownButton<String>(
                                         items: selectedClient.carros
                                             .map((carro) => DropdownMenuItem(
                                                 value: carro.id.toString(),
-                                                child: Text(carro.modelo)))
+                                                child: Text(carro.modelo, style: Style.carTextTitle,)))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -144,7 +147,7 @@ class _ClientViewState extends State<ClientView> {
                                     ],
                                   )
                                 : Container(),
-                            
+
                             SizedBox(
                               height: 20,
                             ),
@@ -329,14 +332,16 @@ class _ClientViewState extends State<ClientView> {
     }
   }
 
-  bool validateInfo(){
-    if(ctrName.text.isEmpty){
+  bool validateInfo() {
+    if (ctrName.text.isEmpty) {
       Utils.showInSnackBar(
           'Digite o nome do cliente', Colors.red, _scaffoldKey);
       return false;
-    }else if(ctrPhone.text.isEmpty && ctrPhone2.text.isEmpty){
+    } else if (ctrPhone.text.isEmpty && ctrPhone2.text.isEmpty) {
       Utils.showInSnackBar(
-          'Digite o número do celular ou telefone fixo do cliente', Colors.red, _scaffoldKey);
+          'Digite o número do celular ou telefone fixo do cliente',
+          Colors.red,
+          _scaffoldKey);
       return false;
     }
 
@@ -344,13 +349,13 @@ class _ClientViewState extends State<ClientView> {
   }
 
   addClient() async {
-    if(!validateInfo()) return;
-    ClientBaseModel c = await ClientService.addClient('1', ctrName.text, ctrPhone.text, ctrPhone2.text, ctrCpf.text, ctrEmail.text);
+    if (!validateInfo()) return;
+    ClientBaseModel c = await ClientService.addClient('1', ctrName.text,
+        ctrPhone.text, ctrPhone2.text, ctrCpf.text, ctrEmail.text);
 
-    if(c != null){
-      Utils.showInSnackBar(
-          'Cliente Cadastrado', Colors.green, _scaffoldKey);
-    }else{
+    if (c != null) {
+      Utils.showInSnackBar('Cliente Cadastrado', Colors.green, _scaffoldKey);
+    } else {
       Utils.showInSnackBar(
           'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);
     }
@@ -364,22 +369,29 @@ class _ClientViewState extends State<ClientView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Histórico de serviços - ${selectedClient.informacoes.clienteNome}"),
+          title: Text(
+              "Histórico de serviços - ${selectedClient.informacoes.clienteNome}"),
           content: Container(
-            height: 500,
-            width: 600,
-            child: services.isEmpty
-                ? Text('Buscando Serviços')
-                : ListView.builder(
-                  itemCount: services.length,
-                  itemBuilder: (context, index) {
-                    ServiceModel service = services[index];
-                    return ListTile(
-                      title: Text(service.nomeCliente),
-                      trailing: Text(service.dataInicio),
-                    );
-                  }),
-          ),
+              height: 500,
+              width: 700,
+              child: services.isEmpty
+                  ? Text('Buscando Serviços')
+                  : Column(
+                      children: [
+                        TextField(
+                          controller: ctrSearchService,
+                          style: Style.searchText,
+                          decoration: InputDecoration(
+                            hintText: 'Buscar...',
+                            hintStyle: Style.searchText,
+                            prefixIcon: Icon(Icons.search)
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        Expanded(
+                            child: ServiceListDateComponent(services),)
+                      ],
+                    )),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
@@ -387,11 +399,6 @@ class _ClientViewState extends State<ClientView> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            ),
-
-            FlatButton(
-              child: Text("ADICIONAR"),
-              onPressed: () {},
             ),
           ],
         );
