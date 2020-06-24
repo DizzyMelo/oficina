@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/service/client_service.dart';
@@ -18,9 +19,12 @@ class _ClientViewState extends State<ClientView> {
   TextEditingController ctrName = TextEditingController();
   TextEditingController ctrPhone =
       MaskedTextController(mask: '(00) 00000-0000');
+
+  TextEditingController ctrPhone2 =
+      MaskedTextController(mask: '(00) 0000-0000');
   TextEditingController ctrEmail = TextEditingController();
   TextEditingController ctrCar = TextEditingController();
-  TextEditingController ctrPlate = MaskedTextController(mask: '***-0*00');
+  TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _selectedCar = '';
 
@@ -48,7 +52,7 @@ class _ClientViewState extends State<ClientView> {
     ctrPhone.text = '';
     ctrEmail.text = '';
     ctrCar.text = '';
-    ctrPlate.text = '';
+    ctrCpf.text = '';
   }
 
   Widget createTextField(
@@ -104,8 +108,12 @@ class _ClientViewState extends State<ClientView> {
                         child: Column(
                           children: [
                             createTextField('Nome', ctrName, LineIcons.user),
+                            createTextField('CPF', ctrCpf, LineIcons.user),
                             createTextField(
-                                'Telefone', ctrPhone, LineIcons.phone),
+                                'Celular', ctrPhone, LineIcons.phone),
+
+                            createTextField(
+                                'Telefone Fixo', ctrPhone2, LineIcons.phone),
                             createTextField(
                                 'Email', ctrEmail, LineIcons.envelope_o),
                             // createTextField('Carro', ctrCar, LineIcons.car),
@@ -222,7 +230,7 @@ class _ClientViewState extends State<ClientView> {
                                         ),
                                       ],
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: addClient),
                               ],
                             )
                           ],
@@ -321,8 +329,31 @@ class _ClientViewState extends State<ClientView> {
     }
   }
 
-  addClient() async {
+  bool validateInfo(){
+    if(ctrName.text.isEmpty){
+      Utils.showInSnackBar(
+          'Digite o nome do cliente', Colors.red, _scaffoldKey);
+      return false;
+    }else if(ctrPhone.text.isEmpty && ctrPhone2.text.isEmpty){
+      Utils.showInSnackBar(
+          'Digite o número do celular ou telefone fixo do cliente', Colors.red, _scaffoldKey);
+      return false;
+    }
 
+    return true;
+  }
+
+  addClient() async {
+    if(!validateInfo()) return;
+    ClientBaseModel c = await ClientService.addClient('1', ctrName.text, ctrPhone.text, ctrPhone2.text, ctrCpf.text, ctrEmail.text);
+
+    if(c != null){
+      Utils.showInSnackBar(
+          'Cliente Cadastrado', Colors.green, _scaffoldKey);
+    }else{
+      Utils.showInSnackBar(
+          'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);
+    }
   }
 
   void _services() async {

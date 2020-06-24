@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/painting.dart';
+import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/shared/urls.dart';
 
@@ -28,7 +29,7 @@ class ClientService {
   }
 
 
-  static Future<bool> addClient(String loja, nome, t1, t2, cpf, email) async {
+  static Future<ClientBaseModel> addClient(String loja, nome, t1, t2, cpf, email) async {
     String url = '${Urls.baseUrl}cliente/adicionar.php';
     FormData formData = new FormData.fromMap(
         {
@@ -43,9 +44,9 @@ class ClientService {
     try{
       var response = await dio.post(url, data: formData);
       print(response.data);
-      return true;
+      return ClientBaseModel.fromJson(json.decode(response.data));
     }catch(e){
-      return false;
+      return null;
     }
   }
 }
