@@ -46,11 +46,11 @@ class PaymentService {
     String url = '${Urls.baseUrl}pagamento/adicionar.php';
     Dio dio = new Dio();
 
-    FormData formData = new FormData.fromMap(
-        {'forma': forma, 'servico': servico, 'valor': valor});
+    Map<String, dynamic> map = {'forma': forma, 'servico': servico, 'valor': valor};
 
+    FormData formData = new FormData.fromMap(map);
+    print(map);
     var response = await dio.post(url, data: formData);
-    print(response.data);
     
     try {
       json.decode(response.data).forEach((element) {

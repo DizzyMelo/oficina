@@ -117,7 +117,6 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                             SizedBox(
                               height: 20,
                             ),
-                            
                             Expanded(
                                 child: ListView.builder(
                                     itemCount: paymentFormats.length,
@@ -149,8 +148,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                         ),
                                       );
                                     })),
-
-                                    createTextField(
+                            createTextField(
                                 'Pagamento', ctrPayment, LineIcons.money,
                                 function: makePayment),
                           ],
@@ -266,11 +264,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                                   warranties[index];
                                               return InkWell(
                                                 onTap: () {
-                                                  this.unsetWarranty();
-                                                  selectedWarranty = p;
-                                                  setState(() {
-                                                    p.selected = !p.selected;
-                                                  });
+                                                  addWarranty(p);
                                                 },
                                                 child: AnimatedContainer(
                                                   duration: Duration(
@@ -283,12 +277,25 @@ class _FinishServiceViewState extends State<FinishServiceView> {
                                                   height: 40,
                                                   color: Colors.blue,
                                                   child: Center(
-                                                    child: Text(
-                                                      '${p.garantia} meses' ??
-                                                          'no-data',
-                                                      style: Style
-                                                          .paymentFormatTitle,
-                                                    ),
+                                                    child: p.loading
+                                                        ? SizedBox(
+                                                          height: 30,
+                                                          width: 30,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                              valueColor:
+                                                                  AlwaysStoppedAnimation(
+                                                                      Colors
+                                                                          .white),
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            '${p.garantia} meses' ??
+                                                                'no-data',
+                                                            style: Style
+                                                                .paymentFormatTitle,
+                                                          ),
                                                   ),
                                                 ),
                                               );
@@ -405,6 +412,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
           'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
       return;
     }
+
     List<PaymentModel> res = await PaymentService.addPayment(
         widget.service.idServico, int.parse(selectedFormat.id), valor);
 
@@ -414,17 +422,42 @@ class _FinishServiceViewState extends State<FinishServiceView> {
 
       setState(() {
         res.forEach((element) {
-        t += double.parse(element.valor);
-      });
-      
-      setState(() {
-        payments = res;
-        totalPaid = t;
-      });
+          t += double.parse(element.valor);
+        });
+
+        setState(() {
+          payments = res;
+          totalPaid = t;
+        });
       });
     } else {
       Utils.showInSnackBar(
           'Erro ao adicionar pagamento', Colors.red, _scaffoldKey);
+    }
+  }
+
+  addWarranty(WarrantyModel w) async {
+    this.unsetWarranty();
+    selectedWarranty = w;
+    setState(() {
+      w.loading = true;
+    });
+
+    WarrantyModel m =
+        await WarrantyService.addWarranty(widget.service.idServico, w.id);
+
+    setState(() {
+      w.loading = false;
+    });
+
+    if (m != null) {
+      selectedWarranty = w;
+      setState(() {
+        w.selected = true;
+      });
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao adicionar garantia', Colors.red, _scaffoldKey);
     }
   }
 

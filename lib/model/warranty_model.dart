@@ -12,12 +12,14 @@ class WarrantyModel {
     WarrantyModel({
         this.id,
         this.garantia,
-        this.selected = false
+        this.selected = false,
+        this.loading = false
     });
 
     String id;
     String garantia;
     bool selected;
+    bool loading;
 
     factory WarrantyModel.fromJson(Map<String, dynamic> json) => WarrantyModel(
         id: json["id"],

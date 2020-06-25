@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:oficina/model/car_model.dart';
 import 'package:oficina/model/warranty_model.dart';
 import 'package:oficina/shared/urls.dart';
 
@@ -23,21 +22,18 @@ class WarrantyService {
     }
   }
 
-  static Future<List<CarModel>> addCar(int cliente, String modelo, String placa) async {
-    List<CarModel> cars = new List();
+  static Future<WarrantyModel> addWarranty(servico, garantia ) async {
+    
     String url = '${Urls.baseUrl}garantia/adicionar.php';
     Dio dio = new Dio();
 
     FormData formData = new FormData.fromMap(
-        {'cliente': cliente, 'modelo': modelo.toUpperCase(), 'placa': placa.toUpperCase()});
+        {'servico': servico, 'garantia': garantia});
 
     try {
       var response = await dio.post(url, data: formData);
 
-      json.decode(response.data).forEach((element) {
-        cars.add(CarModel.fromJson(element));
-      });
-      return cars;
+      return WarrantyModel.fromJson(json.decode(response.data));
     } catch (e) {
       return null;
     }

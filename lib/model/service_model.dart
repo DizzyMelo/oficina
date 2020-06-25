@@ -28,6 +28,7 @@ class ServiceModel {
     String colaboradorId;
     String nomeColaborador;
     String desconto;
+    String valorTotal;
 
     ServiceModel({
         this.idServico,
@@ -49,6 +50,7 @@ class ServiceModel {
         this.colaboradorId,
         this.nomeColaborador,
         this.desconto,
+        this.valorTotal
     });
 
     factory ServiceModel.fromJson(Map<String, dynamic> json) => ServiceModel(
@@ -71,6 +73,7 @@ class ServiceModel {
         colaboradorId: json["colaborador_id"],
         nomeColaborador: json["nomeColaborador"],
         desconto: json["desconto"],
+        valorTotal: json["valorTotal"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -93,5 +96,6 @@ class ServiceModel {
         "colaborador_id": colaboradorId,
         "nomeColaborador": nomeColaborador,
         "desconto": desconto,
+        "valorTotal": valorTotal
     };
 }
