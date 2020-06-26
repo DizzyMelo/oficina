@@ -66,6 +66,11 @@ class Style {
   static TextStyle valueSaleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w700, fontSize: 12));
   static TextStyle valueProfitText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange, fontWeight: FontWeight.w700, fontSize: 12));
 
+
+  //Car Page
+
+  static TextStyle carTitleText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 12));
+  static TextStyle plateNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w500, fontSize: 11));
   // Finish Page
 
   static TextStyle totalValuePaid = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w700, fontSize: 12));

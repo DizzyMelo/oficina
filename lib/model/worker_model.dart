@@ -16,6 +16,7 @@ class WorkerModel {
     String token;
     String lojaId;
     String endereco;
+    String funcao;
     bool selecionado;
 
     WorkerModel({
@@ -26,6 +27,7 @@ class WorkerModel {
         this.token,
         this.lojaId,
         this.endereco,
+        this.funcao,
         this.selecionado = false
     });
 
@@ -37,6 +39,7 @@ class WorkerModel {
         token: json["token"],
         lojaId: json["loja_id"],
         endereco: json["endereco"],
+        funcao: json["funcao"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -47,5 +50,6 @@ class WorkerModel {
         "token": token,
         "loja_id": lojaId,
         "endereco": endereco,
+        "funcao": funcao,
     };
 }

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/main',
+      initialRoute: '/new_car',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -64,7 +64,8 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(builder: (context) => NewServiceView());
             break;
           case "/new_car":
-            page = MaterialPageRoute(builder: (context) => NewCarView(client: settings.arguments,));
+            String client = settings.arguments ?? '62';
+            page = MaterialPageRoute(builder: (context) => NewCarView(client: client,));
             break;
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());

@@ -128,13 +128,20 @@ class _ClientViewState extends State<ClientView> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(child: Text('Carros', style: Style.carTextTitle,)),
+                                      Flexible(
+                                          child: Text(
+                                        'Carros',
+                                        style: Style.carTextTitle,
+                                      )),
                                       Flexible(
                                           child: DropdownButton<String>(
                                         items: selectedClient.carros
                                             .map((carro) => DropdownMenuItem(
                                                 value: carro.id.toString(),
-                                                child: Text(carro.modelo, style: Style.carTextTitle,)))
+                                                child: Text(
+                                                  carro.modelo,
+                                                  style: Style.carTextTitle,
+                                                )))
                                             .toList(),
                                         onChanged: (value) {
                                           setState(() {
@@ -151,91 +158,98 @@ class _ClientViewState extends State<ClientView> {
                             SizedBox(
                               height: 20,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                selectedClient == null
-                                    ? Container()
-                                    : RaisedButton(
-                                        color: Colors.blue,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              LineIcons.clock_o,
-                                              color: Colors.white,
-                                              size: 15,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              "Histórico de Serviços",
-                                              style: Style.serviceButton,
-                                            ),
-                                          ],
-                                        ),
-                                        onPressed: () async {
-                                          _services();
-                                        }),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                RaisedButton(
-                                    color: Colors.red,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          LineIcons.close,
-                                          color: Colors.white,
-                                          size: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Cancelar",
-                                          style: Style.serviceButton,
-                                        ),
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedClient = null;
-                                        unselectAllClients();
-                                        clearClient();
-                                      });
-                                    }),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                RaisedButton(
-                                    color: Colors.green,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          LineIcons.check,
-                                          color: Colors.white,
-                                          size: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Cadastrar Cliente",
-                                          style: Style.serviceButton,
-                                        ),
-                                      ],
-                                    ),
-                                    onPressed: addClient),
-                              ],
-                            )
+
+                            selectedClient != null
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      RaisedButton(
+                                          color: Colors.blue,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                LineIcons.clock_o,
+                                                color: Colors.white,
+                                                size: 15,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Histórico de Serviços",
+                                                style: Style.serviceButton,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {
+                                            _services();
+                                          })
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      RaisedButton(
+                                          color: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                LineIcons.close,
+                                                color: Colors.white,
+                                                size: 15,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Cancelar",
+                                                style: Style.serviceButton,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              selectedClient = null;
+                                              unselectAllClients();
+                                              clearClient();
+                                            });
+                                          }),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      RaisedButton(
+                                          color: Colors.green,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                LineIcons.check,
+                                                color: Colors.white,
+                                                size: 15,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Cadastrar Cliente",
+                                                style: Style.serviceButton,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: addClient),
+                                    ],
+                                  )
                           ],
                         ),
                       )),
@@ -353,12 +367,49 @@ class _ClientViewState extends State<ClientView> {
     ClientBaseModel c = await ClientService.addClient('1', ctrName.text,
         ctrPhone.text, ctrPhone2.text, ctrCpf.text, ctrEmail.text);
 
-    if (c != null) {
-      Utils.showInSnackBar('Cliente Cadastrado', Colors.green, _scaffoldKey);
+    if (c != null) { 
+      ctrName.text = "";
+      ctrCpf.text = "";
+      ctrPhone.text = "";
+      ctrPhone2.text = "";
+      ctrEmail.text = "";
+      _addCardDialog(c.id);
     } else {
       Utils.showInSnackBar(
           'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);
     }
+  }
+
+  void _addCardDialog(String id) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(
+              "Desaja adicionar um veículo ao cliente"),
+          content: Container(
+            height: 200,
+            child: Center(child: Text('Adione um veículo ao cliente'))),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("FECHAR"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("SIM"),
+              onPressed: () {
+                Navigator.pushNamed(context, '/new_car', arguments: id);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _services() async {
@@ -382,14 +433,16 @@ class _ClientViewState extends State<ClientView> {
                           controller: ctrSearchService,
                           style: Style.searchText,
                           decoration: InputDecoration(
-                            hintText: 'Buscar...',
-                            hintStyle: Style.searchText,
-                            prefixIcon: Icon(Icons.search)
-                          ),
+                              hintText: 'Buscar...',
+                              hintStyle: Style.searchText,
+                              prefixIcon: Icon(Icons.search)),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Expanded(
-                            child: ServiceListDateComponent(services),)
+                          child: ServiceListDateComponent(services),
+                        )
                       ],
                     )),
           actions: <Widget>[

@@ -8,7 +8,7 @@ import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class NewCarView extends StatefulWidget {
-  final ClientModel client;
+  final String client;
   NewCarView({this.client});
 
   @override
@@ -118,14 +118,30 @@ class _NewCarViewState extends State<NewCarView> {
                         ),
                       )),
                       Flexible(
-                        child: Container(
-                          child: ListView.builder(
-                              itemCount: cars.length,
-                              itemBuilder: (context, index){
-                                CarModel car = cars[index];
-                                return ListTile(title: Text(car.modelo),);
-                          }),
-                      ))
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                        children: [
+                          Text(
+                            'CARROS ADICIONADOS',
+                            style: Style.clientTitle,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: cars.length,
+                                itemBuilder: (context, index) {
+                                  CarModel car = cars[index];
+                                  return ListTile(
+                                    title: Text(car.modelo, style: Style.carTitleText,),
+                                    subtitle: Text(car.placa, style: Style.plateNameText,),
+                                  );
+                                }),
+                          )
+                        ],
+                      )))
                     ],
                   ))
             ],
@@ -134,25 +150,25 @@ class _NewCarViewState extends State<NewCarView> {
   }
 
   getCars() async {
-    List<CarModel> temp = await CarService.getCars(int.parse(widget.client.informacoes.clienteId));
+    List<CarModel> temp = await CarService.getCars(int.parse(widget.client));
 
-    if(temp != null){
+    if (temp != null) {
       setState(() {
         cars = temp;
       });
     }
   }
 
-
   addCar() async {
-    List<CarModel> temp = await CarService.addCar(int.parse(widget.client.informacoes.clienteId), ctrModel.text, ctrPlate.text);
+    List<CarModel> temp = await CarService.addCar(
+        int.parse(widget.client), ctrModel.text, ctrPlate.text);
 
-    if(temp != null){
+    if (temp != null) {
       Utils.showInSnackBar('Carro adicionado', Colors.green, _scaffoldKey);
       setState(() {
         cars = temp;
       });
-    }else{
+    } else {
       Utils.showInSnackBar('Erro ao adionar carro', Colors.red, _scaffoldKey);
     }
   }

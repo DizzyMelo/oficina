@@ -197,7 +197,27 @@ class _MainViewState extends State<MainView> {
                                         width: double.infinity,
                                         child: Row(
                                           children: [
-                                            CircleAvatar(),
+                                            Stack(
+                                              overflow: Overflow.visible,
+                                              children: [
+                                                CircleAvatar(),
+                                                Positioned(
+                                                  bottom: 0,
+                                                  right: 0,
+                                                  child: Container(
+                                                  height: 15,
+                                                  width: 15,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.green,
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                      width: 2,
+                                                      color: Colors.grey[100]
+                                                    )
+                                                  ),
+                                                ))
+                                              ],
+                                            ),
                                             SizedBox(
                                               width: 10,
                                             ),

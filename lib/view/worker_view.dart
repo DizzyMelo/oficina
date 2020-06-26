@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/role_model.dart';
+import 'package:oficina/components/worker_list_component.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/model/worker_model.dart';
 import 'package:oficina/service/product_service.dart';
@@ -23,8 +25,10 @@ class _WorkerViewState extends State<WorkerView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<WorkerModel> workers = new List();
+  List<RoleModel> roles = new List();
 
   WorkerModel selectedWorker;
+  String selectedRole;
 
   Widget createTextField(
       String hint, TextEditingController controller, IconData icon) {
@@ -83,8 +87,29 @@ class _WorkerViewState extends State<WorkerView> {
                                   'Telefone', ctrPhone, LineIcons.code),
                               createTextField(
                                   'Login', ctrLogin, LineIcons.wrench),
-                              createTextField(
-                                  'Função', ctrFunction, LineIcons.wrench),
+
+                              Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(child: Text('Função', style: Style.carTextTitle,)),
+                                      Flexible(
+                                          child: DropdownButton<String>(
+                                        items: roles
+                                            .map((role) => DropdownMenuItem(
+                                                value: role.id.toString(),
+                                                child: Text(role.funcao, style: Style.carTextTitle,)))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedRole = value;
+                                          });
+                                        },
+                                        value: selectedRole,
+                                        isExpanded: true,
+                                      ))
+                                    ],
+                                  ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -190,7 +215,7 @@ class _WorkerViewState extends State<WorkerView> {
                                                 ),
                                               ],
                                             ),
-                                            onPressed: addProduct),
+                                            onPressed: addWorker),
                                       ],
                                     )
                             ],
@@ -225,28 +250,7 @@ class _WorkerViewState extends State<WorkerView> {
                             Expanded(
                                 child: Container(
                                     child: Scrollbar(
-                              child: ListView.separated(
-                                separatorBuilder: (context, index) => Divider(
-                                  thickness: 0.6,
-                                  color: Colors.grey[800],
-                                ),
-                                itemCount: workers.length,
-                                itemBuilder: (context, index) {
-                                  WorkerModel w = workers[index];
-
-                                  return ListTile(
-                                      onTap: () {
-                                        fillForm(w);
-                                        setState(() {
-                                          selectedWorker = w;
-                                        });
-                                      },
-                                      title: Text(
-                                        w.nome ?? '',
-                                        style: Style.clientNameText,
-                                      ));
-                                },
-                              ),
+                              child: WorkerListComponent(workers)
                             )))
                           ],
                         ),
@@ -287,8 +291,6 @@ class _WorkerViewState extends State<WorkerView> {
     ctrFunction.text = w.funcaoId;
   }
 
-  addProduct() async {}
-
   editProduct() async {}
 
   getWorkers() async {
@@ -301,10 +303,35 @@ class _WorkerViewState extends State<WorkerView> {
     }
   }
 
+  getRoles() async {
+    List<RoleModel> r = await WorkerService.getRoles('1');
+
+    if (r != null) {
+      setState(() {
+        roles = r;
+        selectedRole = r.first.id;
+      });
+    }
+  }
+
+  addWorker() async {
+    WorkerModel w = await WorkerService.addWorker(ctrName.text, ctrPhone.text, '', '1', selectedRole, ctrLogin.text);
+
+    if(w != null){
+      setState(() {
+        workers.add(w);
+      });
+      Utils.showInSnackBar('Colaborador adicionado', Colors.green, _scaffoldKey);
+    }else{
+      Utils.showInSnackBar('Erro ao adicionar colaborador', Colors.red, _scaffoldKey);
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     this.getWorkers();
+    this.getRoles();
   }
 }
