@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/service/product_service.dart';
 import 'package:oficina/shared/style.dart';
@@ -65,12 +66,7 @@ class _StockViewState extends State<StockView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Icon(LineIcons.close),
-                  onPressed: () => Navigator.pop(context)),
-            ),
+            AppBarComponent(icon: LineIcons.square, title: 'Estoque',),
             Expanded(
                 child: Container(
               child: Row(

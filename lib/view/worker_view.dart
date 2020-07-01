@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/role_model.dart';
 import 'package:oficina/components/worker_list_component.dart';
 import 'package:oficina/model/product_model.dart';
@@ -66,12 +67,7 @@ class _WorkerViewState extends State<WorkerView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Icon(LineIcons.close),
-                  onPressed: () => Navigator.pop(context)),
-            ),
+            AppBarComponent(icon: LineIcons.wrench, title: 'Colaboradores',),
             Expanded(
                 child: Container(
               child: Row(

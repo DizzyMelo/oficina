@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/shared/style.dart';
 
@@ -37,6 +38,19 @@ class Utils {
         ));
 
     return fmf.output.symbolOnLeft;
+  }
+
+  static String getCars(List<Carro> cars){
+    if(cars.isEmpty){
+      return 'Sem carro';
+    }else{
+      String c = '';
+      cars.forEach((element) {
+        c += '${element.modelo} - '; 
+      });
+      c = c.substring(0, c.length - 2);
+      return c;
+    }
   }
 
   static String formatDate(DateTime dt){

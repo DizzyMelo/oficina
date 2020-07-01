@@ -200,7 +200,9 @@ class _MainViewState extends State<MainView> {
                                             Stack(
                                               overflow: Overflow.visible,
                                               children: [
-                                                CircleAvatar(),
+                                                CircleAvatar(
+                                                  maxRadius: 16,
+                                                ),
                                                 Positioned(
                                                   bottom: 0,
                                                   right: 0,

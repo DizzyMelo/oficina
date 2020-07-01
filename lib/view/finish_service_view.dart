@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/model/payment_format_model.dart';
 import 'package:oficina/model/payment_model.dart';
 import 'package:oficina/model/service_model.dart';
@@ -84,265 +85,273 @@ class _FinishServiceViewState extends State<FinishServiceView> {
     Size screen = MediaQuery.of(context).size;
 
     return Scaffold(
-      key: _scaffoldKey,
-      body: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-                icon: Icon(LineIcons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-          ),
-          Container(
-              padding: EdgeInsets.all(10),
-              height: 500,
-              width: 900,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Row(
-                children: [
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Center(
-                              child: Text(
-                                'ADICIONAR PAGAMENTO',
-                                style: Style.mediumText,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Expanded(
-                                child: ListView.builder(
-                                    itemCount: paymentFormats.length,
-                                    itemBuilder: (context, index) {
-                                      PaymentFormatModel p =
-                                          paymentFormats[index];
-                                      return InkWell(
-                                        onTap: () {
-                                          this.unSetPaymentFormat();
-                                          selectedFormat = p;
-                                          setState(() {
-                                            p.selected = !p.selected;
-                                          });
-                                        },
-                                        child: AnimatedContainer(
-                                          duration: Duration(milliseconds: 200),
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: p.selected ? 5 : 15,
-                                              vertical: 5),
-                                          width: double.infinity,
-                                          height: 40,
-                                          color: Colors.blue,
-                                          child: Center(
-                                            child: Text(
-                                              p.forma ?? 'no-data',
-                                              style: Style.paymentFormatTitle,
-                                            ),
+        key: _scaffoldKey,
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              AppBarComponent(
+                icon: LineIcons.check,
+                title: 'Concluir Serviço',
+              ),
+              Container(
+                  padding: EdgeInsets.all(10),
+                  height: 500,
+                  width: 900,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Row(
+                    children: [
+                      Flexible(
+                          flex: 1,
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                    child: Container(
+                                  padding: EdgeInsets.all(0),
+                                  // decoration: BoxDecoration(
+                                  //   shape: BoxShape.circle,
+                                  //   border: Border.all(width: 1, color: Colors.orange)
+                                  // ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            'GARANTIA',
+                                            style: Style.mediumText,
                                           ),
                                         ),
-                                      );
-                                    })),
-                            createTextField(
-                                'Pagamento', ctrPayment, LineIcons.money,
-                                function: makePayment),
-                          ],
-                        ),
-                      )),
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  LineIcons.money,
-                                  color: totalPaid <
-                                          double.parse(widget.service.valor)
-                                      ? Colors.orange
-                                      : Colors.green,
-                                  size: 30,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  '${Utils.formatMoney(totalPaid)} / ${Utils.formatMoney(double.parse(widget.service.valor))}',
-                                  style: Style.totalValuePaid,
-                                ),
+                                        Center(
+                                          child: Text(
+                                            selectedWarranty == null
+                                                ? 'Não selecionado'
+                                                : '${selectedWarranty.garantia} meses',
+                                            style: Style.warrantyText,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        // Divider(
+                                        //   color: Colors.grey[500],
+                                        //   thickness: 2,
+                                        // ),
+                                        Expanded(
+                                            child: ListView.builder(
+                                                itemCount: warranties.length,
+                                                itemBuilder: (context, index) {
+                                                  WarrantyModel p =
+                                                      warranties[index];
+                                                  return InkWell(
+                                                    onTap: () {
+                                                      addWarranty(p);
+                                                    },
+                                                    child: AnimatedContainer(
+                                                      duration: Duration(
+                                                          milliseconds: 200),
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  p.selected
+                                                                      ? 5
+                                                                      : 15,
+                                                              vertical: 5),
+                                                      width: double.infinity,
+                                                      height: 40,
+                                                      color: Colors.blue,
+                                                      child: Center(
+                                                        child: p.loading
+                                                            ? SizedBox(
+                                                                height: 30,
+                                                                width: 30,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  strokeWidth:
+                                                                      2,
+                                                                  valueColor:
+                                                                      AlwaysStoppedAnimation(
+                                                                          Colors
+                                                                              .white),
+                                                                ),
+                                                              )
+                                                            : Text(
+                                                                '${p.garantia} meses' ??
+                                                                    'no-data',
+                                                                style: Style
+                                                                    .paymentFormatTitle,
+                                                              ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }))
+                                      ],
+                                    ),
+                                  ),
+                                ))
                               ],
                             ),
-                            SizedBox(
-                              height: 7,
+                          )),
+                      Flexible(
+                          flex: 1,
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'ADICIONAR PAGAMENTO',
+                                    style: Style.mediumText,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Expanded(
+                                    child: ListView.builder(
+                                        itemCount: paymentFormats.length,
+                                        itemBuilder: (context, index) {
+                                          PaymentFormatModel p =
+                                              paymentFormats[index];
+                                          return InkWell(
+                                            onTap: () {
+                                              this.unSetPaymentFormat();
+                                              selectedFormat = p;
+                                              setState(() {
+                                                p.selected = !p.selected;
+                                              });
+                                            },
+                                            child: AnimatedContainer(
+                                              duration:
+                                                  Duration(milliseconds: 200),
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      p.selected ? 5 : 15,
+                                                  vertical: 5),
+                                              width: double.infinity,
+                                              height: 40,
+                                              color: Colors.blue,
+                                              child: Center(
+                                                child: Text(
+                                                  p.forma ?? 'no-data',
+                                                  style:
+                                                      Style.paymentFormatTitle,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        })),
+                                createTextField(
+                                    'Pagamento', ctrPayment, LineIcons.money,
+                                    function: makePayment),
+                              ],
                             ),
-                            // Divider(
-                            //   color: Colors.grey[500],
-                            //   thickness: 2,
-                            // ),
-                            Expanded(
-                              child: payments.length > 0
-                                  ? ListView.builder(
-                                      itemExtent: 50,
-                                      itemCount: payments.length,
-                                      itemBuilder: (context, index) {
-                                        PaymentModel p = payments[index];
-                                        return ListTile(
-                                          title: Text(
-                                            Utils.formatMoney(
-                                                double.parse(p.valor)),
-                                            style: Style.itemValueText,
-                                          ),
-                                          subtitle: Text(
-                                            Utils.formatDate(p.dataPagamento),
-                                            style: Style.paymenyDateText,
-                                          ),
-                                          trailing: Text(
-                                            p.formaId,
-                                            style: Style.itemNameText,
-                                          ),
-                                        );
-                                      })
-                                  : Text(
-                                      'Nenhum Pagamento Realizado',
-                                      style: Style.warrantyText,
-                                    ),
-                            )
-                          ],
-                        ),
-                      )),
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              padding: EdgeInsets.all(0),
-                              // decoration: BoxDecoration(
-                              //   shape: BoxShape.circle,
-                              //   border: Border.all(width: 1, color: Colors.orange)
-                              // ),
-                              child: Center(
-                                child: Column(
+                          )),
+                      Flexible(
+                          flex: 1,
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Center(
-                                      child: Text(
-                                        'GARANTIA',
-                                        style: Style.mediumText,
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        selectedWarranty == null
-                                            ? 'Não selecionado'
-                                            : '${selectedWarranty.garantia} meses',
-                                        style: Style.warrantyText,
-                                      ),
+                                    Icon(
+                                      LineIcons.money,
+                                      color: totalPaid <
+                                              double.parse(
+                                                  widget.service.valorTotal)
+                                          ? Colors.orange
+                                          : Colors.green,
+                                      size: 30,
                                     ),
                                     SizedBox(
-                                      height: 5,
+                                      width: 10,
                                     ),
-                                    // Divider(
-                                    //   color: Colors.grey[500],
-                                    //   thickness: 2,
-                                    // ),
-                                    Expanded(
-                                        child: ListView.builder(
-                                            itemCount: warranties.length,
-                                            itemBuilder: (context, index) {
-                                              WarrantyModel p =
-                                                  warranties[index];
-                                              return InkWell(
-                                                onTap: () {
-                                                  addWarranty(p);
-                                                },
-                                                child: AnimatedContainer(
-                                                  duration: Duration(
-                                                      milliseconds: 200),
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          p.selected ? 5 : 15,
-                                                      vertical: 5),
-                                                  width: double.infinity,
-                                                  height: 40,
-                                                  color: Colors.blue,
-                                                  child: Center(
-                                                    child: p.loading
-                                                        ? SizedBox(
-                                                          height: 30,
-                                                          width: 30,
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              strokeWidth: 2,
-                                                              valueColor:
-                                                                  AlwaysStoppedAnimation(
-                                                                      Colors
-                                                                          .white),
-                                                            ),
-                                                          )
-                                                        : Text(
-                                                            '${p.garantia} meses' ??
-                                                                'no-data',
-                                                            style: Style
-                                                                .paymentFormatTitle,
-                                                          ),
-                                                  ),
-                                                ),
-                                              );
-                                            }))
+                                    Text(
+                                      '${Utils.formatMoney(totalPaid)} / ${Utils.formatMoney(double.parse(widget.service.valorTotal))}',
+                                      style: Style.totalValuePaid,
+                                    ),
                                   ],
                                 ),
-                              ),
-                            ))
+                                SizedBox(
+                                  height: 7,
+                                ),
+                                // Divider(
+                                //   color: Colors.grey[500],
+                                //   thickness: 2,
+                                // ),
+                                Expanded(
+                                  child: payments.length > 0
+                                      ? ListView.builder(
+                                          itemExtent: 50,
+                                          itemCount: payments.length,
+                                          itemBuilder: (context, index) {
+                                            PaymentModel p = payments[index];
+                                            return ListTile(
+                                              title: Text(
+                                                Utils.formatMoney(
+                                                    double.parse(p.valor)),
+                                                style: Style.itemValueText,
+                                              ),
+                                              subtitle: Text(
+                                                Utils.formatDate(
+                                                    p.dataPagamento),
+                                                style: Style.paymenyDateText,
+                                              ),
+                                              trailing: Text(
+                                                p.formaId,
+                                                style: Style.itemNameText,
+                                              ),
+                                            );
+                                          })
+                                      : Text(
+                                          'Nenhum Pagamento Realizado',
+                                          style: Style.warrantyText,
+                                        ),
+                                )
+                              ],
+                            ),
+                          )),
+                    ],
+                  )),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                height: 60,
+                width: 900,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                        top: BorderSide(width: 0.5, color: Colors.grey[800]))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(3)),
+                        color: Colors.green,
+                        child: Row(
+                          children: [
+                            Icon(
+                              LineIcons.check,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text('Concluir Serviço', style: Style.serviceButton)
                           ],
                         ),
-                      ))
-                ],
-              )),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            height: 60,
-            width: 900,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                    top: BorderSide(width: 0.5, color: Colors.grey[800]))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3)),
-                    color: Colors.green,
-                    child: Row(
-                      children: [
-                        Icon(
-                          LineIcons.check,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Concluir Serviço', style: Style.serviceButton)
-                      ],
-                    ),
-                    onPressed: conclude),
-              ],
-            ),
+                        onPressed: conclude),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   getPaymentFormats() async {

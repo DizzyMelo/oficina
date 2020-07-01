@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
@@ -94,12 +95,7 @@ class _ClientViewState extends State<ClientView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Icon(LineIcons.close),
-                  onPressed: () => Navigator.pop(context)),
-            ),
+            AppBarComponent(icon: LineIcons.user, title: 'Clientes',),
             Expanded(
                 child: Container(
               child: Row(
@@ -186,6 +182,36 @@ class _ClientViewState extends State<ClientView> {
                                           ),
                                           onPressed: () async {
                                             _services();
+                                          }),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      RaisedButton(
+                                          color: Colors.green,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                LineIcons.car,
+                                                color: Colors.white,
+                                                size: 15,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Adicionar Carro",
+                                                style: Style.serviceButton,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {
+                                            Navigator.pushNamed(
+                                                context, '/new_car',
+                                                arguments: selectedClient
+                                                    .informacoes.clienteId);
                                           })
                                     ],
                                   )
@@ -367,7 +393,7 @@ class _ClientViewState extends State<ClientView> {
     ClientBaseModel c = await ClientService.addClient('1', ctrName.text,
         ctrPhone.text, ctrPhone2.text, ctrCpf.text, ctrEmail.text);
 
-    if (c != null) { 
+    if (c != null) {
       ctrName.text = "";
       ctrCpf.text = "";
       ctrPhone.text = "";
@@ -386,22 +412,21 @@ class _ClientViewState extends State<ClientView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text(
-              "Desaja adicionar um veículo ao cliente"),
+          title: Text("Desaja adicionar um veículo ao cliente", style: Style.dialogTitle),
           content: Container(
-            height: 200,
-            child: Center(child: Text('Adione um veículo ao cliente'))),
+              height: 180,
+              child: Center(child: Text('Adione um veículo ao cliente', style: Style.dialogMessage,))),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR"),
+              child: Text("FECHAR", style: Style.closeButton),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
 
             FlatButton(
-              child: Text("SIM"),
+              child: Text("SIM", style: Style.okButton),
               onPressed: () {
                 Navigator.pushNamed(context, '/new_car', arguments: id);
               },
@@ -421,12 +446,12 @@ class _ClientViewState extends State<ClientView> {
         // return object of type Dialog
         return AlertDialog(
           title: Text(
-              "Histórico de serviços - ${selectedClient.informacoes.clienteNome}"),
+              "Histórico de serviços - ${selectedClient.informacoes.clienteNome}", style: Style.dialogTitle,),
           content: Container(
               height: 500,
               width: 700,
               child: services.isEmpty
-                  ? Text('Buscando Serviços')
+                  ? Center(child: Text('Cliente sem serviço registrado', style: Style.notFoundTextTitle,),)
                   : Column(
                       children: [
                         TextField(
@@ -448,7 +473,7 @@ class _ClientViewState extends State<ClientView> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR"),
+              child: Text("FECHAR", style: Style.closeButton,),
               onPressed: () {
                 Navigator.of(context).pop();
               },

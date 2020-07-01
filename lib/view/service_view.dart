@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/model/added_item_model.dart';
 import 'package:oficina/model/item_model.dart';
 import 'package:oficina/model/service_model.dart';
@@ -21,6 +22,7 @@ class ServiceView extends StatefulWidget {
 
 class _ServiceViewState extends State<ServiceView> {
   TextEditingController ctrSearch = TextEditingController();
+  TextEditingController ctrEdit = TextEditingController();
   TextEditingController ctrDiscount = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
 
@@ -40,14 +42,10 @@ class _ServiceViewState extends State<ServiceView> {
         key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                      icon: Icon(LineIcons.close),
-                      onPressed: () => Navigator.pop(context)),
-                ),
+                AppBarComponent(icon: LineIcons.automobile, title: 'Serviço',),
                 Center(
                   child: Container(
                       height: 665,
@@ -151,7 +149,7 @@ class _ServiceViewState extends State<ServiceView> {
                                                         height: 10,
                                                       ),
                                                       Text(
-                                                          'Busque itens na barra acima!'),
+                                                          'Busque itens na barra acima!', style: Style.serviceMessage,),
                                                     ],
                                                   )),
                                           )
@@ -200,6 +198,10 @@ class _ServiceViewState extends State<ServiceView> {
                                                                   .produtosAdicionados[
                                                               index];
                                                       return ListTile(
+                                                        onTap: (){
+                                                          ctrEdit.text = p.qtd;
+                                                          _editAddedProduct(p);
+                                                        },
                                                         title: Text(
                                                           p.nome,
                                                           style: Style
@@ -232,7 +234,7 @@ class _ServiceViewState extends State<ServiceView> {
                                                         height: 10,
                                                       ),
                                                       Text(
-                                                          'Nenhum item adicionado'),
+                                                          'Nenhum item adicionado', style: Style.serviceMessage,),
                                                     ],
                                                   )),
                                           )
@@ -433,7 +435,48 @@ class _ServiceViewState extends State<ServiceView> {
   addItem(ItemModel item, int qtd) async {
     double valorTotal = double.parse(item.valorVenda) * qtd;
     ItemAdicionadoModel tempItems = await ServiceService.addItem(
-        item, widget.serviceModel.idServico, qtd, valorTotal);
+        int.parse(item.id), widget.serviceModel.idServico, qtd, valorTotal);
+
+    if (tempItems != null) {
+      setState(() {
+        addedItems = tempItems;
+        valores = tempItems.valores;
+      });
+
+      Navigator.pop(context);
+    }
+  }
+
+  bool validateQtd(){
+    try{
+      int qtd = int.parse(ctrEdit.text);
+      if(qtd <= 0){
+        return false;
+      }
+    }catch(e){
+      return false;
+    }
+    return true;
+  }
+
+  editItem(ProdutosAdicionado p) async {
+    if(!validateQtd()) return;
+    int qtd = int.parse(ctrEdit.text);
+    double valorTotal = double.parse(p.valorVenda) * qtd;
+    ItemAdicionadoModel tempItems = await ServiceService.editItem(widget.serviceModel.idServico, qtd, valorTotal, p);
+
+    if (tempItems != null) {
+      setState(() {
+        addedItems = tempItems;
+        valores = tempItems.valores;
+      });
+
+      Navigator.pop(context);
+    }
+  }
+
+  removeItem(ProdutosAdicionado item) async {
+    ItemAdicionadoModel tempItems = await ServiceService.removeItem(item, widget.serviceModel.idServico);
 
     if (tempItems != null) {
       setState(() {
@@ -501,6 +544,49 @@ class _ServiceViewState extends State<ServiceView> {
     );
   }
 
+  void _editAddedProduct(p){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text("Editar Produto Adicionado", style: Style.dialogTitle),
+          content: TextField(
+            style: Style.textField,
+            controller: ctrEdit,
+            decoration: InputDecoration(
+              labelText: 'Alterar Qtd.'
+            ),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("FECHAR", style: Style.closeButton),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("EXCLUIR", style: Style.closeButton),
+              onPressed: () async {
+                await removeItem(p);
+                //Navigator.of(context).pop();
+              },
+            ),
+
+            FlatButton(
+              child: Text("SALVAR", style: Style.okButton),
+              onPressed: (){
+                editItem(p);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _discount() {
     // flutter defined function
     showDialog(
@@ -508,21 +594,25 @@ class _ServiceViewState extends State<ServiceView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Desconto"),
+          title: Text("Desconto", style: Style.dialogTitle),
           content: TextField(
+            style: Style.textField,
             controller: ctrDiscount,
+            decoration: InputDecoration(
+              prefixIcon: Icon(LineIcons.money)
+            ),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR"),
+              child: Text("FECHAR", style: Style.closeButton),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
 
             FlatButton(
-              child: Text("ADICIONAR"),
+              child: Text("ADICIONAR", style: Style.okButton),
               onPressed: addDiscount,
             ),
           ],
@@ -538,21 +628,25 @@ class _ServiceViewState extends State<ServiceView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Mão de Obra"),
+          title: Text("Mão de Obra", style: Style.dialogTitle,),
           content: TextField(
+            style: Style.textField,
             controller: ctrManPower,
+            decoration: InputDecoration(
+              prefixIcon: Icon(LineIcons.money)
+            ),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR"),
+              child: Text("FECHAR", style: Style.closeButton,),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
 
             FlatButton(
-              child: Text("ADICIONAR"),
+              child: Text("ADICIONAR", style: Style.okButton,),
               onPressed: addManPower,
             ),
           ],

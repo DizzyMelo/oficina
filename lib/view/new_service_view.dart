@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/model/client_model.dart';
+import 'package:oficina/model/service_model.dart';
 import 'package:oficina/model/worker_model.dart';
 import 'package:oficina/service/client_service.dart';
+import 'package:oficina/service/service_service.dart';
 import 'package:oficina/service/worker_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
@@ -87,12 +90,7 @@ class _NewServiceViewState extends State<NewServiceView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                  icon: Icon(LineIcons.close),
-                  onPressed: () => Navigator.pop(context)),
-            ),
+            AppBarComponent(icon: LineIcons.plus, title: 'Novo Serviço',),
             Expanded(
                 child: Container(
               child: Row(
@@ -112,33 +110,6 @@ class _NewServiceViewState extends State<NewServiceView> {
                               height: 10,
                             ),
 
-                            selectedClient != null &&
-                                    selectedClient.carros.length > 0
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(child: Text('Carros')),
-                                      Flexible(
-                                          child: DropdownButton<String>(
-                                        items: selectedClient.carros
-                                            .map((carro) => DropdownMenuItem(
-                                                value: carro.id.toString(),
-                                                child: Text(carro.modelo)))
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedCar = value;
-                                          });
-                                        },
-                                        value: _selectedCar,
-                                        isExpanded: true,
-                                      ))
-                                    ],
-                                  )
-                                : Container(),
-
-                              SizedBox(height: 10,),
                             Row(
                               children: [
                                 SizedBox(
@@ -159,8 +130,37 @@ class _NewServiceViewState extends State<NewServiceView> {
                               ],
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
+
+                            selectedClient != null &&
+                                    selectedClient.carros.length > 0
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(child: Text('Carros', style: Style.carTextTitle,)),
+                                      Flexible(
+                                          child: DropdownButton<String>(
+                                        items: selectedClient.carros
+                                            .map((carro) => DropdownMenuItem(
+                                                value: carro.id.toString(),
+                                                child: Text(carro.modelo, style: Style.carTextTitle,)))
+                                            .toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedCar = value;
+                                          });
+                                        },
+                                        value: _selectedCar,
+                                        isExpanded: true,
+                                      ))
+                                    ],
+                                  )
+                                : Container(),
+
+                              SizedBox(height: 20,),
+                            
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -188,7 +188,7 @@ class _NewServiceViewState extends State<NewServiceView> {
                                           ],
                                         ),
                                         onPressed: () {
-                                          Navigator.pushNamed(context, '/new_car', arguments: selectedClient);
+                                          Navigator.pushNamed(context, '/new_car', arguments: selectedClient.informacoes.clienteId);
                                           // setState(() {
                                           //   selectedClient = null;
                                           //   unselectAllClients();
@@ -218,7 +218,15 @@ class _NewServiceViewState extends State<NewServiceView> {
                                         ),
                                       ],
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      clearClient();
+                                      unselectAllClients();
+                                      setState(() {
+                                        selectedClient = null;
+                                        worker = null;
+                                        _selectedCar = '';
+                                      });
+                                    }),
                                 SizedBox(
                                   width: 10,
                                 ),
@@ -242,7 +250,10 @@ class _NewServiceViewState extends State<NewServiceView> {
                                         ),
                                       ],
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      if(!validateServiceInfo()) return;
+                                      addService(selectedClient.informacoes.clienteId, _selectedCar, worker.id, '1');
+                                    }),
                               ],
                             )
                           ],
@@ -264,6 +275,9 @@ class _NewServiceViewState extends State<NewServiceView> {
                                     size: 20,
                                     color: Colors.grey[400],
                                   ),
+                                  suffixIcon: IconButton(icon: Icon(LineIcons.plus), onPressed: (){
+                                    Navigator.pushNamed(context, '/client');
+                                  }),
                                   hintText: 'Buscar cliente...',
                                   hintStyle: Style.textField,
                                   enabledBorder: UnderlineInputBorder(
@@ -301,8 +315,7 @@ class _NewServiceViewState extends State<NewServiceView> {
                                       style: Style.clientNameText,
                                     ),
                                     subtitle: Text(
-                                      //'${clientModel.carro} - ${clientModel.placa}',
-                                      'carro',
+                                      Utils.getCars(clientModel.carros),
                                       style: Style.carText,
                                     ),
                                     trailing: Icon(clientModel.selecionado
@@ -354,6 +367,10 @@ class _NewServiceViewState extends State<NewServiceView> {
                                     workerModel.nome,
                                     style: Style.workerNameServiceText,
                                   ),
+                                  subtitle: Text(
+                                    workerModel.funcao,
+                                    style: Style.workerRoleSubtitle,
+                                  ),
                                 );
                               },
                             ),
@@ -376,6 +393,29 @@ class _NewServiceViewState extends State<NewServiceView> {
       setState(() {
         workers = wk;
       });
+    }
+  }
+
+  bool validateServiceInfo(){
+    if(selectedClient == null){
+      Utils.showInSnackBar('Selecione o cliente', Colors.red, _scaffoldKey);
+      return false;
+    } else if(worker == null){
+      Utils.showInSnackBar('Selecione o colaborador', Colors.red, _scaffoldKey);
+      return false;
+    } else if(_selectedCar == null || _selectedCar.isEmpty){
+      Utils.showInSnackBar('Selecione o carro do cliente', Colors.red, _scaffoldKey);
+      return false;
+    }
+    return true;
+  }
+
+  addService(cliente, carro, mecanico, loja) async {
+    ServiceModel temp = await ServiceService.addService(cliente, carro, mecanico, loja);
+    if(temp != null){
+      Navigator.pushNamed(context, '/service', arguments: temp);
+    }else{
+      Utils.showInSnackBar('Erro ao iniciar serviço', Colors.red, _scaffoldKey);
     }
   }
 
