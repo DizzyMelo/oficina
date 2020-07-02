@@ -66,4 +66,38 @@ class WorkerService {
       return null;
     }
   }
+
+  static Future<WorkerModel> editWorker(id, nome, telefone,funcao, login) async {
+    String url = '${Urls.baseUrl}colaborador/editar.php';
+    FormData formData = new FormData.fromMap(
+        {
+          'id': id, 
+          'nome': nome, 
+          'telefone': telefone,
+          'funcao': funcao,
+          'login': login,
+        });
+    Dio dio = new Dio();
+    try{
+      var response = await dio.post(url, data: formData);
+      return WorkerModel.fromJson(json.decode(response.data));
+    }catch(e){
+      return null;
+    }
+  }
+
+  static Future<WorkerModel> deleteWorker(colaborador) async {
+    String url = '${Urls.baseUrl}colaborador/excluir.php';
+    FormData formData = new FormData.fromMap(
+        {
+          'colaborador': colaborador
+        });
+    Dio dio = new Dio();
+    try{
+      var response = await dio.post(url, data: formData);
+      return WorkerModel.fromJson(json.decode(response.data));
+    }catch(e){
+      return null;
+    }
+  }
 }

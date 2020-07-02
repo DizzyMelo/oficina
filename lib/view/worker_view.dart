@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/role_model.dart';
-import 'package:oficina/components/worker_list_component.dart';
-import 'package:oficina/model/product_model.dart';
+import 'package:oficina/components/worker_row_component.dart';
 import 'package:oficina/model/worker_model.dart';
-import 'package:oficina/service/product_service.dart';
 import 'package:oficina/service/worker_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
@@ -29,6 +26,7 @@ class _WorkerViewState extends State<WorkerView> {
   List<RoleModel> roles = new List();
 
   WorkerModel selectedWorker;
+  int index = 0;
   String selectedRole;
 
   Widget createTextField(
@@ -67,7 +65,10 @@ class _WorkerViewState extends State<WorkerView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            AppBarComponent(icon: LineIcons.wrench, title: 'Colaboradores',),
+            AppBarComponent(
+              icon: LineIcons.wrench,
+              title: 'Colaboradores',
+            ),
             Expanded(
                 child: Container(
               child: Row(
@@ -80,32 +81,38 @@ class _WorkerViewState extends State<WorkerView> {
                             children: [
                               createTextField('Nome', ctrName, LineIcons.user),
                               createTextField(
-                                  'Telefone', ctrPhone, LineIcons.code),
+                                  'Telefone', ctrPhone, LineIcons.phone),
                               createTextField(
                                   'Login', ctrLogin, LineIcons.wrench),
-
                               Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(child: Text('Função', style: Style.carTextTitle,)),
-                                      Flexible(
-                                          child: DropdownButton<String>(
-                                        items: roles
-                                            .map((role) => DropdownMenuItem(
-                                                value: role.id.toString(),
-                                                child: Text(role.funcao, style: Style.carTextTitle,)))
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            selectedRole = value;
-                                          });
-                                        },
-                                        value: selectedRole,
-                                        isExpanded: true,
-                                      ))
-                                    ],
-                                  ),
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                      child: Text(
+                                    'Função',
+                                    style: Style.carTextTitle,
+                                  )),
+                                  Flexible(
+                                      child: DropdownButton<String>(
+                                    items: roles
+                                        .map((role) => DropdownMenuItem(
+                                            value: role.id.toString(),
+                                            child: Text(
+                                              role.funcao,
+                                              style: Style.carTextTitle,
+                                            )))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedRole = value;
+                                      });
+                                    },
+                                    value: selectedRole,
+                                    isExpanded: true,
+                                  ))
+                                ],
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -129,12 +136,12 @@ class _WorkerViewState extends State<WorkerView> {
                                                   width: 10,
                                                 ),
                                                 Text(
-                                                  "Cancelar",
+                                                  "Excluir",
                                                   style: Style.serviceButton,
                                                 ),
                                               ],
                                             ),
-                                            onPressed: unfillForm),
+                                            onPressed: _deleteWorker),
                                         SizedBox(
                                           width: 10,
                                         ),
@@ -165,31 +172,6 @@ class _WorkerViewState extends State<WorkerView> {
                                   : Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        RaisedButton(
-                                            color: Colors.red,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(3)),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  LineIcons.close,
-                                                  color: Colors.white,
-                                                  size: 15,
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  "Excluir",
-                                                  style: Style.serviceButton,
-                                                ),
-                                              ],
-                                            ),
-                                            onPressed: () {}),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
                                         RaisedButton(
                                             color: Colors.green,
                                             shape: RoundedRectangleBorder(
@@ -246,8 +228,24 @@ class _WorkerViewState extends State<WorkerView> {
                             Expanded(
                                 child: Container(
                                     child: Scrollbar(
-                              child: WorkerListComponent(workers)
-                            )))
+                                        child: Scrollbar(
+                                            child: ListView.builder(
+                                                itemExtent: 55,
+                                                itemCount: workers.length,
+                                                itemBuilder: (context, i) {
+                                                  WorkerModel worker =
+                                                      workers[i];
+                                                  return InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedWorker =
+                                                              worker;
+                                                          index = i;
+                                                        });
+                                                      },
+                                                      child: WorkerRowComponent(
+                                                          worker));
+                                                })))))
                           ],
                         ),
                       )),
@@ -310,16 +308,44 @@ class _WorkerViewState extends State<WorkerView> {
     }
   }
 
-  addWorker() async {
-    WorkerModel w = await WorkerService.addWorker(ctrName.text, ctrPhone.text, '', '1', selectedRole, ctrLogin.text);
+  bool validateInfo() {
+    if (ctrName.text.isEmpty) {
+      Utils.showInSnackBar(
+          'Digie o nome do colaborador', Colors.red, _scaffoldKey);
+      return false;
+    } else if (selectedRole == null || selectedRole.isEmpty) {
+      Utils.showInSnackBar(
+          'Selecione a função do colaborador', Colors.red, _scaffoldKey);
+      return false;
+    }
+    return true;
+  }
 
-    if(w != null){
+  _deleteWorker() async {
+    WorkerModel w = await WorkerService.deleteWorker(selectedWorker.id);
+    if (w != null) {
+
+      Utils.showInSnackBar('Colaborador excluido com sucesso', Colors.green, _scaffoldKey);
+      setState(() {
+        workers.removeAt(index);
+      });
+    }
+  }
+
+  addWorker() async {
+    if (validateInfo() == false) return;
+    WorkerModel w = await WorkerService.addWorker(
+        ctrName.text, ctrPhone.text, '', '1', selectedRole, ctrLogin.text);
+
+    if (w != null) {
       setState(() {
         workers.add(w);
       });
-      Utils.showInSnackBar('Colaborador adicionado', Colors.green, _scaffoldKey);
-    }else{
-      Utils.showInSnackBar('Erro ao adicionar colaborador', Colors.red, _scaffoldKey);
+      Utils.showInSnackBar(
+          'Colaborador adicionado', Colors.green, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao adicionar colaborador', Colors.red, _scaffoldKey);
     }
   }
 
