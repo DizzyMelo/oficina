@@ -14,6 +14,7 @@ class StockView extends StatefulWidget {
 
 class _StockViewState extends State<StockView> {
   TextEditingController ctrSearch = TextEditingController();
+  TextEditingController ctrAmount = TextEditingController();
   TextEditingController ctrName = TextEditingController();
   TextEditingController ctrCode = TextEditingController();
   TextEditingController ctrApplication = TextEditingController();
@@ -29,6 +30,7 @@ class _StockViewState extends State<StockView> {
   List<ProductModel> products = new List();
 
   ProductModel selectedProduct;
+  int selectedIndex;
 
   Widget createTextField(
       String hint, TextEditingController controller, IconData icon) {
@@ -43,8 +45,8 @@ class _StockViewState extends State<StockView> {
                 size: 20,
                 color: Colors.grey[400],
               ),
-              hintText: hint,
-              hintStyle: Style.textField,
+              labelText: hint,
+              labelStyle: Style.textField,
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                 width: 1,
@@ -66,7 +68,10 @@ class _StockViewState extends State<StockView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            AppBarComponent(icon: LineIcons.square, title: 'Estoque',),
+            AppBarComponent(
+              icon: LineIcons.square,
+              title: 'Estoque',
+            ),
             Expanded(
                 child: Container(
               child: Row(
@@ -93,85 +98,111 @@ class _StockViewState extends State<StockView> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  RaisedButton(
-                                      color: Colors.red,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3)),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            LineIcons.close,
-                                            color: Colors.white,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "Excluir",
-                                            style: Style.serviceButton,
-                                          ),
-                                        ],
-                                      ),
-                                      onPressed: () {}),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-
-                                  selectedProduct == null ? Container() :
-                                  RaisedButton(
-                                      color: Colors.blue,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3)),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            LineIcons.pencil,
-                                            color: Colors.white,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "Editar",
-                                            style: Style.serviceButton,
-                                          ),
-                                        ],
-                                      ),
-                                      onPressed: editProduct),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  RaisedButton(
-                                      color: Colors.green,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(3)),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            LineIcons.plus,
-                                            color: Colors.white,
-                                            size: 15,
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "Adicionar",
-                                            style: Style.serviceButton,
-                                          ),
-                                        ],
-                                      ),
-                                      onPressed: addProduct),
-                                ],
-                              )
+                              selectedProduct == null
+                                  ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        RaisedButton(
+                                            color: Colors.green,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  LineIcons.plus,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  "Adicionar",
+                                                  style: Style.serviceButton,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: addProduct),
+                                      ],
+                                    )
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        RaisedButton(
+                                            color: Colors.red,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  LineIcons.close,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  "Excluir",
+                                                  style: Style.serviceButton,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: _confirmDeletion),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        RaisedButton(
+                                            color: Colors.blue,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  LineIcons.pencil,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  "Editar",
+                                                  style: Style.serviceButton,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: editProduct),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        RaisedButton(
+                                            color: Colors.green,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(3)),
+                                            child: Row(
+                                              children: [
+                                                Icon(
+                                                  LineIcons.plus,
+                                                  color: Colors.white,
+                                                  size: 15,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  "Entrada",
+                                                  style: Style.serviceButton,
+                                                ),
+                                              ],
+                                            ),
+                                            onPressed: _confirmAdditionToStock),
+                                      ],
+                                    )
                             ],
                           ))),
                   Flexible(
@@ -218,8 +249,8 @@ class _StockViewState extends State<StockView> {
                                         fillForm(productModel);
                                         setState(() {
                                           selectedProduct = productModel;
+                                          selectedIndex = index;
                                         });
-                                        
                                       },
                                       title: Text(
                                         productModel.nome ?? '',
@@ -324,48 +355,193 @@ class _StockViewState extends State<StockView> {
   }
 
   addProduct() async {
-    String valorPago = ctrPricePaid.text.replaceAll("R\$", "").replaceAll(".", "").replaceAll(",", ".");
-    String valorVenda = ctrPriceSale.text.replaceAll("R\$", "").replaceAll(".", "").replaceAll(",", ".");
+    String valorPago = ctrPricePaid.text
+        .replaceAll("R\$", "")
+        .replaceAll(".", "")
+        .replaceAll(",", ".");
+    String valorVenda = ctrPriceSale.text
+        .replaceAll("R\$", "")
+        .replaceAll(".", "")
+        .replaceAll(",", ".");
     ProductModel p = new ProductModel(
-      nome: ctrName.text,
-      aplicacao: ctrApplication.text,
-      valorPago: valorPago,
-      valorVenda: valorVenda,
-      qtd: ctrQtd.text,
-      qtdMin: ctrQtdMin.text,
-      sts: "1",
-      lojaId: '1',
-      codigo: ctrCode.text
-    );
+        nome: ctrName.text,
+        aplicacao: ctrApplication.text,
+        valorPago: valorPago,
+        valorVenda: valorVenda,
+        qtd: ctrQtd.text,
+        qtdMin: ctrQtdMin.text,
+        sts: "1",
+        lojaId: '1',
+        codigo: ctrCode.text);
     ProductModel product = await ProductService.add(p);
 
-    if(product != null){
+    if (product != null) {
       Utils.showInSnackBar('Produto adicionado', Colors.green, _scaffoldKey);
-    }else{
-      Utils.showInSnackBar('Alogo deu erro ao adicionar o produto', Colors.red, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Alogo deu erro ao adicionar o produto', Colors.red, _scaffoldKey);
+    }
+  }
+
+  deleteProduct() async {
+    bool res = await ProductService.delete(selectedProduct.id);
+
+    if (res) {
+      setState(() {
+        products.removeAt(selectedIndex);
+      });
+      Navigator.pop(context);
+      Utils.showInSnackBar(
+          'Item removido com sucesso', Colors.green, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar('Erro ao remover item', Colors.red, _scaffoldKey);
+    }
+  }
+
+  void _confirmDeletion() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(
+            "Excluir ${selectedProduct.nome}",
+            style: Style.dialogTitle,
+          ),
+          content: Container(
+            height: 130,
+            width: 300,
+            child: Center(
+              child: Text(
+                'Tem certeza que deseja exluir este produto',
+                style: Style.dialogMessage,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "NÃO",
+                style: Style.closeButton,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "SIM",
+                style: Style.okButton,
+              ),
+              onPressed: deleteProduct,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _confirmAdditionToStock() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(
+            "Adicionar Entrada - ${selectedProduct.nome}",
+            style: Style.dialogTitle,
+          ),
+          content: Container(
+            height: 130,
+            width: 300,
+            child: Center(
+              child: TextField(
+                controller: ctrAmount,
+                style: Style.textField,
+                decoration: InputDecoration(
+                    labelText: 'Qtd.', labelStyle: Style.textField),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text(
+                "FECHAR",
+                style: Style.closeButton,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                "ADICIONAR",
+                style: Style.okButton,
+              ),
+              onPressed: addToStock,
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  bool validateQtd(){
+    try{
+      int qtd = int.parse(ctrAmount.text);
+      if(qtd <= 0){
+        return false;
+      }
+    }catch(e){
+      return false;
+    }
+    return true;
+  }
+
+  addToStock() async {
+    if(!validateQtd()) return;
+    int qtd = int.parse(ctrAmount.text);
+    bool res = await ProductService.addToStock(selectedProduct.id, qtd);
+    if (res) {
+      Navigator.pop(context);
+      Utils.showInSnackBar(
+          'Entrada adicionada com sucesso', Colors.green, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao adicionar entrada', Colors.red, _scaffoldKey);
     }
   }
 
   editProduct() async {
-    String valorPago = ctrPricePaid.text.replaceAll("R\$", "").replaceAll(".", "").replaceAll(",", ".");
-    String valorVenda = ctrPriceSale.text.replaceAll("R\$", "").replaceAll(".", "").replaceAll(",", ".");
+    String valorPago = ctrPricePaid.text
+        .replaceAll("R\$", "")
+        .replaceAll(".", "")
+        .replaceAll(",", ".");
+    String valorVenda = ctrPriceSale.text
+        .replaceAll("R\$", "")
+        .replaceAll(".", "")
+        .replaceAll(",", ".");
     ProductModel p = new ProductModel(
-      id: selectedProduct.id,
-      nome: ctrName.text,
-      aplicacao: ctrApplication.text,
-      valorPago: valorPago,
-      valorVenda: valorVenda,
-      qtd: ctrQtd.text,
-      qtdMin: ctrQtdMin.text,
-      sts: "1",
-      lojaId: '1',
-      codigo: ctrCode.text
-    );
+        id: selectedProduct.id,
+        nome: ctrName.text,
+        aplicacao: ctrApplication.text,
+        valorPago: valorPago,
+        valorVenda: valorVenda,
+        qtd: ctrQtd.text,
+        qtdMin: ctrQtdMin.text,
+        sts: "1",
+        lojaId: '1',
+        codigo: ctrCode.text);
     ProductModel product = await ProductService.edit(p);
-    if(product != null){
+    if (product != null) {
       Utils.showInSnackBar('Produto editado', Colors.green, _scaffoldKey);
-    }else{
-      Utils.showInSnackBar('Alogo deu erro ao editar o produto', Colors.red, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Alogo deu erro ao editar o produto', Colors.red, _scaffoldKey);
     }
   }
 }

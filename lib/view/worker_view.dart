@@ -42,8 +42,8 @@ class _WorkerViewState extends State<WorkerView> {
                 size: 20,
                 color: Colors.grey[400],
               ),
-              hintText: hint,
-              hintStyle: Style.textField,
+              labelText: hint,
+              labelStyle: Style.textField,
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                 width: 1,

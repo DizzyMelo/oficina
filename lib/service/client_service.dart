@@ -43,7 +43,29 @@ class ClientService {
     Dio dio = new Dio();
     try{
       var response = await dio.post(url, data: formData);
-      print(response.data);
+      return ClientBaseModel.fromJson(json.decode(response.data));
+    }catch(e){
+      return null;
+    }
+  }
+
+  static Future<ClientBaseModel> editClient(ClientModel c) async {
+    String url = '${Urls.baseUrl}cliente/editar.php';
+
+    Map<String, dynamic> body  = { 
+          'id': c.informacoes.clienteId,
+          'nome': c.informacoes.clienteNome,
+          'telefone1': c.informacoes.telefone1, 
+          'telefone2': c.informacoes.telefone2,
+          'cpf': c.informacoes.cpf,
+          'email': c.informacoes.email
+        };
+
+    print(body);
+    FormData formData = new FormData.fromMap(body);
+    Dio dio = new Dio();
+    try{
+      var response = await dio.post(url, data: formData);
       return ClientBaseModel.fromJson(json.decode(response.data));
     }catch(e){
       return null;

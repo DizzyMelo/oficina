@@ -46,6 +46,8 @@ class _ClientViewState extends State<ClientView> {
   selectClient(ClientModel client) {
     ctrName.text = client.informacoes.clienteNome ?? '';
     ctrPhone.text = client.informacoes.telefone1 ?? '';
+    ctrPhone2.text = client.informacoes.telefone2 ?? '';
+    ctrCpf.text = client.informacoes.cpf ?? '';
     ctrEmail.text = client.informacoes.email ?? '';
     //ctrCar.text = client.informacoes.carro ?? '';
     //ctrPlate.text = client.placa ?? '';
@@ -72,8 +74,8 @@ class _ClientViewState extends State<ClientView> {
                 size: 20,
                 color: Colors.grey[400],
               ),
-              hintText: hint,
-              hintStyle: Style.textField,
+              labelText: hint,
+              labelStyle: Style.textField,
               enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                 width: 1,
@@ -95,7 +97,10 @@ class _ClientViewState extends State<ClientView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            AppBarComponent(icon: LineIcons.user, title: 'Clientes',),
+            AppBarComponent(
+              icon: LineIcons.user,
+              title: 'Clientes',
+            ),
             Expanded(
                 child: Container(
               child: Row(
@@ -130,22 +135,46 @@ class _ClientViewState extends State<ClientView> {
                                         style: Style.carTextTitle,
                                       )),
                                       Flexible(
-                                          child: DropdownButton<String>(
-                                        items: selectedClient.carros
-                                            .map((carro) => DropdownMenuItem(
-                                                value: carro.id.toString(),
-                                                child: Text(
-                                                  carro.modelo,
-                                                  style: Style.carTextTitle,
-                                                )))
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedCar = value;
-                                          });
-                                        },
-                                        value: _selectedCar,
-                                        isExpanded: true,
+                                        flex: 2,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Flexible(
+                                            child: DropdownButton<String>(
+                                              items: selectedClient.carros
+                                                  .map((carro) =>
+                                                      DropdownMenuItem(
+                                                          value: carro.id
+                                                              .toString(),
+                                                          child: Text(
+                                                            carro.modelo,
+                                                            style: Style
+                                                                .carTextTitle,
+                                                          )))
+                                                  .toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedCar = value;
+                                                });
+                                              },
+                                              value: _selectedCar,
+                                              isExpanded: true,
+                                            ),
+                                          ),
+                                          SizedBox(width: 10,),
+                                          Flexible(
+                                            flex: 1,
+                                              child: IconButton(
+                                                  icon: Icon(LineIcons.plus),
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(
+                                                        context, '/new_car',
+                                                        arguments:
+                                                            selectedClient
+                                                                .informacoes
+                                                                .clienteId);
+                                                  }))
+                                        ],
                                       ))
                                     ],
                                   )
@@ -159,6 +188,32 @@ class _ClientViewState extends State<ClientView> {
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
+                                      RaisedButton(
+                                          color: Colors.red,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                LineIcons.close,
+                                                color: Colors.white,
+                                                size: 15,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Excluir Cliente",
+                                                style: Style.serviceButton,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {}),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+
                                       RaisedButton(
                                           color: Colors.blue,
                                           shape: RoundedRectangleBorder(
@@ -186,6 +241,7 @@ class _ClientViewState extends State<ClientView> {
                                       SizedBox(
                                         width: 10,
                                       ),
+                                      
                                       RaisedButton(
                                           color: Colors.green,
                                           shape: RoundedRectangleBorder(
@@ -194,7 +250,7 @@ class _ClientViewState extends State<ClientView> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                LineIcons.car,
+                                                LineIcons.pencil,
                                                 color: Colors.white,
                                                 size: 15,
                                               ),
@@ -202,17 +258,12 @@ class _ClientViewState extends State<ClientView> {
                                                 width: 10,
                                               ),
                                               Text(
-                                                "Adicionar Carro",
+                                                "Editar Informações",
                                                 style: Style.serviceButton,
                                               ),
                                             ],
                                           ),
-                                          onPressed: () async {
-                                            Navigator.pushNamed(
-                                                context, '/new_car',
-                                                arguments: selectedClient
-                                                    .informacoes.clienteId);
-                                          })
+                                          onPressed: editClient),
                                     ],
                                   )
                                 : Row(
@@ -335,8 +386,7 @@ class _ClientViewState extends State<ClientView> {
                                       style: Style.clientNameText,
                                     ),
                                     subtitle: Text(
-                                      'carro',
-                                      //'${clientModel.carros.first.modelo} - ${clientModel.carros.first.placa}',
+                                      Utils.getCars(clientModel.carros),
                                       style: Style.carText,
                                     ),
                                     trailing: Icon(clientModel.selecionado
@@ -412,10 +462,15 @@ class _ClientViewState extends State<ClientView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Desaja adicionar um veículo ao cliente", style: Style.dialogTitle),
+          title: Text("Desaja adicionar um veículo ao cliente",
+              style: Style.dialogTitle),
           content: Container(
               height: 180,
-              child: Center(child: Text('Adione um veículo ao cliente', style: Style.dialogMessage,))),
+              child: Center(
+                  child: Text(
+                'Adione um veículo ao cliente',
+                style: Style.dialogMessage,
+              ))),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
@@ -446,12 +501,19 @@ class _ClientViewState extends State<ClientView> {
         // return object of type Dialog
         return AlertDialog(
           title: Text(
-              "Histórico de serviços - ${selectedClient.informacoes.clienteNome}", style: Style.dialogTitle,),
+            "Histórico de serviços - ${selectedClient.informacoes.clienteNome}",
+            style: Style.dialogTitle,
+          ),
           content: Container(
               height: 500,
               width: 700,
               child: services.isEmpty
-                  ? Center(child: Text('Cliente sem serviço registrado', style: Style.notFoundTextTitle,),)
+                  ? Center(
+                      child: Text(
+                        'Cliente sem serviço registrado',
+                        style: Style.notFoundTextTitle,
+                      ),
+                    )
                   : Column(
                       children: [
                         TextField(
@@ -473,7 +535,10 @@ class _ClientViewState extends State<ClientView> {
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR", style: Style.closeButton,),
+              child: Text(
+                "FECHAR",
+                style: Style.closeButton,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -482,6 +547,23 @@ class _ClientViewState extends State<ClientView> {
         );
       },
     );
+  }
+
+  editClient() async {
+    if (!validateInfo()) return;
+    selectedClient.informacoes.clienteNome = ctrName.text;
+    selectedClient.informacoes.telefone1 = ctrPhone.text;
+    selectedClient.informacoes.telefone2 = ctrPhone2.text;
+    selectedClient.informacoes.cpf = ctrCpf.text;
+    selectedClient.informacoes.email = ctrEmail.text;
+    ClientBaseModel c = await ClientService.editClient(selectedClient);
+
+    if (c != null) {
+      Utils.showInSnackBar('Informações editadas!', Colors.green, _scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao editar informações!', Colors.red, _scaffoldKey);
+    }
   }
 
   getServices() async {

@@ -516,24 +516,26 @@ class _ServiceViewState extends State<ServiceView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Quantidade de Itens"),
+          title: Text("Quantidade de Itens", style: Style.dialogTitle,),
           content: TextField(
             controller: ctrAmount,
+            style: Style.textField,
             decoration: InputDecoration(
-              hintText: 'Qtd.'
+              labelText: 'Qtd.',
+              labelStyle: Style.textField
             ),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR"),
+              child: Text("FECHAR", style: Style.closeButton,),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
 
             FlatButton(
-              child: Text("ADICIONAR"),
+              child: Text("ADICIONAR", style: Style.okButton,),
               onPressed: (){
                 addItem(item, int.parse(ctrAmount.text));
               },

@@ -68,10 +68,38 @@ class ProductService {
     });
     try {
       var response = await dio.post(url, data: formData);
-      print(response.data);
       return ProductModel.fromJson(json.decode(response.data));
     } catch (e) {
       return null;
+    }
+  }
+
+  static Future<bool> delete(id) async {
+    String url = '${Urls.baseUrl}estoque/excluir.php';
+    Dio dio = new Dio();
+    FormData formData = new FormData.fromMap({
+      'id': id,
+    });
+    try {
+      var response = await dio.post(url, data: formData);      
+      return json.decode(response.data);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> addToStock(id, qtd) async {
+    String url = '${Urls.baseUrl}estoque/entrada.php';
+    Dio dio = new Dio();
+    FormData formData = new FormData.fromMap({
+      'id': id,
+      'qtd': qtd,
+    });
+    try {
+      var response = await dio.post(url, data: formData);      
+      return json.decode(response.data);
+    } catch (e) {
+      return false;
     }
   }
 }
