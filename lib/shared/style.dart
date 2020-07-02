@@ -91,4 +91,11 @@ class Style {
   static TextStyle closeButton = GoogleFonts.lato(textStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.w500, fontSize: 14));
   static TextStyle okButton = GoogleFonts.lato(textStyle: TextStyle(color: Colors.green, fontWeight: FontWeight.w500, fontSize: 14));
 
+  //Receipt Page
+
+  static TextStyle receiptTitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 12));
+  static TextStyle receiptSubtitle = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 11));
+  static TextStyle receiptMarker = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 11));
+  static TextStyle receiptMessage = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 11));
+
 }

@@ -54,7 +54,16 @@ class Utils {
   }
 
   static String formatDate(DateTime dt){
-    return '${dt.day}/${dt.month}/${dt.year} às ${dt.hour}:${dt.minute}';
+    if(dt == null){
+      return 'Não Informado';
+    }
+    String dia = dt.day < 10 ? '0${dt.day}' : '${dt.day}';
+    String mes = dt.month < 10 ? '0${dt.month}' : '${dt.month}';
+
+    String hora = dt.hour < 10 ? '0${dt.hour}' : '${dt.hour}';
+    String minuto = dt.minute < 10 ? '0${dt.minute}' : '${dt.minute}';
+
+    return '$dia/$mes/${dt.year} às $hora:$minuto';
   }
 
   static Text validadeAmount(ProductModel p) {

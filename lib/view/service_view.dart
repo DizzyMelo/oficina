@@ -394,7 +394,7 @@ class _ServiceViewState extends State<ServiceView> {
                     ],
                   ),
                   onPressed: () {
-                    Printer.print();
+                    Printer.print(widget.serviceModel, addedItems.produtosAdicionados);
                   }),
               SizedBox(width: 10),
               RaisedButton(
