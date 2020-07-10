@@ -38,50 +38,6 @@ class _NewServiceViewState extends State<NewServiceView> {
     });
   }
 
-  selectClient(ClientModel client) {
-    ctrName.text = client.informacoes.clienteNome ?? '';
-    ctrPhone.text = client.informacoes.telefone1 ?? '';
-    ctrEmail.text = client.informacoes.email ?? '';
-    //ctrCar.text = client.carro ?? '';
-    //ctrPlate.text = client.placa ?? '';
-  }
-
-  clearClient() {
-    ctrName.text = '';
-    ctrPhone.text = '';
-    ctrEmail.text = '';
-    ctrCar.text = '';
-    ctrPlate.text = '';
-  }
-
-  Widget createTextField(
-      String hint, TextEditingController controller, IconData icon) {
-    return Column(
-      children: [
-        TextField(
-          style: Style.textField,
-          controller: controller,
-          decoration: InputDecoration(
-              prefixIcon: Icon(
-                icon,
-                size: 20,
-                color: Colors.grey[400],
-              ),
-              labelText: hint,
-              labelStyle: Style.textField,
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                width: 1,
-                color: Colors.grey[800],
-              ))),
-        ),
-        SizedBox(
-          height: 10,
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,175 +46,15 @@ class _NewServiceViewState extends State<NewServiceView> {
         padding: EdgeInsets.all(10),
         child: Column(
           children: [
-            AppBarComponent(icon: LineIcons.plus, title: 'Novo Serviço',),
-            Expanded(
-                child: Container(
+            AppBarComponent(
+              icon: LineIcons.plus,
+              title: 'Novo Serviço',
+            ),
+            Container(
+              height: 500,
+              width: 900,
               child: Row(
                 children: [
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            createTextField('Nome', ctrName, LineIcons.user),
-                            createTextField(
-                                'Telefone', ctrPhone, LineIcons.phone),
-                            createTextField(
-                                'Email', ctrEmail, LineIcons.envelope_o),
-                            SizedBox(
-                              height: 10,
-                            ),
-
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Icon(
-                                  LineIcons.wrench,
-                                  color: Colors.grey[400],
-                                  size: 20,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  worker == null ? 'Colaborador' : worker.nome,
-                                  style: Style.textField,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-
-                            selectedClient != null &&
-                                    selectedClient.carros.length > 0
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(child: Text('Carros', style: Style.carTextTitle,)),
-                                      Flexible(
-                                          child: DropdownButton<String>(
-                                        items: selectedClient.carros
-                                            .map((carro) => DropdownMenuItem(
-                                                value: carro.id.toString(),
-                                                child: Text(carro.modelo, style: Style.carTextTitle,)))
-                                            .toList(),
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedCar = value;
-                                          });
-                                        },
-                                        value: _selectedCar,
-                                        isExpanded: true,
-                                      ))
-                                    ],
-                                  )
-                                : Container(),
-
-                              SizedBox(height: 20,),
-                            
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                selectedClient == null
-                                    ? Container()
-                                    : RaisedButton(
-                                        color: Colors.blue,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(3)),
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              LineIcons.car,
-                                              color: Colors.white,
-                                              size: 15,
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              "Adicionar Carro",
-                                              style: Style.serviceButton,
-                                            ),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pushNamed(context, '/new_car', arguments: selectedClient.informacoes.clienteId);
-                                          // setState(() {
-                                          //   selectedClient = null;
-                                          //   unselectAllClients();
-                                          //   clearClient();
-                                          // });
-                                        }),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                RaisedButton(
-                                    color: Colors.red,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          LineIcons.close,
-                                          color: Colors.white,
-                                          size: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Cancelar",
-                                          style: Style.serviceButton,
-                                        ),
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      clearClient();
-                                      unselectAllClients();
-                                      setState(() {
-                                        selectedClient = null;
-                                        worker = null;
-                                        _selectedCar = '';
-                                      });
-                                    }),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                RaisedButton(
-                                    color: Colors.green,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3)),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          LineIcons.check,
-                                          color: Colors.white,
-                                          size: 15,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Iniciar",
-                                          style: Style.serviceButton,
-                                        ),
-                                      ],
-                                    ),
-                                    onPressed: () {
-                                      if(!validateServiceInfo()) return;
-                                      addService(selectedClient.informacoes.clienteId, _selectedCar, worker.id, '1');
-                                    }),
-                              ],
-                            )
-                          ],
-                        ),
-                      )),
                   Flexible(
                       flex: 1,
                       child: Container(
@@ -275,9 +71,11 @@ class _NewServiceViewState extends State<NewServiceView> {
                                     size: 20,
                                     color: Colors.grey[400],
                                   ),
-                                  suffixIcon: IconButton(icon: Icon(LineIcons.plus), onPressed: (){
-                                    Navigator.pushNamed(context, '/client');
-                                  }),
+                                  suffixIcon: IconButton(
+                                      icon: Icon(LineIcons.plus),
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, '/client');
+                                      }),
                                   hintText: 'Buscar cliente...',
                                   hintStyle: Style.textField,
                                   enabledBorder: UnderlineInputBorder(
@@ -303,11 +101,11 @@ class _NewServiceViewState extends State<NewServiceView> {
                                         unselectAllClients();
                                         clientModel.selecionado =
                                             !clientModel.selecionado;
-                                        _selectedCar =  clientModel.carros.length > 0 ? clientModel.carros.first.id : null;
+                                        _selectedCar =
+                                            clientModel.carros.length > 0
+                                                ? clientModel.carros.first.id
+                                                : null;
                                         selectedClient = clientModel;
-                                        if (clientModel.selecionado) {
-                                          selectClient(clientModel);
-                                        }
                                       });
                                     },
                                     title: Text(
@@ -341,7 +139,7 @@ class _NewServiceViewState extends State<NewServiceView> {
                             style: Style.selectWorkerTitle,
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 2,
                           ),
                           Divider(
                             height: 20,
@@ -379,7 +177,7 @@ class _NewServiceViewState extends State<NewServiceView> {
                       ))),
                 ],
               ),
-            ))
+            )
           ],
         ),
       ),
@@ -396,25 +194,27 @@ class _NewServiceViewState extends State<NewServiceView> {
     }
   }
 
-  bool validateServiceInfo(){
-    if(selectedClient == null){
+  bool validateServiceInfo() {
+    if (selectedClient == null) {
       Utils.showInSnackBar('Selecione o cliente', Colors.red, _scaffoldKey);
       return false;
-    } else if(worker == null){
+    } else if (worker == null) {
       Utils.showInSnackBar('Selecione o colaborador', Colors.red, _scaffoldKey);
       return false;
-    } else if(_selectedCar == null || _selectedCar.isEmpty){
-      Utils.showInSnackBar('Selecione o carro do cliente', Colors.red, _scaffoldKey);
+    } else if (_selectedCar == null || _selectedCar.isEmpty) {
+      Utils.showInSnackBar(
+          'Selecione o carro do cliente', Colors.red, _scaffoldKey);
       return false;
     }
     return true;
   }
 
   addService(cliente, carro, mecanico, loja) async {
-    ServiceModel temp = await ServiceService.addService(cliente, carro, mecanico, loja);
-    if(temp != null){
+    ServiceModel temp =
+        await ServiceService.addService(cliente, carro, mecanico, loja);
+    if (temp != null) {
       Navigator.pushNamed(context, '/service', arguments: temp);
-    }else{
+    } else {
       Utils.showInSnackBar('Erro ao iniciar serviço', Colors.red, _scaffoldKey);
     }
   }

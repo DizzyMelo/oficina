@@ -6,8 +6,10 @@ import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/service_model.dart';
+import 'package:oficina/model/user_base_model.dart';
 import 'package:oficina/service/client_service.dart';
 import 'package:oficina/service/service_service.dart';
+import 'package:oficina/service/user_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -21,6 +23,7 @@ class _ClientViewState extends State<ClientView> {
   TextEditingController ctrSearchService = TextEditingController();
   //ctrSearchService
   TextEditingController ctrName = TextEditingController();
+  TextEditingController ctrLastName = TextEditingController();
   TextEditingController ctrPhone =
       MaskedTextController(mask: '(00) 00000-0000');
 
@@ -111,7 +114,10 @@ class _ClientViewState extends State<ClientView> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                           children: [
-                            createTextField('Nome', ctrName, LineIcons.user),
+                            createTextField(
+                                'Primeiro Nome', ctrName, LineIcons.user),
+                            createTextField(
+                                'Último nome', ctrLastName, LineIcons.user),
                             createTextField('CPF', ctrCpf, LineIcons.user),
                             createTextField(
                                 'Celular', ctrPhone, LineIcons.phone),
@@ -135,47 +141,51 @@ class _ClientViewState extends State<ClientView> {
                                         style: Style.carTextTitle,
                                       )),
                                       Flexible(
-                                        flex: 2,
+                                          flex: 2,
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Flexible(
-                                            child: DropdownButton<String>(
-                                              items: selectedClient.carros
-                                                  .map((carro) =>
-                                                      DropdownMenuItem(
-                                                          value: carro.id
-                                                              .toString(),
-                                                          child: Text(
-                                                            carro.modelo,
-                                                            style: Style
-                                                                .carTextTitle,
-                                                          )))
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _selectedCar = value;
-                                                });
-                                              },
-                                              value: _selectedCar,
-                                              isExpanded: true,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10,),
-                                          Flexible(
-                                            flex: 1,
-                                              child: IconButton(
-                                                  icon: Icon(LineIcons.plus),
-                                                  onPressed: () {
-                                                    Navigator.pushNamed(
-                                                        context, '/new_car',
-                                                        arguments:
-                                                            selectedClient
-                                                                .informacoes
-                                                                .clienteId);
-                                                  }))
-                                        ],
-                                      ))
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Flexible(
+                                                child: DropdownButton<String>(
+                                                  items: selectedClient.carros
+                                                      .map((carro) =>
+                                                          DropdownMenuItem(
+                                                              value: carro.id
+                                                                  .toString(),
+                                                              child: Text(
+                                                                carro.modelo,
+                                                                style: Style
+                                                                    .carTextTitle,
+                                                              )))
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      _selectedCar = value;
+                                                    });
+                                                  },
+                                                  value: _selectedCar,
+                                                  isExpanded: true,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Flexible(
+                                                  flex: 1,
+                                                  child: IconButton(
+                                                      icon:
+                                                          Icon(LineIcons.plus),
+                                                      onPressed: () {
+                                                        Navigator.pushNamed(
+                                                            context, '/new_car',
+                                                            arguments:
+                                                                selectedClient
+                                                                    .informacoes
+                                                                    .clienteId);
+                                                      }))
+                                            ],
+                                          ))
                                     ],
                                   )
                                 : Container(),
@@ -213,7 +223,6 @@ class _ClientViewState extends State<ClientView> {
                                       SizedBox(
                                         width: 10,
                                       ),
-
                                       RaisedButton(
                                           color: Colors.blue,
                                           shape: RoundedRectangleBorder(
@@ -241,7 +250,6 @@ class _ClientViewState extends State<ClientView> {
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      
                                       RaisedButton(
                                           color: Colors.green,
                                           shape: RoundedRectangleBorder(
@@ -324,7 +332,7 @@ class _ClientViewState extends State<ClientView> {
                                               ),
                                             ],
                                           ),
-                                          onPressed: addClient),
+                                          onPressed: addUser),
                                     ],
                                   )
                           ],
@@ -450,6 +458,31 @@ class _ClientViewState extends State<ClientView> {
       ctrPhone2.text = "";
       ctrEmail.text = "";
       _addCardDialog(c.id);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);
+    }
+  }
+
+  addUser() async {
+    if (!validateInfo()) return;
+
+    String time = DateTime.now().millisecondsSinceEpoch.toString();
+    String pass = time.substring(time.length - 6, time.length);
+
+    UserBaseModel user = await UserService.add(
+        ctrName.text,
+        ctrLastName.text,
+        ctrEmail.text,
+        ctrCpf.text,
+        '1',
+        pass,
+        3,
+        ctrPhone.text,
+        ctrPhone2.text);
+
+    if (user != null) {
+      Utils.showInSnackBar('Cliente cadastrado', Colors.green, _scaffoldKey);
     } else {
       Utils.showInSnackBar(
           'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);

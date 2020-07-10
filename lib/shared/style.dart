@@ -4,11 +4,16 @@ import 'package:google_fonts/google_fonts.dart';
 class Style {
   static Color primary = new Color.fromRGBO(0, 153, 255, 1);
 
+  static Color primaryColor = Color.fromRGBO(0, 51, 77, 1);
+  static Color secondaryColor = Color.fromRGBO(255, 128, 0, 1);
+
 
 
 
   static TextStyle loginButton = TextStyle(color: Colors.grey[600]);
   static TextStyle serviceButton = GoogleFonts.lato(textStyle: TextStyle(color: Colors.white));
+  static TextStyle mainButtonText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontSize: 15));
+  static TextStyle secondaryButtonText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[700], fontSize: 13));
   static TextStyle welcomeText = TextStyle(color: Colors.white, fontSize: 20);
 
   static TextStyle itemNameText = GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 12));

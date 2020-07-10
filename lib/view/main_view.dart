@@ -1,9 +1,7 @@
 import 'dart:html';
 
-import 'package:firebase/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:oficina/components/menu_item_component.dart';
 import 'package:oficina/components/service_group_component.dart';
 import 'package:oficina/components/service_list_component.dart';
 import 'package:oficina/model/service_model.dart';
@@ -11,14 +9,11 @@ import 'package:oficina/model/user_model.dart';
 import 'package:oficina/model/worker_model.dart';
 import 'package:oficina/service/service_service.dart';
 import 'package:oficina/service/worker_service.dart';
+import 'package:oficina/shared/actives.dart';
 import 'package:oficina/shared/menu_list.dart';
 import 'package:oficina/shared/style.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class MainView extends StatefulWidget {
-  final UserModel user;
-
-  MainView({this.user});
   @override
   _MainViewState createState() => _MainViewState();
 }
@@ -62,11 +57,11 @@ class _MainViewState extends State<MainView> {
                     children: [
                       Expanded(
                           child: Text(
-                        widget.user.lojaNome,
+                        Active.user.lojaNome ?? 'no-data',
                         style: Style.shopNameText,
                       )),
                       Text(
-                        widget.user.nome.toUpperCase(),
+                        Active.user.primeiroNome ?? 'no-data',
                         style: Style.userNameText,
                       ),
                       SizedBox(
@@ -107,7 +102,7 @@ class _MainViewState extends State<MainView> {
                                             context, item.screen),
                                         leading: Icon(item.icon),
                                         title: Text(
-                                          item.title,
+                                          item.title ?? 'no-data',
                                           style: Style.optionTitleText,
                                         ),
                                       );
@@ -245,7 +240,7 @@ class _MainViewState extends State<MainView> {
                                   children: [
                                     Column(
                                       children:
-                                          list.map((e) => Text(e)).toList(),
+                                          list.map((e) => Text(e ?? 'no-data')).toList(),
                                     ),
                                     TextField(
                                       style: Style.messageText,
@@ -295,7 +290,7 @@ class _MainViewState extends State<MainView> {
   }
 
   getServices() async {
-    List<ServiceModel> s = await ServiceService.getServices(widget.user.lojaId);
+    List<ServiceModel> s = await ServiceService.getServices(Active.user.loja);
 
     List<ServiceModel> temp1 = new List();
     List<ServiceModel> temp2 = new List();
