@@ -13,6 +13,8 @@ import 'package:oficina/view/stock_view.dart';
 import 'package:oficina/view/test_view.dart';
 import 'package:oficina/view/worker_view.dart';
 
+import 'shared/style.dart';
+
 void main() async {
   await DotEnv().load('config.env');
   runApp(MyApp());
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Oficina na Mão',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Style.themeColor,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: '/login',
