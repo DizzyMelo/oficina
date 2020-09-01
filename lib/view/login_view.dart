@@ -14,7 +14,8 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   //TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
-  TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00', text: '099.281.414-60');
+  TextEditingController ctrCpf =
+      MaskedTextController(mask: '000.000.000-00', text: '099.281.414-60');
   TextEditingController ctrPass = TextEditingController(text: '102030');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool obscure = true;
@@ -31,81 +32,83 @@ class _LoginViewState extends State<LoginView> {
           height: 400,
           width: 350,
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(3)
-          ),
-
+              color: Colors.white, borderRadius: BorderRadius.circular(3)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               TextField(
                 controller: ctrCpf,
                 style: Style.textField,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(LineIcons.user, color: Colors.grey[400],),
-                  hintText: "Usuário",
-                  hintStyle: Style.textField,
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
+                    prefixIcon: Icon(
+                      LineIcons.user,
+                      color: Colors.grey[400],
+                    ),
+                    hintText: "Usuário",
+                    hintStyle: Style.textField,
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
                       width: 1,
                       color: Colors.grey[800],
-                    )
-                  )
-                ),
+                    ))),
               ),
-
               SizedBox(height: 10),
-
               TextField(
                 controller: ctrPass,
                 obscureText: obscure,
                 style: Style.textField,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(LineIcons.lock, color: Colors.grey[400],),
-                  hintText: "Senha",
-                  hintStyle: Style.textField,
-                  suffixIcon: IconButton(icon: Icon(obscure ? LineIcons.eye : LineIcons.eye_slash), onPressed: changeObscure),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
+                    prefixIcon: Icon(
+                      LineIcons.lock,
+                      color: Colors.grey[400],
+                    ),
+                    hintText: "Senha",
+                    hintStyle: Style.textField,
+                    suffixIcon: IconButton(
+                        icon:
+                            Icon(obscure ? LineIcons.eye : LineIcons.eye_slash),
+                        onPressed: changeObscure),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
                       width: 1,
                       color: Colors.grey[800],
-                    )
-                  )
-                ),
+                    ))),
               ),
-
               SizedBox(height: 20),
-
-              loading ?
-              SizedBox(
-                height: 30,
-                width: 30,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation(Style.secondaryColor),
-                ),
-              )
-              :
-              
-              InkWell(
-                onTap: login,
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 500),
-                  height: 45,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Style.secondaryColor,
-                    borderRadius: BorderRadius.circular(4)
-                  ),
-                  child: Center(child: Text('ENTRAR', style: Style.mainButtonText,),),
-                ),
-              ),
-
+              loading
+                  ? SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor:
+                            AlwaysStoppedAnimation(Style.secondaryColor),
+                      ),
+                    )
+                  : InkWell(
+                      onTap: login,
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 500),
+                        height: 45,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: Style.secondaryColor,
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Center(
+                          child: Text(
+                            'ENTRAR',
+                            style: Style.mainButtonText,
+                          ),
+                        ),
+                      ),
+                    ),
               SizedBox(height: 10),
-
-              FlatButton(onPressed: (){}, child: Text('Esqueceu sua senha?', style: Style.secondaryButtonText,))
-
+              FlatButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Esqueceu sua senha?',
+                    style: Style.secondaryButtonText,
+                  ))
             ],
           ),
         ),
@@ -114,40 +117,48 @@ class _LoginViewState extends State<LoginView> {
   }
 
   bool validateInfo() {
-    if(ctrCpf.text.isEmpty){
-      Utils.showInSnackBar('Por favor, informe o nome de usuário', Colors.red, _scaffoldKey);
+    if (ctrCpf.text.isEmpty) {
+      Utils.showInSnackBar(
+          'Por favor, informe o nome de usuário', Colors.red, _scaffoldKey);
       return false;
-    }else if(ctrPass.text.isEmpty){
-      Utils.showInSnackBar('Por favor, informe a senha', Colors.red, _scaffoldKey);
+    } else if (ctrPass.text.isEmpty) {
+      Utils.showInSnackBar(
+          'Por favor, informe a senha', Colors.red, _scaffoldKey);
       return false;
     }
     return true;
   }
 
-  changeObscure(){
+  changeObscure() {
     setState(() {
       obscure = !obscure;
     });
   }
 
   login() async {
-    if(validateInfo()) {
+    if (validateInfo()) {
       setState(() {
         loading = true;
       });
-      UserBaseModel user = await UserService.login(ctrCpf.text, ctrPass.text, '');
+      UserBaseModel user =
+          await UserService.login(ctrCpf.text, ctrPass.text, '');
       setState(() {
         loading = false;
       });
-      if(user != null){
+      if (user != null) {
         print(user.primeiroNome);
         Active.user = user;
         Navigator.pushNamed(context, '/main', arguments: user);
-      }else{
-        Utils.showInSnackBar('Usuário ou senha inválidos', Colors.red, _scaffoldKey);
+      } else {
+        Utils.showInSnackBar(
+            'Usuário ou senha inválidos', Colors.red, _scaffoldKey);
       }
     }
+  }
 
-    
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 }

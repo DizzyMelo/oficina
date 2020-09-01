@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:oficina/view/client_view.dart';
 import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
@@ -12,7 +13,8 @@ import 'package:oficina/view/stock_view.dart';
 import 'package:oficina/view/test_view.dart';
 import 'package:oficina/view/worker_view.dart';
 
-void main() {
+void main() async {
+  await DotEnv().load('config.env');
   runApp(MyApp());
 }
 
@@ -39,11 +41,13 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(builder: (context) => LoginView());
             break;
           case "/main":
-            page = MaterialPageRoute(
-                builder: (context) => MainView());
+            page = MaterialPageRoute(builder: (context) => MainView());
             break;
           case "/service":
-            page = MaterialPageRoute(builder: (context) => ServiceView(serviceModel: settings.arguments,));
+            page = MaterialPageRoute(
+                builder: (context) => ServiceView(
+                      serviceModel: settings.arguments,
+                    ));
             break;
           case "/new_service":
             page = MaterialPageRoute(builder: (context) => NewServiceView());
@@ -51,7 +55,11 @@ class MyApp extends StatelessWidget {
           case "/new_car":
             String client = settings.arguments ?? '62';
             String clientName = settings.arguments ?? 'Daniel';
-            page = MaterialPageRoute(builder: (context) => NewCarView(clientName, client: client,));
+            page = MaterialPageRoute(
+                builder: (context) => NewCarView(
+                      clientName,
+                      client: client,
+                    ));
             break;
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());
@@ -64,7 +72,10 @@ class MyApp extends StatelessWidget {
             break;
 
           case "/finish_service":
-            page = MaterialPageRoute(builder: (context) => FinishServiceView(service: settings.arguments,));
+            page = MaterialPageRoute(
+                builder: (context) => FinishServiceView(
+                      service: settings.arguments,
+                    ));
             break;
 
           case "/settings":
@@ -84,4 +95,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
