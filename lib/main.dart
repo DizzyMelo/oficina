@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:oficina/view/client_view.dart';
 import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Oficina na Mão',
       theme: ThemeData(
         primarySwatch: Style.themeColor,
+        textTheme: GoogleFonts.latoTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: '/login',

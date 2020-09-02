@@ -193,7 +193,7 @@ class Style {
 
   static TextStyle dialogTitle = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 17));
+          color: Colors.grey[800], fontWeight: FontWeight.w800, fontSize: 17));
   static TextStyle dialogMessage = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 14));

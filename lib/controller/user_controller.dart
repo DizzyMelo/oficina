@@ -34,4 +34,15 @@ class UserController {
           'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
     }
   }
+
+  Future getColaborators(shop, context, scaffoldKey) async {
+    SearchUserDataModel res = await requests.getColaborators(shop);
+
+    if (res != null) {
+      return res;
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+    }
+  }
 }

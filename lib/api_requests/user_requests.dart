@@ -17,8 +17,6 @@ class UserRequests {
           },
           body: json.encode(data));
 
-      print(res.body);
-
       if (res.statusCode == 201) {
         return CreateUserDataModel.fromJson(json.decode(res.body));
       } else {
@@ -48,8 +46,8 @@ class UserRequests {
     }
   }
 
-  Future<SearchUserDataModel> getWorkers(shop) async {
-    String url = '${DotEnv().env['BASE_URL']}/users/$shop/colaborators';
+  Future<SearchUserDataModel> getColaborators(shop) async {
+    String url = '${DotEnv().env['BASE_URL']}/users/colaborators/$shop';
 
     try {
       var res = await http.get(url, headers: {

@@ -5,14 +5,9 @@ import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/controller/user_controller.dart';
-import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
-import 'package:oficina/model/user_base_model.dart';
-import 'package:oficina/service/client_service.dart';
-import 'package:oficina/service/service_service.dart';
-import 'package:oficina/service/user_service.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -331,7 +326,9 @@ class _ClientViewState extends State<ClientView> {
                                           itemBuilder: (context, index) {
                                             User user = users.data.users[index];
                                             return ListTile(
-                                              onTap: () {},
+                                              onTap: () {
+                                                this.selectUser(user);
+                                              },
                                               title: Text(
                                                 user.name,
                                                 style: Style.clientNameText,
@@ -494,6 +491,14 @@ class _ClientViewState extends State<ClientView> {
   }
 
   getServices() async {}
+
+  selectUser(User user) {
+    ctrName.text = user.name;
+    ctrCpf.text = user.cpfcnpj;
+    ctrPhone.text = user.phone.length > 0 ? user.phone[0] : '';
+    ctrPhone2.text = user.phone.length > 1 ? user.phone[1] : '';
+    ctrEmail.text = user.email;
+  }
 
   @override
   void initState() {

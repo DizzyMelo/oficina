@@ -350,8 +350,8 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    this.getServices();
-    this.getWorkers();
+    //this.getServices();
+    //this.getWorkers();
 
     //channel = IOWebSocketChannel.connect('echo.websocket.org');
     // channel.stream.listen((event) {

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
-import 'package:oficina/components/main_textfield_component.dart';
+import 'package:oficina/components/medium_buttom_component.dart';
+import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
-import 'package:oficina/model/service_model.dart';
+import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/worker_model.dart';
-import 'package:oficina/service/client_service.dart';
-import 'package:oficina/service/service_service.dart';
-import 'package:oficina/service/worker_service.dart';
 import 'package:oficina/shared/style.dart';
-import 'package:oficina/shared/utils.dart';
 
 class NewServiceView extends StatefulWidget {
   @override
@@ -27,6 +23,13 @@ class _NewServiceViewState extends State<NewServiceView> {
   ClientModel selectedClient;
   String _selectedCar = '';
   WorkerModel worker;
+
+  SearchUserDataModel users;
+  SearchUserDataModel colaborators;
+  User client;
+  User colaborator;
+
+  UserController _userController;
 
   unselectAllClients() {
     clients.forEach((c) {
@@ -57,12 +60,50 @@ class _NewServiceViewState extends State<NewServiceView> {
                     BoxDecoration(borderRadius: BorderRadius.circular(5)),
                 child: Column(
                   children: <Widget>[
-                    MainTextFieldComponent(
-                        controller: ctrSearch,
-                        icon: LineIcons.search,
-                        hint: 'Buscar'),
+                    // TextField(
+                    //   style: Style.textField,
+                    //   onSubmitted: (name) async {
+                    //     await searchClients(name);
+                    //   },
+                    //   decoration: InputDecoration(
+                    //       prefixIcon: Icon(Icons.search),
+                    //       hintText: 'Buscar...',
+                    //       hintStyle: Style.textField),
+                    // ),
+                    // Expanded(
+                    //   child: users == null
+                    //       ? Center(
+                    //           child: Text('Buscar clientes'),
+                    //         )
+                    //       : Container(
+                    //           child: ListView.builder(
+                    //               itemCount: users.data.users.length,
+                    //               itemBuilder: (context, index) {
+                    //                 User user = users.data.users[index];
+                    //                 return ListTile(
+                    //                   title: Text(user.name),
+                    //                 );
+                    //               }),
+                    //         ),
+                    // ),
+                    ListTile(
+                      leading: Icon(LineIcons.user),
+                      title: Text('Selecionar cliente'),
+                      trailing: Icon(LineIcons.plus),
+                    ),
+                    ListTile(
+                      leading: Icon(LineIcons.car),
+                      title: Text('Selecionar veículo'),
+                      trailing: Icon(LineIcons.plus),
+                    ),
+                    ListTile(
+                      onTap: selectColaborator,
+                      leading: Icon(LineIcons.user),
+                      title: Text('Selecionar colaborador'),
+                      trailing: Icon(LineIcons.plus),
+                    ),
                     SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
                     MainButtomComponent(title: 'INICAR', function: () {})
                   ],
@@ -75,58 +116,83 @@ class _NewServiceViewState extends State<NewServiceView> {
     );
   }
 
-  getWorkers() async {
-    List<WorkerModel> wk = await WorkerService.getWorkers('1');
+  getColaborators() async {
+    SearchUserDataModel res = await _userController.getColaborators(
+        '5f4d4e7deb1bcc09ebe4b8b4', context, _scaffoldKey);
 
-    if (wk != null && wk.length > 0) {
+    if (res != null) {
       setState(() {
-        workers = wk;
+        colaborators = res;
       });
     }
   }
 
-  bool validateServiceInfo() {
-    if (selectedClient == null) {
-      Utils.showInSnackBar('Selecione o cliente', Colors.red, _scaffoldKey);
-      return false;
-    } else if (worker == null) {
-      Utils.showInSnackBar('Selecione o colaborador', Colors.red, _scaffoldKey);
-      return false;
-    } else if (_selectedCar == null || _selectedCar.isEmpty) {
-      Utils.showInSnackBar(
-          'Selecione o carro do cliente', Colors.red, _scaffoldKey);
-      return false;
-    }
-    return true;
-  }
+  addService(cliente, carro, mecanico, loja) async {}
 
-  addService(cliente, carro, mecanico, loja) async {
-    ServiceModel temp =
-        await ServiceService.addService(cliente, carro, mecanico, loja);
-    if (temp != null) {
-      Navigator.pushNamed(context, '/service', arguments: temp);
-    } else {
-      Utils.showInSnackBar('Erro ao iniciar serviço', Colors.red, _scaffoldKey);
-    }
-  }
+  searchClients(String name) async {
+    SearchUserDataModel res =
+        await _userController.searchByName(name, context, _scaffoldKey);
 
-  searchClients(String txt) async {
-    if (txt.length < 3) {
-      Utils.showInSnackBar(
-          'Digite pelo menos 3 caracteres', Colors.red, _scaffoldKey);
-      return;
-    }
-    List<ClientModel> tempClients = await ClientService.searchClients('1', txt);
-    if (tempClients != null && tempClients.length > 0) {
+    if (res != null) {
       setState(() {
-        clients = tempClients;
+        users = res;
       });
     }
+  }
+
+  void selectColaborator() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Selecionar Colaborador",
+                  style: Style.dialogTitle,
+                ),
+                Text(
+                  colaborator == null
+                      ? "Colaborador não selecionado"
+                      : colaborator.name,
+                  style: Style.dialogSubtitle,
+                ),
+              ],
+            ),
+            content: Container(
+              height: 400,
+              width: 400,
+              child: ListView.builder(
+                  itemCount: colaborators.data.users.length,
+                  itemBuilder: (context, index) {
+                    User user = colaborators.data.users[index];
+                    return ListTile(
+                      onTap: () {
+                        setState(() {
+                          colaborator = user;
+                        });
+                      },
+                      title: Text(user.name),
+                      subtitle: Text(user.role),
+                    );
+                  }),
+            ),
+            actions: <Widget>[
+              MediumButtomComponent(title: 'SELECIONAR', function: () {})
+            ],
+          );
+        });
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    this.getWorkers();
+    _userController = UserController();
+    this.getColaborators();
   }
 }
