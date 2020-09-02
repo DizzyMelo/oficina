@@ -10,7 +10,6 @@ import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/settings_view.dart';
 import 'package:oficina/view/stock_view.dart';
-import 'package:oficina/view/test_view.dart';
 import 'package:oficina/view/worker_view.dart';
 
 import 'shared/style.dart';
@@ -82,10 +81,6 @@ class MyApp extends StatelessWidget {
 
           case "/settings":
             page = MaterialPageRoute(builder: (context) => SettingsView());
-            break;
-
-          case "/test":
-            page = MaterialPageRoute(builder: (context) => TestView());
             break;
         }
 

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
+import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/service_list_date_component.dart';
+import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_base_model.dart';
 import 'package:oficina/model/client_model.dart';
+import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/model/user_base_model.dart';
 import 'package:oficina/service/client_service.dart';
@@ -23,7 +26,6 @@ class _ClientViewState extends State<ClientView> {
   TextEditingController ctrSearchService = TextEditingController();
   //ctrSearchService
   TextEditingController ctrName = TextEditingController();
-  TextEditingController ctrLastName = TextEditingController();
   TextEditingController ctrPhone =
       MaskedTextController(mask: '(00) 00000-0000');
 
@@ -36,61 +38,12 @@ class _ClientViewState extends State<ClientView> {
   String _selectedCar = '';
 
   List<ClientModel> clients = new List();
+  SearchUserDataModel users;
   ClientModel selectedClient;
 
   List<ServiceModel> services = new List();
 
-  unselectAllClients() {
-    clients.forEach((c) {
-      c.selecionado = false;
-    });
-  }
-
-  selectClient(ClientModel client) {
-    ctrName.text = client.informacoes.clienteNome ?? '';
-    ctrPhone.text = client.informacoes.telefone1 ?? '';
-    ctrPhone2.text = client.informacoes.telefone2 ?? '';
-    ctrCpf.text = client.informacoes.cpf ?? '';
-    ctrEmail.text = client.informacoes.email ?? '';
-    //ctrCar.text = client.informacoes.carro ?? '';
-    //ctrPlate.text = client.placa ?? '';
-  }
-
-  clearClient() {
-    ctrName.text = '';
-    ctrPhone.text = '';
-    ctrEmail.text = '';
-    ctrCar.text = '';
-    ctrCpf.text = '';
-  }
-
-  Widget createTextField(
-      String hint, TextEditingController controller, IconData icon) {
-    return Column(
-      children: [
-        TextField(
-          style: Style.textField,
-          controller: controller,
-          decoration: InputDecoration(
-              prefixIcon: Icon(
-                icon,
-                size: 20,
-                color: Colors.grey[400],
-              ),
-              labelText: hint,
-              labelStyle: Style.textField,
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                width: 1,
-                color: Colors.grey[800],
-              ))),
-        ),
-        SizedBox(
-          height: 10,
-        )
-      ],
-    );
-  }
+  UserController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -114,21 +67,26 @@ class _ClientViewState extends State<ClientView> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                           children: [
-                            createTextField(
-                                'Primeiro Nome', ctrName, LineIcons.user),
-                            createTextField(
-                                'Último nome', ctrLastName, LineIcons.user),
-                            createTextField('CPF', ctrCpf, LineIcons.user),
-                            createTextField(
-                                'Celular', ctrPhone, LineIcons.phone),
-
-                            createTextField(
-                                'Telefone Fixo', ctrPhone2, LineIcons.phone),
-                            createTextField(
-                                'Email', ctrEmail, LineIcons.envelope_o),
-                            // createTextField('Carro', ctrCar, LineIcons.car),
-                            // createTextField(
-                            //     'Placa', ctrPlate, LineIcons.square_o),
+                            MainTextFieldComponent(
+                                controller: ctrName,
+                                icon: LineIcons.user,
+                                hint: 'Nome'),
+                            MainTextFieldComponent(
+                                controller: ctrCpf,
+                                icon: LineIcons.user,
+                                hint: 'CPF/CNPJ'),
+                            MainTextFieldComponent(
+                                controller: ctrPhone,
+                                icon: LineIcons.phone,
+                                hint: 'Celular'),
+                            MainTextFieldComponent(
+                                controller: ctrPhone2,
+                                icon: LineIcons.phone,
+                                hint: 'Telefone Fixo'),
+                            MainTextFieldComponent(
+                                controller: ctrEmail,
+                                icon: LineIcons.envelope_o,
+                                hint: 'Email'),
                             selectedClient != null &&
                                     selectedClient.carros.length > 0
                                 ? Row(
@@ -189,11 +147,9 @@ class _ClientViewState extends State<ClientView> {
                                     ],
                                   )
                                 : Container(),
-
                             SizedBox(
                               height: 20,
                             ),
-
                             selectedClient != null
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -304,8 +260,6 @@ class _ClientViewState extends State<ClientView> {
                                           onPressed: () {
                                             setState(() {
                                               selectedClient = null;
-                                              unselectAllClients();
-                                              clearClient();
                                             });
                                           }),
                                       SizedBox(
@@ -332,7 +286,7 @@ class _ClientViewState extends State<ClientView> {
                                               ),
                                             ],
                                           ),
-                                          onPressed: addUser),
+                                          onPressed: createUser),
                                     ],
                                   )
                           ],
@@ -366,44 +320,28 @@ class _ClientViewState extends State<ClientView> {
                               height: 10,
                             ),
                             Expanded(
-                                child: Container(
-                                    child: Scrollbar(
-                              child: ListView.builder(
-                                itemCount: clients.length,
-                                itemBuilder: (context, index) {
-                                  ClientModel clientModel = clients[index];
-
-                                  return ListTile(
-                                    onTap: () {
-                                      setState(() {
-                                        unselectAllClients();
-                                        clientModel.selecionado =
-                                            !clientModel.selecionado;
-                                        _selectedCar =
-                                            clientModel.carros.length > 0
-                                                ? clientModel.carros.first.id
-                                                : null;
-                                        selectedClient = clientModel;
-                                        if (clientModel.selecionado) {
-                                          selectClient(clientModel);
-                                        }
-                                      });
-                                    },
-                                    title: Text(
-                                      clientModel.informacoes.clienteNome,
-                                      style: Style.clientNameText,
-                                    ),
-                                    subtitle: Text(
-                                      Utils.getCars(clientModel.carros),
-                                      style: Style.carText,
-                                    ),
-                                    trailing: Icon(clientModel.selecionado
-                                        ? LineIcons.check
-                                        : LineIcons.circle_o),
-                                  );
-                                },
+                              child: Container(
+                                child: users == null
+                                    ? Center(
+                                        child: Text('Buscar cliente'),
+                                      )
+                                    : Scrollbar(
+                                        child: ListView.builder(
+                                          itemCount: users.data.users.length,
+                                          itemBuilder: (context, index) {
+                                            User user = users.data.users[index];
+                                            return ListTile(
+                                              onTap: () {},
+                                              title: Text(
+                                                user.name,
+                                                style: Style.clientNameText,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                               ),
-                            )))
+                            ),
                           ],
                         ),
                       )),
@@ -416,16 +354,12 @@ class _ClientViewState extends State<ClientView> {
     );
   }
 
-  searchClients(String txt) async {
-    if (txt.length < 3) {
-      Utils.showInSnackBar(
-          'Digite pelo menos 3 caracteres', Colors.red, _scaffoldKey);
-      return;
-    }
-    List<ClientModel> tempClients = await ClientService.searchClients('1', txt);
-    if (tempClients != null && tempClients.length > 0) {
+  searchClients(String name) async {
+    var res = await controller.searchByName(name, context, _scaffoldKey);
+
+    if (res != null) {
       setState(() {
-        clients = tempClients;
+        users = res;
       });
     }
   }
@@ -446,47 +380,20 @@ class _ClientViewState extends State<ClientView> {
     return true;
   }
 
-  addClient() async {
-    if (!validateInfo()) return;
-    ClientBaseModel c = await ClientService.addClient('1', ctrName.text,
-        ctrPhone.text, ctrPhone2.text, ctrCpf.text, ctrEmail.text);
-
-    if (c != null) {
-      ctrName.text = "";
-      ctrCpf.text = "";
-      ctrPhone.text = "";
-      ctrPhone2.text = "";
-      ctrEmail.text = "";
-      _addCardDialog(c.id);
-    } else {
-      Utils.showInSnackBar(
-          'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);
-    }
-  }
-
-  addUser() async {
+  createUser() async {
     if (!validateInfo()) return;
 
-    String time = DateTime.now().millisecondsSinceEpoch.toString();
-    String pass = time.substring(time.length - 6, time.length);
+    Map<String, dynamic> data = {
+      "name": ctrName.text,
+      "email": ctrEmail.text,
+      "password": "12345678",
+      "passwordConfirm": "12345678",
+      "shop": "5f4d4e7deb1bcc09ebe4b8b4",
+      "role": "cliente",
+      "cpfcnpj": ctrCpf.text
+    };
 
-    UserBaseModel user = await UserService.add(
-        ctrName.text,
-        ctrLastName.text,
-        ctrEmail.text,
-        ctrCpf.text,
-        '1',
-        pass,
-        3,
-        ctrPhone.text,
-        ctrPhone2.text);
-
-    if (user != null) {
-      Utils.showInSnackBar('Cliente cadastrado', Colors.green, _scaffoldKey);
-    } else {
-      Utils.showInSnackBar(
-          'Erro ao cadastrar cliente!', Colors.red, _scaffoldKey);
-    }
+    controller.create(data, context, _scaffoldKey);
   }
 
   void _addCardDialog(String id) async {
@@ -584,34 +491,13 @@ class _ClientViewState extends State<ClientView> {
 
   editClient() async {
     if (!validateInfo()) return;
-    selectedClient.informacoes.clienteNome = ctrName.text;
-    selectedClient.informacoes.telefone1 = ctrPhone.text;
-    selectedClient.informacoes.telefone2 = ctrPhone2.text;
-    selectedClient.informacoes.cpf = ctrCpf.text;
-    selectedClient.informacoes.email = ctrEmail.text;
-    ClientBaseModel c = await ClientService.editClient(selectedClient);
-
-    if (c != null) {
-      Utils.showInSnackBar('Informações editadas!', Colors.green, _scaffoldKey);
-    } else {
-      Utils.showInSnackBar(
-          'Erro ao editar informações!', Colors.red, _scaffoldKey);
-    }
   }
 
-  getServices() async {
-    List<ServiceModel> s = await ServiceService.getServicesByClient(
-        '1', selectedClient.informacoes.clienteId);
-
-    if (s != null) {
-      setState(() {
-        services = s;
-      });
-    }
-  }
+  getServices() async {}
 
   @override
   void initState() {
     super.initState();
+    controller = UserController();
   }
 }

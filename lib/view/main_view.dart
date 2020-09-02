@@ -57,11 +57,11 @@ class _MainViewState extends State<MainView> {
                     children: [
                       Expanded(
                           child: Text(
-                        Active.user.lojaNome ?? 'no-data',
+                        'no-data',
                         style: Style.shopNameText,
                       )),
                       Text(
-                        Active.user.primeiroNome ?? 'no-data',
+                        'no-data',
                         style: Style.userNameText,
                       ),
                       SizedBox(
@@ -199,20 +199,20 @@ class _MainViewState extends State<MainView> {
                                                   maxRadius: 16,
                                                 ),
                                                 Positioned(
-                                                  bottom: 0,
-                                                  right: 0,
-                                                  child: Container(
-                                                  height: 15,
-                                                  width: 15,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.green,
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                      width: 2,
-                                                      color: Colors.grey[100]
-                                                    )
-                                                  ),
-                                                ))
+                                                    bottom: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      height: 15,
+                                                      width: 15,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.green,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: Border.all(
+                                                              width: 2,
+                                                              color: Colors
+                                                                  .grey[100])),
+                                                    ))
                                               ],
                                             ),
                                             SizedBox(
@@ -239,8 +239,9 @@ class _MainViewState extends State<MainView> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Column(
-                                      children:
-                                          list.map((e) => Text(e ?? 'no-data')).toList(),
+                                      children: list
+                                          .map((e) => Text(e ?? 'no-data'))
+                                          .toList(),
                                     ),
                                     TextField(
                                       style: Style.messageText,
@@ -248,7 +249,7 @@ class _MainViewState extends State<MainView> {
                                           suffixIcon: IconButton(
                                               icon:
                                                   Icon(LineIcons.paper_plane_o),
-                                              onPressed: (){})),
+                                              onPressed: () {})),
                                     )
                                   ],
                                 ),

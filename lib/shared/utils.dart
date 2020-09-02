@@ -6,9 +6,9 @@ import 'package:oficina/shared/style.dart';
 
 class Utils {
   static void showInSnackBar(
-      String value, Color cor, GlobalKey<ScaffoldState> scaffoldKey) {
+      String value, Color color, GlobalKey<ScaffoldState> scaffoldKey) {
     scaffoldKey.currentState.showSnackBar(SnackBar(
-      backgroundColor: cor,
+      backgroundColor: color,
       content: Text(value),
       duration: Duration(seconds: 5),
       action: SnackBarAction(
@@ -40,21 +40,21 @@ class Utils {
     return fmf.output.symbolOnLeft;
   }
 
-  static String getCars(List<Carro> cars){
-    if(cars.isEmpty){
+  static String getCars(List<Carro> cars) {
+    if (cars.isEmpty) {
       return 'Sem carro';
-    }else{
+    } else {
       String c = '';
       cars.forEach((element) {
-        c += '${element.modelo} - '; 
+        c += '${element.modelo} - ';
       });
       c = c.substring(0, c.length - 2);
       return c;
     }
   }
 
-  static String formatDate(DateTime dt){
-    if(dt == null){
+  static String formatDate(DateTime dt) {
+    if (dt == null) {
       return 'Não Informado';
     }
     String dia = dt.day < 10 ? '0${dt.day}' : '${dt.day}';
@@ -75,12 +75,12 @@ class Utils {
         '$qtd itens ',
         style: Style.qtdOkText,
       );
-    }else if(qtd == qtdMin){
+    } else if (qtd == qtdMin) {
       return Text(
         '$qtd itens ',
         style: Style.qtdOkWarning,
       );
-    } else{
+    } else {
       return Text(
         '$qtd itens ',
         style: Style.qtdOkDanger,

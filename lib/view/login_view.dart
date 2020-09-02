@@ -5,9 +5,8 @@ import 'package:oficina/api_requests/auth_requests.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/logo_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
-import 'package:oficina/model/user_base_model.dart';
-import 'package:oficina/service/user_service.dart';
-import 'package:oficina/shared/actives.dart';
+import 'package:oficina/components/main_textfield_component.dart';
+import 'package:oficina/controller/auth_controller.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -24,6 +23,8 @@ class _LoginViewState extends State<LoginView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool obscure = true;
   bool loading = false;
+
+  AuthController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +46,8 @@ class _LoginViewState extends State<LoginView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LogoComponent(),
-                TextField(
-                  controller: ctrCpf,
-                  style: Style.textField,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        LineIcons.user,
-                        color: Colors.grey[400],
-                      ),
-                      hintText: "Usuário",
-                      hintStyle: Style.textField,
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.grey[800],
-                      ))),
-                ),
+                MainTextFieldComponent(
+                    controller: ctrCpf, icon: LineIcons.user, hint: 'CPF/CNPJ'),
                 SizedBox(height: 10),
                 TextField(
                   controller: ctrPass,
@@ -71,8 +58,8 @@ class _LoginViewState extends State<LoginView> {
                         LineIcons.lock,
                         color: Colors.grey[400],
                       ),
-                      hintText: "Senha",
-                      hintStyle: Style.textField,
+                      labelText: "Senha",
+                      labelStyle: Style.textField,
                       suffixIcon: IconButton(
                           icon: Icon(
                               obscure ? LineIcons.eye : LineIcons.eye_slash),
@@ -126,7 +113,7 @@ class _LoginViewState extends State<LoginView> {
       setState(() {
         loading = true;
       });
-      await AuthRequests.login(ctrCpf.text, ctrPass.text);
+      await controller.login(ctrCpf.text, ctrPass.text, context, _scaffoldKey);
       setState(() {
         loading = false;
       });
@@ -137,5 +124,6 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    controller = AuthController();
   }
 }
