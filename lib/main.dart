@@ -12,16 +12,22 @@ import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/settings_view.dart';
 import 'package:oficina/view/stock_view.dart';
 import 'package:oficina/view/worker_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'shared/style.dart';
 
 void main() async {
+  final prefs = await SharedPreferences.getInstance();
+  String token = prefs.getString('token');
   await DotEnv().load('config.env');
-  runApp(MyApp());
+  runApp(MyApp(token));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final String token;
+
+  MyApp(this.token);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +38,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/login',
+      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 

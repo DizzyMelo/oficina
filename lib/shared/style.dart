@@ -199,7 +199,7 @@ class Style {
           color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 14));
   static TextStyle dialogSubtitle = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 10));
+          color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 12));
   static TextStyle closeButton = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.red, fontWeight: FontWeight.w500, fontSize: 14));

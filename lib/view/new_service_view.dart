@@ -3,6 +3,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/medium_buttom_component.dart';
+import 'package:oficina/components/search_textfield_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
@@ -60,38 +61,15 @@ class _NewServiceViewState extends State<NewServiceView> {
                     BoxDecoration(borderRadius: BorderRadius.circular(5)),
                 child: Column(
                   children: <Widget>[
-                    // TextField(
-                    //   style: Style.textField,
-                    //   onSubmitted: (name) async {
-                    //     await searchClients(name);
-                    //   },
-                    //   decoration: InputDecoration(
-                    //       prefixIcon: Icon(Icons.search),
-                    //       hintText: 'Buscar...',
-                    //       hintStyle: Style.textField),
-                    // ),
-                    // Expanded(
-                    //   child: users == null
-                    //       ? Center(
-                    //           child: Text('Buscar clientes'),
-                    //         )
-                    //       : Container(
-                    //           child: ListView.builder(
-                    //               itemCount: users.data.users.length,
-                    //               itemBuilder: (context, index) {
-                    //                 User user = users.data.users[index];
-                    //                 return ListTile(
-                    //                   title: Text(user.name),
-                    //                 );
-                    //               }),
-                    //         ),
-                    // ),
                     ListTile(
+                      onTap: selectClient,
                       leading: Icon(LineIcons.user),
-                      title: Text('Selecionar cliente'),
+                      title: Text(
+                          client == null ? 'Selecionar cliente' : client.name),
                       trailing: Icon(LineIcons.plus),
                     ),
                     ListTile(
+                      onTap: () {},
                       leading: Icon(LineIcons.car),
                       title: Text('Selecionar veículo'),
                       trailing: Icon(LineIcons.plus),
@@ -99,7 +77,9 @@ class _NewServiceViewState extends State<NewServiceView> {
                     ListTile(
                       onTap: selectColaborator,
                       leading: Icon(LineIcons.user),
-                      title: Text('Selecionar colaborador'),
+                      title: Text(colaborator == null
+                          ? 'Selecionar colaborador'
+                          : colaborator.name),
                       trailing: Icon(LineIcons.plus),
                     ),
                     SizedBox(
@@ -181,7 +161,86 @@ class _NewServiceViewState extends State<NewServiceView> {
                   }),
             ),
             actions: <Widget>[
-              MediumButtomComponent(title: 'SELECIONAR', function: () {})
+              MediumButtomComponent(
+                  title: 'SELECIONAR',
+                  function: () {
+                    Navigator.pop(context, colaborator);
+                  })
+            ],
+          );
+        });
+      },
+    );
+  }
+
+  void selectClient() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "Selecionar Cliente",
+                  style: Style.dialogTitle,
+                ),
+                Text(
+                  client == null ? "Cliente não selecionado" : client.name,
+                  style: Style.dialogSubtitle,
+                ),
+              ],
+            ),
+            content: Container(
+                height: 400,
+                width: 400,
+                child: Column(
+                  children: [
+                    SearchTextFieldComponent(
+                      controller: ctrSearch,
+                      hint: 'Buscar cliente...',
+                      function: (name) async {
+                        print('function called');
+                        SearchUserDataModel res = await _userController
+                            .searchByName(name, context, _scaffoldKey);
+
+                        if (res != null) {
+                          setState(() {
+                            users = res;
+                          });
+                        }
+                      },
+                    ),
+                    Expanded(
+                      child: users == null
+                          ? Center(
+                              child: Text('Buscar cliente'),
+                            )
+                          : ListView.builder(
+                              itemCount: users.data.users.length,
+                              itemBuilder: (context, index) {
+                                User user = users.data.users[index];
+                                return ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      client = user;
+                                    });
+                                  },
+                                  title: Text(user.name),
+                                  subtitle: Text(user.role),
+                                );
+                              }),
+                    )
+                  ],
+                )),
+            actions: <Widget>[
+              MediumButtomComponent(
+                  title: 'SELECIONAR',
+                  function: () {
+                    Navigator.pop(context);
+                  })
             ],
           );
         });
