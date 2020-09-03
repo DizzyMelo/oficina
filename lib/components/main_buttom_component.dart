@@ -15,7 +15,8 @@ class MainButtomComponent extends StatelessWidget {
         height: 45,
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Style.primary, borderRadius: BorderRadius.circular(4)),
+            color: function == null ? Colors.grey[400] : Style.primary,
+            borderRadius: BorderRadius.circular(4)),
         child: Center(
           child: Text(
             title,

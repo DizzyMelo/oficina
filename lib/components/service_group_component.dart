@@ -10,17 +10,31 @@ class ServiceGroupComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: _function,
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 250),
-        alignment: Alignment.center,
-        margin: EdgeInsets.only(right: 10),
-        padding: EdgeInsets.all(10),
-        height: 40,
-        child: Text(title, style: selected ? Style.selectedGroupServiceText : Style.unselectedGroupServiceText,),
-        decoration: BoxDecoration(
-            color: selected ? Colors.blue : Colors.transparent, borderRadius: BorderRadius.circular(4)),
-      ),
-    );
+        onTap: _function,
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          height: 40,
+          width: 110,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: Style.unselectedGroupServiceText,
+              ),
+              AnimatedContainer(
+                duration: Duration(milliseconds: 250),
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                height: 4,
+                width: selected ? 110 : 4,
+                decoration: BoxDecoration(
+                    color: Style.primaryColor,
+                    borderRadius: BorderRadius.circular(4)),
+              ),
+            ],
+          ),
+        ));
   }
 }

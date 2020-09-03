@@ -390,7 +390,7 @@ class _ClientViewState extends State<ClientView> {
       "cpfcnpj": ctrCpf.text
     };
 
-    controller.create(data, context, _scaffoldKey);
+    await controller.create(data, context, _scaffoldKey);
   }
 
   void _addCardDialog(String id) async {

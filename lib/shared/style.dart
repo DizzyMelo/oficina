@@ -74,6 +74,10 @@ class Style {
       textStyle: TextStyle(
           color: Colors.grey[900], fontWeight: FontWeight.w400, fontSize: 13));
 
+  static TextStyle optionTitleTextLight = GoogleFonts.lato(
+      textStyle: TextStyle(
+          color: Colors.grey[100], fontWeight: FontWeight.w400, fontSize: 13));
+
   static TextStyle userNameText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 13));

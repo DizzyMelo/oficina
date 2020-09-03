@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oficina/api_requests/user_requests.dart';
 import 'package:oficina/model/create_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
+import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -43,6 +44,17 @@ class UserController {
     } else {
       Utils.showInSnackBar(
           'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+    }
+  }
+
+  Future getVehicles(userId, context, scaffoldKey) async {
+    VehicleDataModel res = await requests.getUserVehicles(userId);
+
+    if (res != null) {
+      return res;
+    } else {
+      Utils.showInSnackBar(
+          'Nenhum veículo encontrado', Colors.red, scaffoldKey);
     }
   }
 }

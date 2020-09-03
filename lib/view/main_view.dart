@@ -2,8 +2,10 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/main_appbar_component.dart';
 import 'package:oficina/components/service_group_component.dart';
 import 'package:oficina/components/service_list_component.dart';
+import 'package:oficina/components/side_menu_component.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/model/user_model.dart';
 import 'package:oficina/model/worker_model.dart';
@@ -44,73 +46,15 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-            height: screen.height,
-            child: Column(
-              children: [
-                Container(
-                  padding:
-                      EdgeInsets.only(left: 20, right: 10, top: 10, bottom: 10),
-                  height: 60,
-                  width: screen.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                          child: Text(
-                        'no-data',
-                        style: Style.shopNameText,
-                      )),
-                      Text(
-                        'no-data',
-                        style: Style.userNameText,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.blue),
-                        child: Center(
-                          child: Icon(
-                            LineIcons.user,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: Row(
+          height: screen.height,
+          child: Column(
+            children: [
+              MainAppbarComponent(),
+              Expanded(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      flex: 2,
-                      child: Container(
-                        height: screen.height,
-                        child: Column(
-                          children: [
-                            Expanded(
-                                child: ListView.builder(
-                                    itemCount: MenuList.listMenu.length,
-                                    itemBuilder: (context, index) {
-                                      MenuItem item = MenuList.listMenu[index];
-                                      return ListTile(
-                                        onTap: () => Navigator.pushNamed(
-                                            context, item.screen),
-                                        leading: Icon(item.icon),
-                                        title: Text(
-                                          item.title ?? 'no-data',
-                                          style: Style.optionTitleText,
-                                        ),
-                                      );
-                                    }))
-                          ],
-                        ),
-                      ),
-                    ),
+                    Flexible(flex: 2, child: SideMenuComponent()),
                     Flexible(
                       flex: 7,
                       child: Container(
@@ -122,11 +66,11 @@ class _MainViewState extends State<MainView> {
                             child: Row(
                               children: [
                                 ServiceGroupComponent(
-                                    'Em Progresso  -  $qtdProgress', () {
+                                    'Iniciado  -  $qtdProgress', () {
                                   selectGroup(1);
                                 }, s1),
-                                ServiceGroupComponent(
-                                    'Em Espera  -  $qtdWaiting', () {
+                                ServiceGroupComponent('Espera  -  $qtdWaiting',
+                                    () {
                                   selectGroup(2);
                                 }, s2),
                                 ServiceGroupComponent(
@@ -168,6 +112,7 @@ class _MainViewState extends State<MainView> {
                         ],
                       )),
                     ),
+                    /*
                     Flexible(
                         flex: 2,
                         child: Container(
@@ -256,11 +201,14 @@ class _MainViewState extends State<MainView> {
                               )),
                             ],
                           ),
-                        ))
+                        ),)
+                        */
                   ],
-                )),
-              ],
-            )),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -8,6 +8,9 @@ import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
 import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
+import 'package:oficina/view/select_car_view.dart';
+import 'package:oficina/view/select_client_view.dart';
+import 'package:oficina/view/select_colaborator_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/settings_view.dart';
 import 'package:oficina/view/stock_view.dart';
@@ -38,7 +41,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      initialRoute: '/select_colaborator',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -89,6 +93,26 @@ class MyApp extends StatelessWidget {
 
           case "/settings":
             page = MaterialPageRoute(builder: (context) => SettingsView());
+            break;
+
+          case "/select_client":
+            page = MaterialPageRoute(builder: (context) => SelectClientView());
+            break;
+
+          case "/select_car":
+            page = MaterialPageRoute(
+              builder: (context) => SelectCarView(
+                userId: '5f4f93ee94a9db0004008f1c',
+              ),
+            );
+            break;
+
+          case "/select_colaborator":
+            page = MaterialPageRoute(
+              builder: (context) => SelectColaboratorView(
+                shop: '5f4d4e7deb1bcc09ebe4b8b4',
+              ),
+            );
             break;
         }
 

@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:oficina/model/create_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
+import 'package:oficina/model/vehicle_data_model.dart';
 
 class UserRequests {
   Future<CreateUserDataModel> create(data) async {
@@ -57,6 +58,25 @@ class UserRequests {
 
       if (res.statusCode == 200) {
         return SearchUserDataModel.fromJson(json.decode(res.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<VehicleDataModel> getUserVehicles(id) async {
+    String url = '${DotEnv().env['BASE_URL']}/users/$id/cars';
+
+    try {
+      var res = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      });
+
+      if (res.statusCode == 200) {
+        return VehicleDataModel.fromJson(json.decode(res.body));
       } else {
         return null;
       }
