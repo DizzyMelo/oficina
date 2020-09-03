@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
@@ -14,9 +12,9 @@ import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/shared/style.dart';
 
 class SelectColaboratorView extends StatefulWidget {
-  final String shop;
+  final List<String> args;
 
-  SelectColaboratorView({@required this.shop});
+  SelectColaboratorView({@required this.args});
   @override
   _SelectColaboratorViewState createState() => _SelectColaboratorViewState();
 }
@@ -66,7 +64,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                             ),
                           )
                         : Expanded(
-                            child: users == null || users.data.users.length == 2
+                            child: users == null || users.data.users.length == 0
                                 ? Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -135,7 +133,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
   getColaborators() async {
     this.changeLodingState();
     SearchUserDataModel res = await _userController.getColaborators(
-        widget.shop, context, _scaffoldKey);
+        '5f4d4e7deb1bcc09ebe4b8b4', context, _scaffoldKey);
     this.changeLodingState();
 
     if (res != null) {
@@ -146,6 +144,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
   }
 
   createColaborator() async {
+    Navigator.pop(context);
     String randomTime = DateTime.now().millisecondsSinceEpoch.toString();
     String password =
         randomTime.substring(randomTime.length - 6, randomTime.length);
@@ -155,7 +154,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
       "email": ctrEmail.text,
       "password": password,
       "passwordConfirm": password,
-      "shop": widget.shop,
+      "shop": '5f4d4e7deb1bcc09ebe4b8b4',
       "role": role,
       "cpfcnpj": ctrCpf.text
     };
@@ -164,7 +163,9 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
       data.remove("email");
     }
 
-    //_userController.create(data, context, _scaffoldKey);
+    await _userController.create(data, context, _scaffoldKey);
+
+    this.getColaborators();
 
     print(data);
   }

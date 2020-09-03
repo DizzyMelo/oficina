@@ -15,7 +15,7 @@ class MenuList {
         color: Colors.blue,
         title: 'Novo Serviço',
         icon: LineIcons.plus,
-        screen: '/new_service',
+        screen: '/select_client',
         img: 'plus.png'),
     MenuItem(
         color: Colors.teal,

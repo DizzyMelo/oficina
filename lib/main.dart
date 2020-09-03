@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:oficina/view/client_view.dart';
 import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
@@ -41,8 +42,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      initialRoute: '/select_colaborator',
+      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      //initialRoute: '/select_colaborator',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -54,7 +55,13 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(builder: (context) => LoginView());
             break;
           case "/main":
-            page = MaterialPageRoute(builder: (context) => MainView());
+            String userId = settings.arguments == null
+                ? JwtDecoder.decode(token)['id']
+                : settings.arguments;
+            page = MaterialPageRoute(
+                builder: (context) => MainView(
+                      userId: userId,
+                    ));
             break;
           case "/service":
             page = MaterialPageRoute(
@@ -102,7 +109,7 @@ class MyApp extends StatelessWidget {
           case "/select_car":
             page = MaterialPageRoute(
               builder: (context) => SelectCarView(
-                userId: '5f4f93ee94a9db0004008f1c',
+                userId: settings.arguments,
               ),
             );
             break;
@@ -110,7 +117,7 @@ class MyApp extends StatelessWidget {
           case "/select_colaborator":
             page = MaterialPageRoute(
               builder: (context) => SelectColaboratorView(
-                shop: '5f4d4e7deb1bcc09ebe4b8b4',
+                args: settings.arguments,
               ),
             );
             break;

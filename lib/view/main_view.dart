@@ -1,21 +1,19 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_appbar_component.dart';
 import 'package:oficina/components/service_group_component.dart';
 import 'package:oficina/components/service_list_component.dart';
 import 'package:oficina/components/side_menu_component.dart';
+import 'package:oficina/controller/user_controller.dart';
+import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
-import 'package:oficina/model/user_model.dart';
 import 'package:oficina/model/worker_model.dart';
-import 'package:oficina/service/service_service.dart';
-import 'package:oficina/service/worker_service.dart';
-import 'package:oficina/shared/actives.dart';
-import 'package:oficina/shared/menu_list.dart';
 import 'package:oficina/shared/style.dart';
 
 class MainView extends StatefulWidget {
+  final String userId;
+
+  MainView({@required this.userId});
   @override
   _MainViewState createState() => _MainViewState();
 }
@@ -34,180 +32,100 @@ class _MainViewState extends State<MainView> {
   List<ServiceModel> services = new List();
   List<ServiceModel> servicesWaiting = new List();
   List<ServiceModel> servicesConcluded = new List();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int qtdProgress = 0;
   int qtdWaiting = 0;
   int qtdConcluded = 0;
+
+  bool loading = false;
+
+  UserController _userController;
+  GetUserDataModel _userDataModel;
 
   List<ServiceModel> supportServices = new List();
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Container(
           height: screen.height,
-          child: Column(
-            children: [
-              MainAppbarComponent(),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: _userDataModel == null
+              ? Center(
+                  child: LoadingComponent(),
+                )
+              : Column(
                   children: [
-                    Flexible(flex: 2, child: SideMenuComponent()),
-                    Flexible(
-                      flex: 7,
-                      child: Container(
-                          child: Column(
+                    MainAppbarComponent(user: _userDataModel),
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            height: 50,
-                            child: Row(
+                          Flexible(flex: 2, child: SideMenuComponent()),
+                          Flexible(
+                            flex: 7,
+                            child: Container(
+                                child: Column(
                               children: [
-                                ServiceGroupComponent(
-                                    'Iniciado  -  $qtdProgress', () {
-                                  selectGroup(1);
-                                }, s1),
-                                ServiceGroupComponent('Espera  -  $qtdWaiting',
-                                    () {
-                                  selectGroup(2);
-                                }, s2),
-                                ServiceGroupComponent(
-                                    'Concluído  -  $qtdConcluded', () {
-                                  selectGroup(3);
-                                }, s3),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  height: 50,
+                                  child: Row(
+                                    children: [
+                                      ServiceGroupComponent(
+                                          'Iniciado  -  $qtdProgress', () {
+                                        selectGroup(1);
+                                      }, s1),
+                                      ServiceGroupComponent(
+                                          'Espera  -  $qtdWaiting', () {
+                                        selectGroup(2);
+                                      }, s2),
+                                      ServiceGroupComponent(
+                                          'Concluído  -  $qtdConcluded', () {
+                                        selectGroup(3);
+                                      }, s3),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: TextField(
+                                    onChanged: (str) {},
+                                    controller: ctrSearch,
+                                    style: Style.searchText,
+                                    decoration: InputDecoration(
+                                        hintText: 'Buscar Serviço...',
+                                        hintStyle: Style.searchText,
+                                        prefixIcon: Icon(Icons.search)),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Expanded(
+                                  child: PageView(
+                                    controller: controller,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    children: [
+                                      ServiceListComponent(services),
+                                      ServiceListComponent(servicesWaiting),
+                                      ServiceListComponent(servicesConcluded)
+                                    ],
+                                  ),
+                                ),
                               ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            child: TextField(
-                              onChanged: searchServices,
-                              controller: ctrSearch,
-                              style: Style.searchText,
-                              decoration: InputDecoration(
-                                  hintText: 'Buscar Serviço...',
-                                  hintStyle: Style.searchText,
-                                  prefixIcon: Icon(Icons.search)),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Expanded(
-                            child: PageView(
-                              controller: controller,
-                              physics: NeverScrollableScrollPhysics(),
-                              children: [
-                                ServiceListComponent(services),
-                                ServiceListComponent(servicesWaiting),
-                                ServiceListComponent(servicesConcluded)
-                              ],
-                            ),
+                            )),
                           ),
                         ],
-                      )),
+                      ),
                     ),
-                    /*
-                    Flexible(
-                        flex: 2,
-                        child: Container(
-                          padding: EdgeInsets.only(top: 5),
-                          margin: EdgeInsets.only(left: 5),
-                          decoration: BoxDecoration(color: Colors.grey[100]),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                  child: Container(
-                                      child: Scrollbar(
-                                child: ListView.builder(
-                                    itemCount: workers.length,
-                                    itemBuilder: (context, index) {
-                                      WorkerModel w = workers[index];
-                                      return Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 5),
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 2),
-                                        height: 50,
-                                        width: double.infinity,
-                                        child: Row(
-                                          children: [
-                                            Stack(
-                                              overflow: Overflow.visible,
-                                              children: [
-                                                CircleAvatar(
-                                                  maxRadius: 16,
-                                                ),
-                                                Positioned(
-                                                    bottom: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                      height: 15,
-                                                      width: 15,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.green,
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                              width: 2,
-                                                              color: Colors
-                                                                  .grey[100])),
-                                                    ))
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(w.nome ?? 'Colaborador',
-                                                style: Style.workerNameText,
-                                                overflow: TextOverflow.fade)
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              ))),
-                              Expanded(
-                                  child: Container(
-                                margin: EdgeInsets.only(top: 5),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        top: BorderSide(
-                                            width: 0.5,
-                                            color: Colors.grey[800]))),
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Column(
-                                      children: list
-                                          .map((e) => Text(e ?? 'no-data'))
-                                          .toList(),
-                                    ),
-                                    TextField(
-                                      style: Style.messageText,
-                                      decoration: InputDecoration(
-                                          suffixIcon: IconButton(
-                                              icon:
-                                                  Icon(LineIcons.paper_plane_o),
-                                              onPressed: () {})),
-                                    )
-                                  ],
-                                ),
-                              )),
-                            ],
-                          ),
-                        ),)
-                        */
                   ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -238,75 +156,22 @@ class _MainViewState extends State<MainView> {
     });
   }
 
-  getServices() async {
-    List<ServiceModel> s = await ServiceService.getServices(Active.user.loja);
+  getUserInformation() async {
+    GetUserDataModel res = await _userController.getUserInformation(
+        widget.userId, context, _scaffoldKey);
 
-    List<ServiceModel> temp1 = new List();
-    List<ServiceModel> temp2 = new List();
-    List<ServiceModel> temp4 = new List();
-
-    if (s != null) {
-      s.forEach((element) {
-        if (element.sts == 'Em espera') {
-          temp1.add(element);
-        } else if (element.sts == 'Iniciado') {
-          temp2.add(element);
-        } else if (element.sts == 'Concluido') {
-          temp4.add(element);
-        }
-      });
-
+    if (res != null) {
       setState(() {
-        supportServices = s;
-        services = temp2;
-        servicesWaiting = temp1;
-        servicesConcluded = temp4;
-
-        qtdProgress = services.length;
-        qtdWaiting = servicesWaiting.length;
-        qtdConcluded = servicesConcluded.length;
+        _userDataModel = res;
       });
     }
-  }
-
-  getWorkers() async {
-    List<WorkerModel> wk = await WorkerService.getWorkers('1');
-
-    if (wk != null && wk.length > 0) {
-      setState(() {
-        workers = wk;
-      });
-    }
-  }
-
-  searchServices(String str) {
-    List<ServiceModel> tempServices = new List();
-    supportServices.forEach((element) {
-      if (element.nomeCliente.toLowerCase().contains(str.toLowerCase()) ||
-          element.nomeColaborador.toLowerCase().contains(str.toLowerCase()) ||
-          element.modelo.toLowerCase().contains(str.toLowerCase()) ||
-          element.telefone1.toLowerCase().contains(str.toLowerCase())) {
-        tempServices.add(element);
-      }
-    });
-
-    setState(() {
-      services = tempServices;
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    //this.getServices();
-    //this.getWorkers();
-
-    //channel = IOWebSocketChannel.connect('echo.websocket.org');
-    // channel.stream.listen((event) {
-    //   setState(() {
-    //     list.add(event);
-    //   });
-    // });
+    _userController = UserController();
+    this.getUserInformation();
   }
 
   @override

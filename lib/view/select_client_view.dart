@@ -72,7 +72,11 @@ class _SelectClientViewState extends State<SelectClientView> {
                                         onTap: () {
                                           setState(() {
                                             client = user;
-                                            function = () {};
+                                            function = () {
+                                              Navigator.pushNamed(
+                                                  context, '/select_car',
+                                                  arguments: client.id);
+                                            };
                                           });
                                         },
                                         title: Text(user.name),

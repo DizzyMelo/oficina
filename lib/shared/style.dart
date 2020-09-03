@@ -80,10 +80,10 @@ class Style {
 
   static TextStyle userNameText = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 13));
+          color: Colors.grey[100], fontWeight: FontWeight.w400, fontSize: 13));
   static TextStyle shopNameText = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 15));
+          color: Colors.grey[100], fontWeight: FontWeight.w400, fontSize: 15));
   static TextStyle totalValueText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.green, fontWeight: FontWeight.w700, fontSize: 11));

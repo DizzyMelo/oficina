@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:oficina/api_requests/user_requests.dart';
 import 'package:oficina/model/create_user_data_model.dart';
+import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/style.dart';
@@ -38,6 +39,17 @@ class UserController {
 
   Future getColaborators(shop, context, scaffoldKey) async {
     SearchUserDataModel res = await requests.getColaborators(shop);
+
+    if (res != null) {
+      return res;
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+    }
+  }
+
+  Future getUserInformation(id, context, scaffoldKey) async {
+    GetUserDataModel res = await requests.getUserInformation(id);
 
     if (res != null) {
       return res;

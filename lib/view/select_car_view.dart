@@ -28,6 +28,7 @@ class _SelectCarViewState extends State<SelectCarView> {
   VehicleController _vehicleController;
   bool loading = false;
   Car vehicle;
+  Function function = null;
 
   VehicleDataModel vehicles;
   @override
@@ -86,6 +87,14 @@ class _SelectCarViewState extends State<SelectCarView> {
                                           onTap: () {
                                             setState(() {
                                               vehicle = v;
+                                              function = () {
+                                                Navigator.pushNamed(context,
+                                                    '/select_colaborator',
+                                                    arguments: [
+                                                      widget.userId,
+                                                      v.id
+                                                    ]);
+                                              };
                                             });
                                           },
                                           title: Text(v.name),
@@ -114,11 +123,12 @@ class _SelectCarViewState extends State<SelectCarView> {
                                     onPressed: () {
                                       setState(() {
                                         vehicle = null;
+                                        function = null;
                                       });
                                     }),
                           ),
                           MainButtomComponent(
-                              title: 'CONTINUAR', function: () {})
+                              title: 'CONTINUAR', function: function)
                         ],
                       ),
               ),
