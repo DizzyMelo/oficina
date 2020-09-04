@@ -3,9 +3,10 @@ import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
-import 'package:oficina/controller/user_controller.dart';
+import 'package:oficina/controller/shop_controller.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 
 class NewServiceView extends StatefulWidget {
   final List<dynamic> args;
@@ -17,7 +18,7 @@ class NewServiceView extends StatefulWidget {
 class _NewServiceViewState extends State<NewServiceView> {
   TextEditingController ctrSearch = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  UserController _userController;
+  ShopController _shopController;
 
   User client;
   User colaborator;
@@ -69,7 +70,7 @@ class _NewServiceViewState extends State<NewServiceView> {
                     Column(
                       children: [
                         MainButtomComponent(
-                            title: 'INICAR SERVIÇO', function: () {}),
+                            title: 'INICAR SERVIÇO', function: createService),
                         SizedBox(
                           height: 10,
                         ),
@@ -87,12 +88,21 @@ class _NewServiceViewState extends State<NewServiceView> {
     );
   }
 
-  addService(cliente, carro, mecanico, loja) async {}
+  createService() async {
+    Map<String, dynamic> data = {
+      "client": client.id,
+      "colaborator": colaborator.id,
+      "car": vehicle.id,
+      "shop": SessionVariables.userDataModel.data.data.shop.id
+    };
+
+    await _shopController.create(data, context, _scaffoldKey);
+  }
 
   @override
   void initState() {
     super.initState();
-    _userController = UserController();
+    _shopController = ShopController();
     client = widget.args[0];
     vehicle = widget.args[1];
     colaborator = widget.args[2];
