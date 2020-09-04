@@ -19,7 +19,10 @@ class SearchTextFieldComponent extends StatelessWidget {
       decoration: InputDecoration(
           hintText: hint,
           hintStyle: Style.searchText,
-          prefixIcon: Icon(Icons.search)),
+          prefixIcon: Icon(
+            Icons.search,
+            size: 15,
+          )),
     );
   }
 }

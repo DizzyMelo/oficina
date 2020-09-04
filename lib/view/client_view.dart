@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
+import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/controller/user_controller.dart';
@@ -57,7 +58,7 @@ class _ClientViewState extends State<ClientView> {
               child: Row(
                 children: [
                   Flexible(
-                      flex: 2,
+                      flex: 1,
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
@@ -145,150 +146,13 @@ class _ClientViewState extends State<ClientView> {
                             SizedBox(
                               height: 20,
                             ),
-                            selectedClient != null
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      RaisedButton(
-                                          color: Colors.red,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3)),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                LineIcons.close,
-                                                color: Colors.white,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Excluir Cliente",
-                                                style: Style.serviceButton,
-                                              ),
-                                            ],
-                                          ),
-                                          onPressed: () async {}),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      RaisedButton(
-                                          color: Colors.blue,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3)),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                LineIcons.clock_o,
-                                                color: Colors.white,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Histórico de Serviços",
-                                                style: Style.serviceButton,
-                                              ),
-                                            ],
-                                          ),
-                                          onPressed: () async {
-                                            _services();
-                                          }),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      RaisedButton(
-                                          color: Colors.green,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3)),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                LineIcons.pencil,
-                                                color: Colors.white,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Editar Informações",
-                                                style: Style.serviceButton,
-                                              ),
-                                            ],
-                                          ),
-                                          onPressed: editClient),
-                                    ],
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      RaisedButton(
-                                          color: Colors.red,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3)),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                LineIcons.close,
-                                                color: Colors.white,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Cancelar",
-                                                style: Style.serviceButton,
-                                              ),
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              selectedClient = null;
-                                            });
-                                          }),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      RaisedButton(
-                                          color: Colors.green,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3)),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                LineIcons.check,
-                                                color: Colors.white,
-                                                size: 15,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Cadastrar Cliente",
-                                                style: Style.serviceButton,
-                                              ),
-                                            ],
-                                          ),
-                                          onPressed: createUser),
-                                    ],
-                                  )
+                            MainButtomComponent(
+                                title: 'ADICIONAR CLIENTE', function: () {})
                           ],
                         ),
                       )),
                   Flexible(
-                      flex: 3,
+                      flex: 2,
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Column(

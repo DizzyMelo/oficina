@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:oficina/view/client_view.dart';
+import 'package:oficina/view/edit_product_view.dart';
 import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
 import 'package:oficina/view/login_view.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/select_colaborator',
+      //initialRoute: '/edit_product',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -121,6 +122,14 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(
               builder: (context) => SelectColaboratorView(
                 args: settings.arguments,
+              ),
+            );
+            break;
+
+          case "/edit_product":
+            page = MaterialPageRoute(
+              builder: (context) => EditProductView(
+                product: settings.arguments,
               ),
             );
             break;

@@ -87,4 +87,14 @@ class Utils {
       );
     }
   }
+
+  static double clearPrice(String value) {
+    double price = double.parse(value
+        .replaceAll('R\$', '')
+        .replaceAll('.', '')
+        .replaceAll(',', '.')
+        .replaceAll(' ', '')
+        .trim());
+    return price;
+  }
 }

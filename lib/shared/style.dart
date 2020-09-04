@@ -58,7 +58,7 @@ class Style {
 
   static TextStyle textField = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 13));
+          color: Colors.grey[800], fontWeight: FontWeight.w400, fontSize: 13));
 
   static TextStyle pageTitleText = GoogleFonts.lato(
       textStyle: TextStyle(

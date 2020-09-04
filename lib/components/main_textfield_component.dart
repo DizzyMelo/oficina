@@ -17,10 +17,10 @@ class MainTextFieldComponent extends StatelessWidget {
       decoration: InputDecoration(
           prefixIcon: Icon(
             icon,
-            color: Colors.grey[400],
+            size: 15,
           ),
-          labelText: hint,
-          labelStyle: Style.textField,
+          hintText: hint,
+          hintStyle: Style.textField,
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
             width: 1,
