@@ -70,15 +70,11 @@ class UserRequests {
   Future<GetUserDataModel> getUserInformation(id) async {
     String url = '${DotEnv().env['BASE_URL']}/users/$id';
 
-    print(id);
-
     try {
       var res = await http.get(url, headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
       });
-
-      print(res.body);
 
       if (res.statusCode == 200) {
         return GetUserDataModel.fromJson(json.decode(res.body));

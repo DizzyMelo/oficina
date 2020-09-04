@@ -7,14 +7,14 @@ import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/medium_buttom_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/controller/vehicle_controller.dart';
+import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/style.dart';
-import 'package:oficina/shared/utils.dart';
 
 class SelectCarView extends StatefulWidget {
-  final String userId;
+  final User user;
 
-  SelectCarView({@required this.userId});
+  SelectCarView({@required this.user});
   @override
   _SelectCarViewState createState() => _SelectCarViewState();
 }
@@ -91,8 +91,8 @@ class _SelectCarViewState extends State<SelectCarView> {
                                                 Navigator.pushNamed(context,
                                                     '/select_colaborator',
                                                     arguments: [
-                                                      widget.userId,
-                                                      v.id
+                                                      widget.user,
+                                                      v
                                                     ]);
                                               };
                                             });
@@ -141,16 +141,14 @@ class _SelectCarViewState extends State<SelectCarView> {
 
   getVehicles() async {
     this.changeLodingState();
-    VehicleDataModel res =
-        await _userController.getVehicles(widget.userId, context, _scaffoldKey);
+    VehicleDataModel res = await _userController.getVehicles(
+        widget.user.id, context, _scaffoldKey);
     this.changeLodingState();
 
     if (res != null) {
       setState(() {
         vehicles = res;
       });
-    } else {
-      print('res nulo');
     }
   }
 
@@ -161,7 +159,7 @@ class _SelectCarViewState extends State<SelectCarView> {
     Map<String, dynamic> data = {
       "name": ctrName.text,
       "plate": ctrPlate.text,
-      "user": widget.userId
+      "user": widget.user.id
     };
     await _vehicleController.create(data, context, _scaffoldKey);
     this.changeLodingState();

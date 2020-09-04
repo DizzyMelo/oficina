@@ -25,8 +25,13 @@ class Style {
   static TextStyle loginButton = TextStyle(color: Colors.grey[600]);
   static TextStyle serviceButton =
       GoogleFonts.lato(textStyle: TextStyle(color: Colors.white));
+
   static TextStyle mainButtonText = GoogleFonts.lato(
       textStyle: TextStyle(color: secondaryColor, fontSize: 15));
+
+  static TextStyle whiteButtonText =
+      GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontSize: 15));
+
   static TextStyle secondaryButtonText = GoogleFonts.lato(
       textStyle: TextStyle(color: Colors.grey[700], fontSize: 13));
   static TextStyle welcomeText = TextStyle(color: Colors.white, fontSize: 20);

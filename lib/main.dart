@@ -70,7 +70,10 @@ class MyApp extends StatelessWidget {
                     ));
             break;
           case "/new_service":
-            page = MaterialPageRoute(builder: (context) => NewServiceView());
+            page = MaterialPageRoute(
+                builder: (context) => NewServiceView(
+                      args: settings.arguments,
+                    ));
             break;
           case "/new_car":
             String client = settings.arguments ?? '62';
@@ -109,7 +112,7 @@ class MyApp extends StatelessWidget {
           case "/select_car":
             page = MaterialPageRoute(
               builder: (context) => SelectCarView(
-                userId: settings.arguments,
+                user: settings.arguments,
               ),
             );
             break;

@@ -9,10 +9,11 @@ import 'package:oficina/components/medium_buttom_component.dart';
 import 'package:oficina/components/select_role_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/search_user_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 
 class SelectColaboratorView extends StatefulWidget {
-  final List<String> args;
+  final List<dynamic> args;
 
   SelectColaboratorView({@required this.args});
   @override
@@ -27,6 +28,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
   String role = 'mecanico';
   bool mecanic = true;
   bool atendant = false;
+  Function function;
 
   SearchUserDataModel users;
   User colaborator;
@@ -88,6 +90,13 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                         onTap: () {
                                           setState(() {
                                             colaborator = user;
+                                            function = () {
+                                              widget.args.add(user);
+
+                                              Navigator.pushNamed(
+                                                  context, '/new_service',
+                                                  arguments: widget.args);
+                                            };
                                           });
                                         },
                                         title: Text(user.name),
@@ -116,10 +125,11 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                               onPressed: () {
                                 setState(() {
                                   colaborator = null;
+                                  function = null;
                                 });
                               }),
                     ),
-                    MainButtomComponent(title: 'CONTINUAR', function: () {})
+                    MainButtomComponent(title: 'CONTINUAR', function: function)
                   ],
                 ),
               ),
@@ -133,7 +143,9 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
   getColaborators() async {
     this.changeLodingState();
     SearchUserDataModel res = await _userController.getColaborators(
-        '5f4d4e7deb1bcc09ebe4b8b4', context, _scaffoldKey);
+        SessionVariables.userDataModel.data.data.shop.id,
+        context,
+        _scaffoldKey);
     this.changeLodingState();
 
     if (res != null) {

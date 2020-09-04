@@ -4,6 +4,7 @@ import 'package:oficina/model/create_user_data_model.dart';
 import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -50,6 +51,8 @@ class UserController {
 
   Future getUserInformation(id, context, scaffoldKey) async {
     GetUserDataModel res = await requests.getUserInformation(id);
+
+    SessionVariables.userDataModel = res;
 
     if (res != null) {
       return res;
