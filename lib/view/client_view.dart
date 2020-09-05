@@ -9,6 +9,7 @@ import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -191,7 +192,9 @@ class _ClientViewState extends State<ClientView> {
                                             User user = users.data.users[index];
                                             return ListTile(
                                               onTap: () {
-                                                this.selectUser(user);
+                                                Navigator.pushNamed(
+                                                    context, '/edit_client',
+                                                    arguments: user);
                                               },
                                               title: Text(
                                                 user.name,
@@ -244,12 +247,13 @@ class _ClientViewState extends State<ClientView> {
   createUser() async {
     if (!validateInfo()) return;
 
+    String password = Utils.generateRandomPassword();
     Map<String, dynamic> data = {
       "name": ctrName.text,
       "email": ctrEmail.text,
-      "password": "12345678",
-      "passwordConfirm": "12345678",
-      "shop": "5f4d4e7deb1bcc09ebe4b8b4",
+      "password": password,
+      "passwordConfirm": password,
+      "shop": SessionVariables.userDataModel.data.data.shop.id,
       "role": "cliente",
       "cpfcnpj": ctrCpf.text
     };

@@ -11,6 +11,7 @@ import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
+import 'package:oficina/shared/utils.dart';
 
 class SelectColaboratorView extends StatefulWidget {
   final List<dynamic> args;
@@ -157,9 +158,8 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
 
   createColaborator() async {
     Navigator.pop(context);
-    String randomTime = DateTime.now().millisecondsSinceEpoch.toString();
-    String password =
-        randomTime.substring(randomTime.length - 6, randomTime.length);
+
+    String password = Utils.generateRandomPassword();
 
     Map<String, dynamic> data = {
       "name": ctrName.text,

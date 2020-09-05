@@ -97,4 +97,11 @@ class Utils {
         .trim());
     return price;
   }
+
+  static String generateRandomPassword() {
+    String randomTime = DateTime.now().millisecondsSinceEpoch.toString();
+    String password =
+        randomTime.substring(randomTime.length - 6, randomTime.length);
+    return password;
+  }
 }

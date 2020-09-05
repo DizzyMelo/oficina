@@ -27,6 +27,18 @@ class UserController {
     }
   }
 
+  Future edit(data, id, delete, context, scaffoldKey) async {
+    CreateUserDataModel res = await requests.edit(data, id);
+
+    if (res != null) {
+      Utils.showInSnackBar(
+          'Cliente editado com sucesso', Colors.green, scaffoldKey);
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao tentar editar o cliente', Colors.red, scaffoldKey);
+    }
+  }
+
   Future searchByName(name, context, scaffoldKey) async {
     SearchUserDataModel res = await requests.searchByName(name);
 

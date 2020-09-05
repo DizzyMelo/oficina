@@ -29,6 +29,27 @@ class UserRequests {
     }
   }
 
+  Future<CreateUserDataModel> edit(data, id) async {
+    String url = '${DotEnv().env['BASE_URL']}/users/$id';
+
+    try {
+      var res = await http.patch(url,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: json.encode(data));
+
+      if (res.statusCode == 200) {
+        return CreateUserDataModel.fromJson(json.decode(res.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<SearchUserDataModel> searchByName(name) async {
     String url = '${DotEnv().env['BASE_URL']}/users/search/$name';
 
