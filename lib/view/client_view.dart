@@ -363,8 +363,8 @@ class _ClientViewState extends State<ClientView> {
   selectUser(User user) {
     ctrName.text = user.name;
     ctrCpf.text = user.cpfcnpj;
-    ctrPhone.text = user.phone.length > 0 ? user.phone[0] : '';
-    ctrPhone2.text = user.phone.length > 1 ? user.phone[1] : '';
+    ctrPhone.text = user.primaryphone;
+    ctrPhone2.text = user.secondaryphone;
     ctrEmail.text = user.email;
   }
 
