@@ -64,6 +64,10 @@ class Style {
       textStyle: TextStyle(
           color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 17));
 
+  static TextStyle pageTitleTextRevert = GoogleFonts.lato(
+      textStyle: TextStyle(
+          color: Colors.grey[100], fontWeight: FontWeight.w600, fontSize: 17));
+
   //Main Page
   static TextStyle mainClientNameText = GoogleFonts.lato(
       textStyle: TextStyle(

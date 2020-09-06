@@ -11,6 +11,7 @@ import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
 import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
+import 'package:oficina/view/profile_view.dart';
 import 'package:oficina/view/select_car_view.dart';
 import 'package:oficina/view/select_client_view.dart';
 import 'package:oficina/view/select_colaborator_view.dart';
@@ -44,8 +45,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/edit_product',
+      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      initialRoute: '/profile',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -140,6 +141,12 @@ class MyApp extends StatelessWidget {
               builder: (context) => EditClientView(
                 user: settings.arguments,
               ),
+            );
+            break;
+
+          case "/profile":
+            page = MaterialPageRoute(
+              builder: (context) => ProfileView(),
             );
             break;
         }
