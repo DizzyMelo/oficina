@@ -147,50 +147,62 @@ class Car {
 class Client {
   Client({
     this.photo,
-    this.phone,
     this.role,
+    this.active,
+    this.token,
     this.id,
     this.name,
     this.email,
     this.shop,
     this.cpfcnpj,
+    this.primaryphone,
+    this.secondaryphone,
     this.v,
     this.clientId,
   });
 
   String photo;
-  List<dynamic> phone;
   String role;
+  bool active;
+  List<dynamic> token;
   String id;
   String name;
   String email;
   String shop;
   String cpfcnpj;
+  String primaryphone;
+  String secondaryphone;
   int v;
   String clientId;
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         photo: json["photo"],
-        phone: List<dynamic>.from(json["phone"].map((x) => x)),
         role: json["role"],
+        active: json["active"],
+        token: List<dynamic>.from(json["token"].map((x) => x)),
         id: json["_id"],
         name: json["name"],
         email: json["email"],
         shop: json["shop"],
         cpfcnpj: json["cpfcnpj"],
+        primaryphone: json["primaryphone"],
+        secondaryphone: json["secondaryphone"],
         v: json["__v"],
         clientId: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
         "photo": photo,
-        "phone": List<dynamic>.from(phone.map((x) => x)),
         "role": role,
+        "active": active,
+        "token": List<dynamic>.from(token.map((x) => x)),
         "_id": id,
         "name": name,
         "email": email,
         "shop": shop,
         "cpfcnpj": cpfcnpj,
+        "primaryphone": primaryphone,
+        "secondaryphone": secondaryphone,
         "__v": v,
         "id": clientId,
       };
@@ -198,36 +210,40 @@ class Client {
 
 class Shop {
   Shop({
-    this.phones,
     this.id,
     this.name,
     this.email,
     this.address,
+    this.primaryphone,
+    this.secondaryphone,
     this.v,
   });
 
-  List<dynamic> phones;
   String id;
   String name;
   String email;
   String address;
+  String primaryphone;
+  String secondaryphone;
   int v;
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
-        phones: List<dynamic>.from(json["phones"].map((x) => x)),
         id: json["_id"],
         name: json["name"],
         email: json["email"],
         address: json["address"],
+        primaryphone: json["primaryphone"],
+        secondaryphone: json["secondaryphone"],
         v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "phones": List<dynamic>.from(phones.map((x) => x)),
         "_id": id,
         "name": name,
         "email": email,
         "address": address,
+        "primaryphone": primaryphone,
+        "secondaryphone": secondaryphone,
         "__v": v,
       };
 }

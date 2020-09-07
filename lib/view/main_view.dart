@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_appbar_component.dart';
 import 'package:oficina/components/service_group_component.dart';
-import 'package:oficina/components/service_list_component.dart';
 import 'package:oficina/components/side_menu_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
-import 'package:oficina/model/worker_model.dart';
 import 'package:oficina/shared/style.dart';
 
 class MainView extends StatefulWidget {
@@ -19,19 +17,14 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  bool s1 = true;
+  bool s1 = false;
   bool s2 = false;
   bool s3 = false;
+  bool s4 = true;
 
   PageController controller = PageController(initialPage: 0);
   TextEditingController ctrSearch = TextEditingController();
-  TextEditingController ctrMessage = TextEditingController();
-  List<WorkerModel> workers = new List();
-  List<String> list = [];
 
-  List<ServiceModel> services = new List();
-  List<ServiceModel> servicesWaiting = new List();
-  List<ServiceModel> servicesConcluded = new List();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int qtdProgress = 0;
@@ -39,6 +32,7 @@ class _MainViewState extends State<MainView> {
   int qtdConcluded = 0;
 
   bool loading = false;
+  bool loadingServices = false;
 
   UserController _userController;
   GetUserDataModel _userDataModel;
@@ -67,59 +61,62 @@ class _MainViewState extends State<MainView> {
                           Flexible(
                             flex: 7,
                             child: Container(
-                                child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  height: 50,
-                                  child: Row(
-                                    children: [
-                                      ServiceGroupComponent(
-                                          'Iniciado  -  $qtdProgress', () {
-                                        selectGroup(1);
-                                      }, s1),
-                                      ServiceGroupComponent(
-                                          'Espera  -  $qtdWaiting', () {
-                                        selectGroup(2);
-                                      }, s2),
-                                      ServiceGroupComponent(
-                                          'Concluído  -  $qtdConcluded', () {
-                                        selectGroup(3);
-                                      }, s3),
-                                    ],
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    height: 50,
+                                    child: Row(
+                                      children: [
+                                        ServiceGroupComponent(
+                                            'Todos  -  $qtdProgress', () {
+                                          selectGroup(4);
+                                        }, s4),
+                                        ServiceGroupComponent(
+                                            'Iniciado  -  $qtdProgress', () {
+                                          selectGroup(1);
+                                        }, s1),
+                                        ServiceGroupComponent(
+                                            'Espera  -  $qtdWaiting', () {
+                                          selectGroup(2);
+                                        }, s2),
+                                        ServiceGroupComponent(
+                                            'Concluído  -  $qtdConcluded', () {
+                                          selectGroup(3);
+                                        }, s3),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: TextField(
-                                    onChanged: (str) {},
-                                    controller: ctrSearch,
-                                    style: Style.searchText,
-                                    decoration: InputDecoration(
-                                        hintText: 'Buscar Serviço...',
-                                        hintStyle: Style.searchText,
-                                        prefixIcon: Icon(Icons.search)),
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Expanded(
-                                  child: PageView(
-                                    controller: controller,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    children: [
-                                      ServiceListComponent(services),
-                                      ServiceListComponent(servicesWaiting),
-                                      ServiceListComponent(servicesConcluded)
-                                    ],
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    child: TextField(
+                                      onChanged: (str) {},
+                                      controller: ctrSearch,
+                                      style: Style.searchText,
+                                      decoration: InputDecoration(
+                                          hintText: 'Buscar Serviço...',
+                                          hintStyle: Style.searchText,
+                                          prefixIcon: Icon(Icons.search)),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                        itemCount: 10,
+                                        itemBuilder: (context, index) {
+                                          return;
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -138,6 +135,7 @@ class _MainViewState extends State<MainView> {
       s1 = false;
       s2 = false;
       s3 = false;
+      s4 = false;
 
       switch (s) {
         case 1:
@@ -150,6 +148,10 @@ class _MainViewState extends State<MainView> {
 
         case 3:
           s3 = true;
+          break;
+
+        case 4:
+          s4 = true;
           break;
         default:
       }

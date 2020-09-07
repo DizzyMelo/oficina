@@ -74,7 +74,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                          'Busque o cliente na barra superior'),
+                                          'Busque o colaborador na barra superior'),
                                       SizedBox(
                                         height: 10,
                                       ),

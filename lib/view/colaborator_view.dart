@@ -6,7 +6,7 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/phone_textfield_component.dart';
-import 'package:oficina/components/service_list_date_component.dart';
+import 'package:oficina/components/select_role_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
@@ -15,12 +15,12 @@ import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
-class ClientView extends StatefulWidget {
+class ColaboratorView extends StatefulWidget {
   @override
-  _ClientViewState createState() => _ClientViewState();
+  _ColaboratorViewState createState() => _ColaboratorViewState();
 }
 
-class _ClientViewState extends State<ClientView> {
+class _ColaboratorViewState extends State<ColaboratorView> {
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrSearchService = TextEditingController();
   //ctrSearchService
@@ -46,6 +46,9 @@ class _ClientViewState extends State<ClientView> {
   IconData iconPhone2 = LineIcons.phone;
 
   bool loading = false;
+  String role = 'mecanico';
+  bool mecanic = true;
+  bool atendant = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +60,7 @@ class _ClientViewState extends State<ClientView> {
           children: [
             AppBarComponent(
               icon: LineIcons.user,
-              title: 'Clientes',
+              title: 'Colaboradores',
             ),
             Expanded(
                 child: Container(
@@ -96,12 +99,38 @@ class _ClientViewState extends State<ClientView> {
                                 icon: LineIcons.envelope_o,
                                 hint: 'Email'),
                             SizedBox(
+                              height: 10,
+                            ),
+                            SelectRoleComponent(
+                                title: 'Mecânico',
+                                selected: mecanic,
+                                function: () {
+                                  setState(() {
+                                    role = 'mecanico';
+                                    mecanic = true;
+                                    atendant = false;
+                                  });
+                                }),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            SelectRoleComponent(
+                                title: 'Atendente',
+                                selected: atendant,
+                                function: () {
+                                  setState(() {
+                                    role = 'atendente';
+                                    mecanic = false;
+                                    atendant = true;
+                                  });
+                                }),
+                            SizedBox(
                               height: 20,
                             ),
                             loading
                                 ? LoadingComponent()
                                 : MainButtomComponent(
-                                    title: 'ADICIONAR CLIENTE',
+                                    title: 'ADICIONAR COLABORADOR',
                                     function: createUser)
                           ],
                         ),
@@ -113,7 +142,7 @@ class _ClientViewState extends State<ClientView> {
                         child: Column(
                           children: [
                             TextField(
-                              onSubmitted: searchClients,
+                              onSubmitted: searchColaborators,
                               style: Style.textField,
                               controller: ctrSearch,
                               decoration: InputDecoration(
@@ -122,7 +151,7 @@ class _ClientViewState extends State<ClientView> {
                                     size: 20,
                                     color: Colors.grey[400],
                                   ),
-                                  hintText: 'Buscar cliente...',
+                                  hintText: 'Buscar colaborador...',
                                   hintStyle: Style.textField,
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
@@ -137,7 +166,7 @@ class _ClientViewState extends State<ClientView> {
                               child: Container(
                                 child: users == null
                                     ? Center(
-                                        child: Text('Buscar cliente'),
+                                        child: Text('Buscar colaborador'),
                                       )
                                     : Scrollbar(
                                         child: ListView.builder(
@@ -172,8 +201,9 @@ class _ClientViewState extends State<ClientView> {
     );
   }
 
-  searchClients(String name) async {
-    var res = await controller.searchUserByName(name, context, _scaffoldKey);
+  searchColaborators(String name) async {
+    var res =
+        await controller.searchColaboratorByName(name, context, _scaffoldKey);
 
     if (res != null) {
       setState(() {
@@ -206,51 +236,17 @@ class _ClientViewState extends State<ClientView> {
       "password": password,
       "passwordConfirm": password,
       "shop": SessionVariables.userDataModel.data.data.shop.id,
-      "role": "cliente",
+      "role": role,
       "cpfcnpj": ctrCpf.text,
       "primaryphone": ctrPhone.text,
       "secondaryphone": ctrPhone2.text,
     });
 
+    print(data);
+
     this.changeLoadingState();
     await controller.create(data, context, _scaffoldKey);
     this.changeLoadingState();
-  }
-
-  void _addCardDialog(String id) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: Text("Desaja adicionar um veículo ao cliente",
-              style: Style.dialogTitle),
-          content: Container(
-              height: 180,
-              child: Center(
-                  child: Text(
-                'Adione um veículo ao cliente',
-                style: Style.dialogMessage,
-              ))),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            FlatButton(
-              child: Text("FECHAR", style: Style.closeButton),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-
-            FlatButton(
-              child: Text("SIM", style: Style.okButton),
-              onPressed: () {
-                Navigator.pushNamed(context, '/new_car', arguments: id);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   changeMaskPhone(String str) {

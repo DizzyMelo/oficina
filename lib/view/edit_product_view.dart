@@ -110,7 +110,7 @@ class _EditProductViewState extends State<EditProductView> {
   }
 
   edit() async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = Utils.validateProductData({
       "name": ctrName.text,
       "description": ctrDescription.text,
       "code": ctrCode.text,
@@ -118,7 +118,7 @@ class _EditProductViewState extends State<EditProductView> {
       "minimum_amount": ctrQtdMin.text,
       "price_sale": Utils.clearPrice(ctrPriceSale.text),
       "price_bought": Utils.clearPrice(ctrPricePaid.text),
-    };
+    });
     this.changeLoadingState();
     await _productController.edit(
         data, widget.product.id, false, context, _scaffoldKey);

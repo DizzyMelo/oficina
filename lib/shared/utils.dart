@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:oficina/components/medium_buttom_component.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/shared/style.dart';
@@ -113,5 +114,60 @@ class Utils {
     String password =
         randomTime.substring(randomTime.length - 6, randomTime.length);
     return password;
+  }
+
+  static Map<String, dynamic> validateUserData(Map<String, dynamic> data) {
+    if (data['email'].toString().isEmpty) {
+      data.remove('email');
+    }
+    if (data['cpfcnpj'].toString().isEmpty) {
+      data.remove('cpfcnpj');
+    }
+    if (data['secondaryphone'].toString().isEmpty) {
+      data.remove('secondaryphone');
+    }
+
+    return data;
+  }
+
+  static Map<String, dynamic> validateProductData(Map<String, dynamic> data) {
+    if (data['description'].toString().isEmpty) {
+      data.remove('description');
+    }
+    if (data['code'].toString().isEmpty) {
+      data.remove('code');
+    }
+    if (data['minimum_amount'].toString().isEmpty) {
+      data.remove('minimum_amount');
+    }
+    if (data['price_bought'].toString().isEmpty) {
+      data.remove('price_bought');
+    }
+    return data;
+  }
+
+  static void confirmDialog(String title, String message, Function function,
+      String buttonTitle, context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title, style: Style.dialogTitle),
+          content: Container(
+            height: 180,
+            child: Center(
+              child: Text(
+                message,
+                style: Style.dialogMessage,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            MediumButtomComponent(title: buttonTitle, function: function)
+          ],
+        );
+      },
+    );
   }
 }

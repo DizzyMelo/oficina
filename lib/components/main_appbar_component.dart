@@ -29,9 +29,14 @@ class MainAppbarComponent extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                  '${DotEnv().env['BASE_URL_IMG']}/user/default.png'),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/profile', arguments: user);
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    '${DotEnv().env['BASE_URL_IMG']}/user/default.png'),
+              ),
             )
           ],
         ),

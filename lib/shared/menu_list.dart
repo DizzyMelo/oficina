@@ -33,7 +33,7 @@ class MenuList {
         color: Colors.orange,
         title: 'Colaboradores',
         icon: LineIcons.wrench,
-        screen: '/worker',
+        screen: '/colaborator',
         img: 'mechanic.png'),
     MenuItem(
         color: Colors.orange,

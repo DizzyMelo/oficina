@@ -88,6 +88,25 @@ class UserRequests {
     }
   }
 
+  Future<SearchUserDataModel> searchColaborators(name, shop) async {
+    String url = '${DotEnv().env['BASE_URL']}/users/colaborators/$name/$shop';
+
+    try {
+      var res = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      });
+
+      if (res.statusCode == 200) {
+        return SearchUserDataModel.fromJson(json.decode(res.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<GetUserDataModel> getUserInformation(id) async {
     String url = '${DotEnv().env['BASE_URL']}/users/$id';
 

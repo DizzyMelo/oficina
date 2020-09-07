@@ -178,7 +178,7 @@ class _StockViewState extends State<StockView> {
   }
 
   createProduct() async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = Utils.validateProductData({
       "name": ctrName.text,
       "description": ctrDescription.text,
       "code": ctrCode.text,
@@ -187,7 +187,7 @@ class _StockViewState extends State<StockView> {
       "price_sale": Utils.clearPrice(ctrPriceSale.text),
       "price_bought": Utils.clearPrice(ctrPricePaid.text),
       "shop": SessionVariables.userDataModel.data.data.shop.id
-    };
+    });
 
     print(data);
 

@@ -39,8 +39,20 @@ class UserController {
     }
   }
 
-  Future searchByName(name, context, scaffoldKey) async {
+  Future searchUserByName(name, context, scaffoldKey) async {
     SearchUserDataModel res = await requests.searchByName(name);
+
+    if (res != null) {
+      return res;
+    } else {
+      Utils.showInSnackBar(
+          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+    }
+  }
+
+  Future searchColaboratorByName(name, context, scaffoldKey) async {
+    SearchUserDataModel res = await requests.searchColaborators(
+        name, SessionVariables.userDataModel.data.data.shop.id);
 
     if (res != null) {
       return res;

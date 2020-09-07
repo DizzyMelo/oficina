@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:oficina/view/client_view.dart';
-import 'package:oficina/view/edit_client_view.dart';
+import 'package:oficina/view/edit_user_view.dart';
 import 'package:oficina/view/edit_product_view.dart';
 import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
@@ -18,7 +18,7 @@ import 'package:oficina/view/select_colaborator_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/settings_view.dart';
 import 'package:oficina/view/stock_view.dart';
-import 'package:oficina/view/worker_view.dart';
+import 'package:oficina/view/colaborator_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'shared/style.dart';
@@ -90,8 +90,8 @@ class MyApp extends StatelessWidget {
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());
             break;
-          case "/worker":
-            page = MaterialPageRoute(builder: (context) => WorkerView());
+          case "/colaborator":
+            page = MaterialPageRoute(builder: (context) => ColaboratorView());
             break;
           case "/client":
             page = MaterialPageRoute(builder: (context) => ClientView());
@@ -136,9 +136,9 @@ class MyApp extends StatelessWidget {
             );
             break;
 
-          case "/edit_client":
+          case "/edit_user":
             page = MaterialPageRoute(
-              builder: (context) => EditClientView(
+              builder: (context) => EditUserView(
                 user: settings.arguments,
               ),
             );

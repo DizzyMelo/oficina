@@ -60,6 +60,13 @@ class Style {
       textStyle: TextStyle(
           color: Colors.grey[800], fontWeight: FontWeight.w400, fontSize: 13));
 
+  static TextStyle textFieldMandatory = GoogleFonts.lato(
+      textStyle: TextStyle(
+          color: Colors.grey[800],
+          fontWeight: FontWeight.w400,
+          fontSize: 11,
+          fontStyle: FontStyle.italic));
+
   static TextStyle pageTitleText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 17));

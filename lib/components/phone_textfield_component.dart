@@ -7,31 +7,48 @@ class PhoneTextFieldComponent extends StatelessWidget {
   final IconData icon;
   final String hint;
   final Function function;
+  final bool mandatory;
 
   PhoneTextFieldComponent(
       {@required this.controller,
       @required this.icon,
       @required this.hint,
-      @required this.function});
+      @required this.function,
+      this.mandatory = false});
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: function,
-      controller: controller,
-      style: Style.textField,
-      decoration: InputDecoration(
-          prefixIcon: Icon(
-            icon,
-            size: 15,
-          ),
-          hintText: hint,
-          hintStyle: Style.textField,
-          enabledBorder: UnderlineInputBorder(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          onChanged: function,
+          controller: controller,
+          style: Style.textField,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              icon,
+              size: 15,
+            ),
+            hintText: hint,
+            hintStyle: Style.textField,
+            enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-            width: 1,
-            color: Colors.grey[800],
-          ))),
+                width: 1,
+                color: Colors.grey[800],
+              ),
+            ),
+          ),
+        ),
+        mandatory
+            ? Text(
+                'O campo acima é obrigatório',
+                style: Style.textFieldMandatory,
+              )
+            : SizedBox(
+                height: 5,
+              )
+      ],
     );
   }
 }

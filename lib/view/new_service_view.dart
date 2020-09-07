@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/cancel_buttom_component.dart';
+import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/controller/service_controller.dart';
+import 'package:oficina/model/create_service_data_model.dart' as service;
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
+import 'package:oficina/shared/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewServiceView extends StatefulWidget {
   final List<dynamic> args;
@@ -23,6 +28,9 @@ class _NewServiceViewState extends State<NewServiceView> {
   User client;
   User colaborator;
   Car vehicle;
+
+  bool loading = false;
+  bool loadingDelete = false;
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +77,28 @@ class _NewServiceViewState extends State<NewServiceView> {
                     ),
                     Column(
                       children: [
-                        MainButtomComponent(
-                            title: 'INICAR SERVIÇO', function: createService),
+                        loading
+                            ? LoadingComponent()
+                            : MainButtomComponent(
+                                title: 'INICAR SERVIÇO',
+                                function: createService),
                         SizedBox(
                           height: 10,
                         ),
-                        CancelButtomComponent(
-                            title: 'CANCELAR', function: () {}),
+                        loadingDelete
+                            ? LoadingComponent(
+                                delete: true,
+                              )
+                            : CancelButtomComponent(
+                                title: 'CANCELAR',
+                                function: () {
+                                  Utils.confirmDialog(
+                                      'Atenção',
+                                      'Tem certeza que deseja cancelar o serviço',
+                                      navigateToMain,
+                                      'CANCELAR',
+                                      context);
+                                }),
                       ],
                     )
                   ],
@@ -96,7 +119,18 @@ class _NewServiceViewState extends State<NewServiceView> {
       "shop": SessionVariables.userDataModel.data.data.shop.id
     };
 
-    await _shopController.create(data, context, _scaffoldKey);
+    service.CreateServiceDataModel res =
+        await _shopController.create(data, context, _scaffoldKey);
+
+    if (res != null) {
+      navigateToMain();
+    }
+  }
+
+  navigateToMain() async {
+    final prefs = await SharedPreferences.getInstance();
+    Navigator.pushNamed(context, '/main',
+        arguments: JwtDecoder.decode(prefs.getString('token'))['id']);
   }
 
   @override

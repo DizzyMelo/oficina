@@ -125,7 +125,7 @@ class _SelectClientViewState extends State<SelectClientView> {
     }
     this.changeLodingState();
     SearchUserDataModel res =
-        await _userController.searchByName(name, context, _scaffoldKey);
+        await _userController.searchUserByName(name, context, _scaffoldKey);
     this.changeLodingState();
 
     if (res != null) {
