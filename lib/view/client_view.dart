@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
+import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
+import 'package:oficina/components/phone_textfield_component.dart';
 import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
@@ -23,11 +25,9 @@ class _ClientViewState extends State<ClientView> {
   TextEditingController ctrSearchService = TextEditingController();
   //ctrSearchService
   TextEditingController ctrName = TextEditingController();
-  TextEditingController ctrPhone =
-      MaskedTextController(mask: '(00) 00000-0000');
+  MaskedTextController ctrPhone = MaskedTextController(mask: '(00) 00000-0000');
 
-  TextEditingController ctrPhone2 =
-      MaskedTextController(mask: '(00) 0000-0000');
+  MaskedTextController ctrPhone2 = MaskedTextController(mask: '(00) 0000-0000');
   TextEditingController ctrEmail = TextEditingController();
   TextEditingController ctrCar = TextEditingController();
   TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00');
@@ -41,6 +41,11 @@ class _ClientViewState extends State<ClientView> {
   List<ServiceModel> services = new List();
 
   UserController controller;
+
+  IconData iconPhone = LineIcons.phone;
+  IconData iconPhone2 = LineIcons.phone;
+
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,83 +77,29 @@ class _ClientViewState extends State<ClientView> {
                                 controller: ctrCpf,
                                 icon: LineIcons.user,
                                 hint: 'CPF/CNPJ'),
-                            MainTextFieldComponent(
-                                controller: ctrPhone,
-                                icon: LineIcons.phone,
-                                hint: 'Celular'),
-                            MainTextFieldComponent(
+                            PhoneTextFieldComponent(
+                              controller: ctrPhone,
+                              icon: iconPhone,
+                              hint: 'Contato 1',
+                              function: changeMaskPhone,
+                            ),
+                            PhoneTextFieldComponent(
                                 controller: ctrPhone2,
-                                icon: LineIcons.phone,
-                                hint: 'Telefone Fixo'),
+                                icon: iconPhone2,
+                                hint: 'Contato 2',
+                                function: changeMaskPhone2),
                             MainTextFieldComponent(
                                 controller: ctrEmail,
                                 icon: LineIcons.envelope_o,
                                 hint: 'Email'),
-                            selectedClient != null &&
-                                    selectedClient.carros.length > 0
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Flexible(
-                                          child: Text(
-                                        'Carros',
-                                        style: Style.carTextTitle,
-                                      )),
-                                      Flexible(
-                                          flex: 2,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Flexible(
-                                                child: DropdownButton<String>(
-                                                  items: selectedClient.carros
-                                                      .map((carro) =>
-                                                          DropdownMenuItem(
-                                                              value: carro.id
-                                                                  .toString(),
-                                                              child: Text(
-                                                                carro.modelo,
-                                                                style: Style
-                                                                    .carTextTitle,
-                                                              )))
-                                                      .toList(),
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _selectedCar = value;
-                                                    });
-                                                  },
-                                                  value: _selectedCar,
-                                                  isExpanded: true,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Flexible(
-                                                  flex: 1,
-                                                  child: IconButton(
-                                                      icon:
-                                                          Icon(LineIcons.plus),
-                                                      onPressed: () {
-                                                        Navigator.pushNamed(
-                                                            context, '/new_car',
-                                                            arguments:
-                                                                selectedClient
-                                                                    .informacoes
-                                                                    .clienteId);
-                                                      }))
-                                            ],
-                                          ))
-                                    ],
-                                  )
-                                : Container(),
                             SizedBox(
                               height: 20,
                             ),
-                            MainButtomComponent(
-                                title: 'ADICIONAR CLIENTE', function: () {})
+                            loading
+                                ? LoadingComponent()
+                                : MainButtomComponent(
+                                    title: 'ADICIONAR CLIENTE',
+                                    function: createUser)
                           ],
                         ),
                       )),
@@ -255,10 +206,14 @@ class _ClientViewState extends State<ClientView> {
       "passwordConfirm": password,
       "shop": SessionVariables.userDataModel.data.data.shop.id,
       "role": "cliente",
-      "cpfcnpj": ctrCpf.text
+      "cpfcnpj": ctrCpf.text,
+      "primaryphone": ctrPhone2.text,
+      "secondaryphone": ctrPhone.text,
     };
 
+    this.changeLoadingState();
     await controller.create(data, context, _scaffoldKey);
+    this.changeLoadingState();
   }
 
   void _addCardDialog(String id) async {
@@ -366,6 +321,58 @@ class _ClientViewState extends State<ClientView> {
     ctrPhone.text = user.primaryphone;
     ctrPhone2.text = user.secondaryphone;
     ctrEmail.text = user.email;
+  }
+
+  changeMaskPhone(String str) {
+    if (str.isEmpty) {
+      setState(() {
+        iconPhone = LineIcons.phone;
+      });
+    }
+    if (str.length >= 4) {
+      String txt = Utils.clearPhone(str);
+      int number = int.parse(txt.substring(3, 4));
+      if (number < 6) {
+        ctrPhone.mask = '(00) 0000-0000';
+        setState(() {
+          iconPhone = LineIcons.phone;
+        });
+      } else {
+        ctrPhone.mask = '(00) 00000-0000';
+        setState(() {
+          iconPhone = LineIcons.mobile;
+        });
+      }
+    }
+  }
+
+  changeMaskPhone2(String str) {
+    if (str.isEmpty) {
+      setState(() {
+        iconPhone2 = LineIcons.phone;
+      });
+    }
+    if (str.length >= 4) {
+      String txt = Utils.clearPhone(str);
+      int number = int.parse(txt.substring(3, 4));
+      if (number < 6) {
+        ctrPhone2.mask = '(00) 0000-0000';
+        setState(() {
+          iconPhone2 = LineIcons.phone;
+        });
+      } else {
+        ctrPhone2.mask = '(00) 00000-0000';
+        setState(() {
+          iconPhone2 = LineIcons.mobile;
+        });
+      }
+    }
+  }
+
+  changeLoadingState() {
+    setState(() {
+      loading = !loading;
+    });
   }
 
   @override

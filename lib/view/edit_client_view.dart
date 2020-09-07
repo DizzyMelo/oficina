@@ -143,6 +143,8 @@ class _EditClientViewState extends State<EditClientView> {
     ctrName.text = widget.user.name;
     ctrCpf.text = widget.user.cpfcnpj;
     ctrEmail.text = widget.user.email;
+    ctrPhone.text = widget.user.primaryphone;
+    ctrPhone2.text = widget.user.secondaryphone;
 
     _userController = UserController();
   }

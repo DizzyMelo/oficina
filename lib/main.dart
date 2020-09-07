@@ -45,8 +45,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      initialRoute: '/profile',
+      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      //initialRoute: '/profile',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 

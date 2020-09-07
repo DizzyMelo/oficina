@@ -98,6 +98,16 @@ class Utils {
     return price;
   }
 
+  static String clearPhone(String value) {
+    String price = value
+        .replaceAll('-', '')
+        .replaceAll('(', '.')
+        .replaceAll(')', '')
+        .replaceAll(' ', '')
+        .trim();
+    return price;
+  }
+
   static String generateRandomPassword() {
     String randomTime = DateTime.now().millisecondsSinceEpoch.toString();
     String password =
