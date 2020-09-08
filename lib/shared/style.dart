@@ -78,10 +78,10 @@ class Style {
   //Main Page
   static TextStyle mainClientNameText = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 11));
+          color: Colors.grey[800], fontWeight: FontWeight.w600, fontSize: 12));
   static TextStyle carNameText = GoogleFonts.lato(
       textStyle: TextStyle(
-          color: Colors.grey[500], fontWeight: FontWeight.w500, fontSize: 10));
+          color: Colors.grey[600], fontWeight: FontWeight.w500, fontSize: 11));
   static TextStyle workerNameText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 11));

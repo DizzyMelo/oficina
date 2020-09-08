@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_appbar_component.dart';
 import 'package:oficina/components/service_group_component.dart';
+import 'package:oficina/components/service_row_component.dart';
 import 'package:oficina/components/side_menu_component.dart';
+import 'package:oficina/controller/shop_controller.dart';
 import 'package:oficina/controller/user_controller.dart';
+import 'package:oficina/model/get_services_data_model.dart';
 import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/shared/style.dart';
@@ -35,7 +38,10 @@ class _MainViewState extends State<MainView> {
   bool loadingServices = false;
 
   UserController _userController;
+  ShopController _shopController;
+
   GetUserDataModel _userDataModel;
+  GetServiceDataModel _serviceDataModel;
 
   List<ServiceModel> supportServices = new List();
   @override
@@ -108,11 +114,29 @@ class _MainViewState extends State<MainView> {
                                     height: 10,
                                   ),
                                   Expanded(
-                                    child: ListView.builder(
-                                        itemCount: 10,
-                                        itemBuilder: (context, index) {
-                                          return;
-                                        }),
+                                    child: _serviceDataModel == null ||
+                                            _serviceDataModel
+                                                    .data.data.length ==
+                                                0
+                                        ? Center(
+                                            child: Text(
+                                                'Nenhum serviço a ser exibido'),
+                                          )
+                                        : ListView.builder(
+                                            itemCount: _serviceDataModel
+                                                .data.data.length,
+                                            itemBuilder: (context, index) {
+                                              Datum data = _serviceDataModel
+                                                  .data.data[index];
+                                              return ServiceRowComponent(
+                                                data,
+                                                function: () {
+                                                  Navigator.pushNamed(
+                                                      context, '/service',
+                                                      arguments: data.id);
+                                                },
+                                              );
+                                            }),
                                   ),
                                 ],
                               ),
@@ -169,11 +193,29 @@ class _MainViewState extends State<MainView> {
     }
   }
 
+  getServices() async {
+    GetServiceDataModel res = await _shopController.getServices(_scaffoldKey);
+
+    if (res != null) {
+      setState(() {
+        _serviceDataModel = res;
+      });
+    } else {
+      print('objeto nulo');
+    }
+  }
+
+  executeInitMethods() async {
+    await this.getUserInformation();
+    await this.getServices();
+  }
+
   @override
   void initState() {
     super.initState();
     _userController = UserController();
-    this.getUserInformation();
+    _shopController = ShopController();
+    this.executeInitMethods();
   }
 
   @override

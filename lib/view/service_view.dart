@@ -45,7 +45,10 @@ class _ServiceViewState extends State<ServiceView> {
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                AppBarComponent(icon: LineIcons.automobile, title: 'Serviço',),
+                AppBarComponent(
+                  icon: LineIcons.automobile,
+                  title: 'Serviço',
+                ),
                 Center(
                   child: Container(
                       height: 665,
@@ -149,7 +152,10 @@ class _ServiceViewState extends State<ServiceView> {
                                                         height: 10,
                                                       ),
                                                       Text(
-                                                          'Busque itens na barra acima!', style: Style.serviceMessage,),
+                                                        'Busque itens na barra acima!',
+                                                        style: Style
+                                                            .serviceMessage,
+                                                      ),
                                                     ],
                                                   )),
                                           )
@@ -198,7 +204,7 @@ class _ServiceViewState extends State<ServiceView> {
                                                                   .produtosAdicionados[
                                                               index];
                                                       return ListTile(
-                                                        onTap: (){
+                                                        onTap: () {
                                                           ctrEdit.text = p.qtd;
                                                           _editAddedProduct(p);
                                                         },
@@ -226,7 +232,8 @@ class _ServiceViewState extends State<ServiceView> {
                                                             .center,
                                                     children: [
                                                       Icon(
-                                                        LineIcons.cart_arrow_down,
+                                                        LineIcons
+                                                            .cart_arrow_down,
                                                         color: Colors.grey[400],
                                                         size: 80,
                                                       ),
@@ -234,7 +241,10 @@ class _ServiceViewState extends State<ServiceView> {
                                                         height: 10,
                                                       ),
                                                       Text(
-                                                          'Nenhum item adicionado', style: Style.serviceMessage,),
+                                                        'Nenhum item adicionado',
+                                                        style: Style
+                                                            .serviceMessage,
+                                                      ),
                                                     ],
                                                   )),
                                           )
@@ -373,7 +383,9 @@ class _ServiceViewState extends State<ServiceView> {
                         LineIcons.close,
                         color: Colors.white,
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text('Cancelar', style: Style.serviceButton)
                     ],
                   ),
@@ -389,12 +401,15 @@ class _ServiceViewState extends State<ServiceView> {
                         LineIcons.print,
                         color: Colors.white,
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text('Imprimir', style: Style.serviceButton)
                     ],
                   ),
                   onPressed: () {
-                    Printer.print(widget.serviceModel, addedItems.produtosAdicionados);
+                    Printer.print(
+                        widget.serviceModel, addedItems.produtosAdicionados);
                   }),
               SizedBox(width: 10),
               RaisedButton(
@@ -407,7 +422,9 @@ class _ServiceViewState extends State<ServiceView> {
                         LineIcons.check,
                         color: Colors.white,
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text('Concluir', style: Style.serviceButton)
                     ],
                   ),
@@ -447,23 +464,24 @@ class _ServiceViewState extends State<ServiceView> {
     }
   }
 
-  bool validateQtd(){
-    try{
+  bool validateQtd() {
+    try {
       int qtd = int.parse(ctrEdit.text);
-      if(qtd <= 0){
+      if (qtd <= 0) {
         return false;
       }
-    }catch(e){
+    } catch (e) {
       return false;
     }
     return true;
   }
 
   editItem(ProdutosAdicionado p) async {
-    if(!validateQtd()) return;
+    if (!validateQtd()) return;
     int qtd = int.parse(ctrEdit.text);
     double valorTotal = double.parse(p.valorVenda) * qtd;
-    ItemAdicionadoModel tempItems = await ServiceService.editItem(widget.serviceModel.idServico, qtd, valorTotal, p);
+    ItemAdicionadoModel tempItems = await ServiceService.editItem(
+        widget.serviceModel.idServico, qtd, valorTotal, p);
 
     if (tempItems != null) {
       setState(() {
@@ -476,7 +494,8 @@ class _ServiceViewState extends State<ServiceView> {
   }
 
   removeItem(ProdutosAdicionado item) async {
-    ItemAdicionadoModel tempItems = await ServiceService.removeItem(item, widget.serviceModel.idServico);
+    ItemAdicionadoModel tempItems =
+        await ServiceService.removeItem(item, widget.serviceModel.idServico);
 
     if (tempItems != null) {
       setState(() {
@@ -516,27 +535,34 @@ class _ServiceViewState extends State<ServiceView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Quantidade de Itens", style: Style.dialogTitle,),
+          title: Text(
+            "Quantidade de Itens",
+            style: Style.dialogTitle,
+          ),
           content: TextField(
             controller: ctrAmount,
             style: Style.textField,
-            decoration: InputDecoration(
-              labelText: 'Qtd.',
-              labelStyle: Style.textField
-            ),
+            decoration:
+                InputDecoration(labelText: 'Qtd.', labelStyle: Style.textField),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR", style: Style.closeButton,),
+              child: Text(
+                "FECHAR",
+                style: Style.closeButton,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
 
             FlatButton(
-              child: Text("ADICIONAR", style: Style.okButton,),
-              onPressed: (){
+              child: Text(
+                "ADICIONAR",
+                style: Style.okButton,
+              ),
+              onPressed: () {
                 addItem(item, int.parse(ctrAmount.text));
               },
             ),
@@ -546,7 +572,7 @@ class _ServiceViewState extends State<ServiceView> {
     );
   }
 
-  void _editAddedProduct(p){
+  void _editAddedProduct(p) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -556,9 +582,7 @@ class _ServiceViewState extends State<ServiceView> {
           content: TextField(
             style: Style.textField,
             controller: ctrEdit,
-            decoration: InputDecoration(
-              labelText: 'Alterar Qtd.'
-            ),
+            decoration: InputDecoration(labelText: 'Alterar Qtd.'),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -579,7 +603,7 @@ class _ServiceViewState extends State<ServiceView> {
 
             FlatButton(
               child: Text("SALVAR", style: Style.okButton),
-              onPressed: (){
+              onPressed: () {
                 editItem(p);
               },
             ),
@@ -600,9 +624,7 @@ class _ServiceViewState extends State<ServiceView> {
           content: TextField(
             style: Style.textField,
             controller: ctrDiscount,
-            decoration: InputDecoration(
-              prefixIcon: Icon(LineIcons.money)
-            ),
+            decoration: InputDecoration(prefixIcon: Icon(LineIcons.money)),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -630,25 +652,32 @@ class _ServiceViewState extends State<ServiceView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Mão de Obra", style: Style.dialogTitle,),
+          title: Text(
+            "Mão de Obra",
+            style: Style.dialogTitle,
+          ),
           content: TextField(
             style: Style.textField,
             controller: ctrManPower,
-            decoration: InputDecoration(
-              prefixIcon: Icon(LineIcons.money)
-            ),
+            decoration: InputDecoration(prefixIcon: Icon(LineIcons.money)),
           ),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             FlatButton(
-              child: Text("FECHAR", style: Style.closeButton,),
+              child: Text(
+                "FECHAR",
+                style: Style.closeButton,
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
 
             FlatButton(
-              child: Text("ADICIONAR", style: Style.okButton,),
+              child: Text(
+                "ADICIONAR",
+                style: Style.okButton,
+              ),
               onPressed: addManPower,
             ),
           ],
