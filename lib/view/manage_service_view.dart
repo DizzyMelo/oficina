@@ -8,9 +8,11 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/search_textfield_component.dart';
+import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/product_controller.dart';
 import 'package:oficina/controller/product_service_controller.dart';
 import 'package:oficina/controller/service_controller.dart';
+import 'package:oficina/model/create_product_service_data_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/search_product_data_model.dart';
 import 'package:oficina/shared/style.dart';
@@ -49,7 +51,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     double mainContainerWidth = screen.width - 20;
-    double mainContainerHeight = 500;
+    double mainContainerHeight = 600;
     double secondaryContainerWidth = mainContainerWidth / 3;
     return Scaffold(
       key: _scaffoldKey,
@@ -208,23 +210,27 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                             height: mainContainerHeight,
                             width: secondaryContainerWidth,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(_detailServiceDataModel
-                                    .data.data.client.name),
-                                SizedBox(
-                                  height: 10,
+                                Text('Informações Gerais'),
+                                Column(
+                                  children: [
+                                    ServiceInfoComponent(
+                                        title: 'Cliente',
+                                        info: _detailServiceDataModel
+                                            .data.data.client.name),
+                                    ServiceInfoComponent(
+                                        title: 'Carro',
+                                        info: _detailServiceDataModel
+                                            .data.data.car.name),
+                                    ServiceInfoComponent(
+                                        title: 'Colaborador',
+                                        info: _detailServiceDataModel
+                                            .data.data.client.name),
+                                  ],
                                 ),
-                                Text(
-                                    _detailServiceDataModel.data.data.car.name),
                                 SizedBox(
-                                  height: 10,
-                                ),
-                                Text(_detailServiceDataModel
-                                    .data.data.colaborator.name),
-                                SizedBox(
-                                  height: 10,
+                                  height: 20,
                                 ),
                                 ActionTextFieldComponent(
                                   controller: ctrHow,
@@ -239,6 +245,25 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                   function: editServiceDiscount,
                                 ),
                                 Expanded(child: Container()),
+                                Column(
+                                  children: [
+                                    ServiceInfoComponent(
+                                        title: 'Mão de Obra',
+                                        info: Utils.formatMoney(
+                                            _detailServiceDataModel
+                                                .data.data.how)),
+                                    ServiceInfoComponent(
+                                        title: 'Desconto',
+                                        info: Utils.formatMoney(
+                                            _detailServiceDataModel
+                                                .data.data.discount)),
+                                    ServiceInfoComponent(
+                                        title: 'Total',
+                                        info: Utils.formatMoney(
+                                            _detailServiceDataModel
+                                                .data.data.value)),
+                                  ],
+                                ),
                                 MainButtomComponent(
                                     title: 'CONCLUIR', function: () {}),
                                 SizedBox(
@@ -272,26 +297,37 @@ class _ManageServiceViewState extends State<ManageServiceView> {
     };
 
     Navigator.pop(context);
-    await _productServiceController.create(data, _scaffoldKey);
+    CreateProductServiceDataModel res =
+        await _productServiceController.create(data, _scaffoldKey);
+
+    if (res != null) this.getServiceDetails();
     productId = '';
   }
 
   removeProduct() async {
-    await _productServiceController.delete(addedProductId, _scaffoldKey);
+    bool res =
+        await _productServiceController.delete(addedProductId, _scaffoldKey);
     Navigator.pop(context);
     addedProductId = '';
+    if (res) this.getServiceDetails();
   }
 
   editServiceHow() async {
     Map<String, dynamic> data = {'how': Utils.clearPrice(ctrHow.text)};
-    await _serviceController.edit(data, widget.serviceId, _scaffoldKey);
+    bool res = await _serviceController.edit(
+        data, widget.serviceId, 'update-how', _scaffoldKey);
+
+    if (res) this.getServiceDetails();
   }
 
   editServiceDiscount() async {
     Map<String, dynamic> data = {
       'discount': Utils.clearPrice(ctrDiscount.text)
     };
-    await _serviceController.edit(data, widget.serviceId, _scaffoldKey);
+    bool res = await _serviceController.edit(
+        data, widget.serviceId, 'update-discount', _scaffoldKey);
+
+    if (res) this.getServiceDetails();
   }
 
   searchProducts(name) async {

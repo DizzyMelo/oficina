@@ -22,14 +22,15 @@ class ProductServiceController {
     }
   }
 
-  Future delete(id, scaffoldKey) async {
+  Future<bool> delete(id, scaffoldKey) async {
     bool res = await requests.delete(id);
     if (res) {
       Utils.showInSnackBar('Produto removido!', Colors.green, scaffoldKey);
+      return res;
     } else {
       Utils.showInSnackBar(
           'Erro ao remover o produto!', Colors.red, scaffoldKey);
-      return null;
+      return false;
     }
   }
 }

@@ -69,7 +69,7 @@ class DataData {
   });
 
   DateTime date;
-  int value;
+  double value;
   String status;
   bool paid;
   double how;

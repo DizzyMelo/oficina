@@ -27,8 +27,8 @@ class ServiceRequests {
     }
   }
 
-  Future<bool> edit(data, id) async {
-    String url = '${DotEnv().env['BASE_URL']}/services/$id';
+  Future<bool> edit(data, id, options) async {
+    String url = '${DotEnv().env['BASE_URL']}/services/$id/$options';
 
     try {
       var res = await http.patch(url,

@@ -51,6 +51,12 @@ class ServiceRowComponent extends StatelessWidget {
                           serviceModel.client.primaryphone,
                           style: Style.phoneText,
                         ),
+                        serviceModel.client.secondaryphone == null
+                            ? SizedBox()
+                            : Text(
+                                serviceModel.client.secondaryphone ?? '',
+                                style: Style.phoneText,
+                              ),
                       ]),
                 )),
             Flexible(

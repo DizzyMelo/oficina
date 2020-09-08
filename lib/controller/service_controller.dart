@@ -19,8 +19,8 @@ class ServiceController {
     return null;
   }
 
-  Future<bool> edit(data, id, scaffoldKey) async {
-    bool res = await requests.edit(data, id);
+  Future<bool> edit(data, id, options, scaffoldKey) async {
+    bool res = await requests.edit(data, id, options);
 
     if (res) {
       Utils.showInSnackBar(
