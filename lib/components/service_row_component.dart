@@ -5,12 +5,15 @@ import 'package:oficina/shared/utils.dart';
 
 class ServiceRowComponent extends StatelessWidget {
   final Datum serviceModel;
-  final Function function;
-  ServiceRowComponent(this.serviceModel, {@required this.function});
+  ServiceRowComponent(this.serviceModel);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/manage_service',
+            arguments: serviceModel.id);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         height: 50,

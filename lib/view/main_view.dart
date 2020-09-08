@@ -128,14 +128,7 @@ class _MainViewState extends State<MainView> {
                                             itemBuilder: (context, index) {
                                               Datum data = _serviceDataModel
                                                   .data.data[index];
-                                              return ServiceRowComponent(
-                                                data,
-                                                function: () {
-                                                  Navigator.pushNamed(
-                                                      context, '/service',
-                                                      arguments: data.id);
-                                                },
-                                              );
+                                              return ServiceRowComponent(data);
                                             }),
                                   ),
                                 ],

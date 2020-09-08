@@ -9,6 +9,7 @@ import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
 import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
+import 'package:oficina/view/manage_service_view.dart';
 import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/profile_view.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/profile',
+      //initialRoute: '/manage_service',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -70,6 +71,13 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(
                 builder: (context) => ServiceView(
                       serviceModel: settings.arguments,
+                    ));
+            break;
+
+          case "/manage_service":
+            page = MaterialPageRoute(
+                builder: (context) => ManageServiceView(
+                      serviceId: settings.arguments,
                     ));
             break;
           case "/new_service":

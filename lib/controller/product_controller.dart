@@ -44,8 +44,12 @@ class ProductController {
     SearchProductDataModel res = await requests.search(
         name, SessionVariables.userDataModel.data.data.shop.id);
 
-    if (res != null) return res;
-    Utils.showInSnackBar('Erro ao adicionar produto', Colors.red, scaffoldKey);
+    if (res != null ||
+        res.data == null ||
+        res.data.data == null ||
+        res.data.data.length == 0) return res;
+    Utils.showInSnackBar(
+        'A pesquisa não encontrou nenhum resultado', Colors.red, scaffoldKey);
     return null;
   }
 }
