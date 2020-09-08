@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/action_textfield_component.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/loading_component.dart';
@@ -225,14 +226,18 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                MainTextFieldComponent(
-                                    controller: ctrHow,
-                                    icon: LineIcons.hand_stop_o,
-                                    hint: 'Mão de obra'),
-                                MainTextFieldComponent(
-                                    controller: ctrDiscount,
-                                    icon: LineIcons.money,
-                                    hint: 'Desconto'),
+                                ActionTextFieldComponent(
+                                  controller: ctrHow,
+                                  icon: LineIcons.hand_stop_o,
+                                  hint: 'Mão de obra',
+                                  function: editServiceHow,
+                                ),
+                                ActionTextFieldComponent(
+                                  controller: ctrDiscount,
+                                  icon: LineIcons.money,
+                                  hint: 'Desconto',
+                                  function: editServiceDiscount,
+                                ),
                                 Expanded(child: Container()),
                                 MainButtomComponent(
                                     title: 'CONCLUIR', function: () {}),
@@ -275,6 +280,18 @@ class _ManageServiceViewState extends State<ManageServiceView> {
     await _productServiceController.delete(addedProductId, _scaffoldKey);
     Navigator.pop(context);
     addedProductId = '';
+  }
+
+  editServiceHow() async {
+    Map<String, dynamic> data = {'how': Utils.clearPrice(ctrHow.text)};
+    await _serviceController.edit(data, widget.serviceId, _scaffoldKey);
+  }
+
+  editServiceDiscount() async {
+    Map<String, dynamic> data = {
+      'discount': Utils.clearPrice(ctrDiscount.text)
+    };
+    await _serviceController.edit(data, widget.serviceId, _scaffoldKey);
   }
 
   searchProducts(name) async {

@@ -19,6 +19,18 @@ class ServiceController {
     return null;
   }
 
+  Future<bool> edit(data, id, scaffoldKey) async {
+    bool res = await requests.edit(data, id);
+
+    if (res) {
+      Utils.showInSnackBar(
+          'Serviço atualizado com sucesso', Colors.green, scaffoldKey);
+      return res;
+    }
+    Utils.showInSnackBar('Erro ao iniciar o serviço', Colors.red, scaffoldKey);
+    return null;
+  }
+
   Future<DetailServiceDataModel> getServiceDetails(id, scaffoldKey) async {
     DetailServiceDataModel res = await requests.getServiceDetails(id);
 
