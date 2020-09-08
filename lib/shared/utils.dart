@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
-import 'package:oficina/components/medium_buttom_component.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:oficina/components/main_textfield_component.dart';
+import 'package:oficina/components/small_buttom_component.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/shared/style.dart';
@@ -164,7 +166,32 @@ class Utils {
             ),
           ),
           actions: <Widget>[
-            MediumButtomComponent(title: buttonTitle, function: function)
+            SmallButtomComponent(title: buttonTitle, function: function)
+          ],
+        );
+      },
+    );
+  }
+
+  static void requestAmount(String title, String message, Function function,
+      String buttonTitle, TextEditingController controller, context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title, style: Style.dialogTitle),
+          content: Container(
+            height: 180,
+            child: Center(
+              child: MainTextFieldComponent(
+                  controller: controller,
+                  icon: LineIcons.calculator,
+                  hint: message),
+            ),
+          ),
+          actions: <Widget>[
+            SmallButtomComponent(title: buttonTitle, function: function)
           ],
         );
       },
