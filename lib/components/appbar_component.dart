@@ -5,8 +5,9 @@ import 'package:oficina/shared/style.dart';
 class AppBarComponent extends StatelessWidget {
   final IconData icon;
   final String title;
+  final Function function;
 
-  AppBarComponent({this.icon, this.title});
+  AppBarComponent({this.icon, this.title, this.function});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,7 +19,7 @@ class AppBarComponent extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: Colors.grey,
+                  color: Style.primaryColor,
                 ),
                 SizedBox(
                   width: 10,
@@ -31,9 +32,11 @@ class AppBarComponent extends StatelessWidget {
             ),
             IconButton(
                 icon: Icon(LineIcons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
+                onPressed: function == null
+                    ? () {
+                        Navigator.pop(context);
+                      }
+                    : function),
           ],
         ),
         SizedBox(

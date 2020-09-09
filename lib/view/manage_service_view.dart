@@ -6,7 +6,6 @@ import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
-import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/search_textfield_component.dart';
 import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/product_controller.dart';
@@ -21,7 +20,7 @@ import 'package:oficina/shared/utils.dart';
 class ManageServiceView extends StatefulWidget {
   final String serviceId;
 
-  ManageServiceView({this.serviceId = '5f564c72f08acb0004cbbfc7'});
+  ManageServiceView({this.serviceId});
   @override
   _ManageServiceViewState createState() => _ManageServiceViewState();
 }
@@ -265,7 +264,11 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                   ],
                                 ),
                                 MainButtomComponent(
-                                    title: 'CONCLUIR', function: () {}),
+                                    title: 'CONCLUIR',
+                                    function: () {
+                                      Navigator.pushNamed(context, '/payment',
+                                          arguments: _detailServiceDataModel);
+                                    }),
                                 SizedBox(
                                   height: 10,
                                 ),

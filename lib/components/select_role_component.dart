@@ -16,11 +16,12 @@ class SelectRoleComponent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           AnimatedContainer(
+            margin: EdgeInsets.all(5),
             height: 15,
             width: 15,
             duration: Duration(milliseconds: 350),
             decoration: BoxDecoration(
-                border: Border.all(width: 2, color: Style.secondaryColor),
+                border: Border.all(width: 1, color: Style.secondaryColor),
                 shape: BoxShape.circle,
                 color: selected ? Style.primaryColor : Style.secondaryColor),
           ),

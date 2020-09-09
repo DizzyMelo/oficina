@@ -12,6 +12,7 @@ import 'package:oficina/view/main_view.dart';
 import 'package:oficina/view/manage_service_view.dart';
 import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
+import 'package:oficina/view/payment_view.dart';
 import 'package:oficina/view/profile_view.dart';
 import 'package:oficina/view/select_car_view.dart';
 import 'package:oficina/view/select_client_view.dart';
@@ -43,11 +44,11 @@ class MyApp extends StatelessWidget {
       title: 'Oficina na Mão',
       theme: ThemeData(
         primarySwatch: Style.themeColor,
-        textTheme: GoogleFonts.latoTextTheme(),
+        textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/manage_service',
+      //initialRoute: '/payment',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -155,6 +156,14 @@ class MyApp extends StatelessWidget {
           case "/profile":
             page = MaterialPageRoute(
               builder: (context) => ProfileView(),
+            );
+            break;
+
+          case "/payment":
+            page = MaterialPageRoute(
+              builder: (context) => PaymentView(
+                service: settings.arguments,
+              ),
             );
             break;
         }

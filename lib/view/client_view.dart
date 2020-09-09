@@ -6,7 +6,6 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/phone_textfield_component.dart';
-import 'package:oficina/components/service_list_date_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';

@@ -5,6 +5,7 @@ class ActionTextFieldComponent extends StatelessWidget {
   final TextEditingController controller;
   final IconData icon;
   final String hint;
+  final String actionText;
   final bool mandatory;
   final Function function;
 
@@ -13,6 +14,7 @@ class ActionTextFieldComponent extends StatelessWidget {
       @required this.icon,
       @required this.hint,
       @required this.function,
+      this.actionText = 'ATUALIZAR',
       this.mandatory = false});
 
   @override
@@ -29,7 +31,7 @@ class ActionTextFieldComponent extends StatelessWidget {
               size: 15,
             ),
             suffixIcon:
-                FlatButton(onPressed: function, child: Text('ATUALIZAR')),
+                FlatButton(onPressed: function, child: Text(actionText)),
             labelText: hint,
             labelStyle: Style.textField,
             enabledBorder: UnderlineInputBorder(
