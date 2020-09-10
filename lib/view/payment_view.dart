@@ -6,6 +6,7 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/select_role_component.dart';
+import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/payment_controller.dart';
 import 'package:oficina/model/create_payment_data_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
@@ -42,7 +43,7 @@ class _PaymentViewState extends State<PaymentView> {
   String paymentMethod = 'Dinheiro';
 
   String selectedPayment = '';
-  String serviceId = '5f563f175635480004c8f663';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,48 +112,64 @@ class _PaymentViewState extends State<PaymentView> {
                                   title: 'ADICIONAR', function: addPayment),
                           SizedBox(height: 30),
                           Divider(),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: Utils.formatMoney(totalPaid),
-                                style: TextStyle(
-                                    color: Colors.grey[800],
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              TextSpan(
-                                text: ' pago',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w300,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ]),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: Utils.formatMoney(
-                                    widget.service.data.data.value - totalPaid),
-                                style: TextStyle(
-                                    color: Colors.grey[800],
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextSpan(
-                                text: ' a pagar',
-                                style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w300,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ]),
-                          ),
+
+                          ServiceInfoComponent(
+                              title: 'Valor Total',
+                              info: Utils.formatMoney(
+                                  widget.service.data.data.value)),
+
+                          ServiceInfoComponent(
+                              title: 'Valor Pago',
+                              info: Utils.formatMoney(totalPaid)),
+
+                          ServiceInfoComponent(
+                              title: 'Valor a Pagar',
+                              info: Utils.formatMoney(
+                                  widget.service.data.data.value - totalPaid)),
+                          // RichText(
+                          //   text: TextSpan(children: [
+                          //     TextSpan(
+                          //       text: Utils.formatMoney(totalPaid),
+                          //       style: Style.paymentValueLarge,
+                          //     ),
+                          //     TextSpan(
+                          //       text: ' valor pago',
+                          //       style: Style.paymentLabel,
+                          //     ),
+                          //   ]),
+                          // ),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
+                          // RichText(
+                          //   text: TextSpan(children: [
+                          //     TextSpan(
+                          //       text: Utils.formatMoney(
+                          //           widget.service.data.data.value - totalPaid),
+                          //       style: Style.paymentValueSmall,
+                          //     ),
+                          //     TextSpan(
+                          //       text: ' valor a pagar',
+                          //       style: Style.paymentLabel,
+                          //     ),
+                          //   ]),
+                          // ),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
+                          // RichText(
+                          //   text: TextSpan(children: [
+                          //     TextSpan(
+                          //       text: Utils.formatMoney(
+                          //           widget.service.data.data.value),
+                          //       style: Style.paymentValueSmall,
+                          //     ),
+                          //     TextSpan(
+                          //       text: ' valor total',
+                          //       style: Style.paymentLabel,
+                          //     ),
+                          //   ]),
+                          // ),
                         ],
                       ),
                     ),
@@ -211,24 +228,35 @@ class _PaymentViewState extends State<PaymentView> {
     );
   }
 
+  bool validatePayment() {
+    double value = Utils.clearPrice(ctrPaymentAmount.text);
+    if (value <= 0) {
+      Utils.showInSnackBar(
+          'O valor precisa ser maior que zero', Colors.red, _scaffoldKey);
+      return false;
+    }
+
+    return true;
+  }
+
   addPayment() async {
+    if (!validatePayment()) return;
     double value = Utils.clearPrice(ctrPaymentAmount.text);
     Map<String, dynamic> data = {
       "value": value,
       "method": paymentMethod,
-      "service": serviceId,
+      "service": widget.service.data.data.id,
       "paid": totalPaid + value >= widget.service.data.data.value
     };
     setState(() {
       loadingAddPayment = !loadingAddPayment;
     });
-    CreatePaymentDataModel res =
-        await _paymentController.create(data, _scaffoldKey);
+    bool res = await _paymentController.create(data, _scaffoldKey);
 
     setState(() {
       loadingAddPayment = !loadingAddPayment;
     });
-    if (res != null) {
+    if (res) {
       this.getPayments();
     }
   }
@@ -243,7 +271,8 @@ class _PaymentViewState extends State<PaymentView> {
   }
 
   getPayments() async {
-    GetPaymentsDataModel res = await _paymentController.getPayments(serviceId);
+    GetPaymentsDataModel res =
+        await _paymentController.getPayments(widget.service.data.data.id);
 
     if (res != null) {
       setState(() {
@@ -289,5 +318,6 @@ class _PaymentViewState extends State<PaymentView> {
   void initState() {
     super.initState();
     this.getPayments();
+    print(widget.service.data.data.id);
   }
 }

@@ -244,4 +244,16 @@ class Style {
   static TextStyle receiptMessage = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[800], fontWeight: FontWeight.w500, fontSize: 11));
+
+  static TextStyle paymentLabel = TextStyle(
+      color: Colors.grey[600],
+      fontSize: 12,
+      fontWeight: FontWeight.w300,
+      fontStyle: FontStyle.italic);
+
+  static TextStyle paymentValueSmall = TextStyle(
+      color: Colors.grey[800], fontSize: 15, fontWeight: FontWeight.w400);
+
+  static TextStyle paymentValueLarge = TextStyle(
+      color: Colors.grey[800], fontSize: 25, fontWeight: FontWeight.w500);
 }

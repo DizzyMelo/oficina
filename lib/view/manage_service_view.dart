@@ -7,6 +7,7 @@ import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/search_textfield_component.dart';
+import 'package:oficina/components/select_role_component.dart';
 import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/product_controller.dart';
 import 'package:oficina/controller/product_service_controller.dart';
@@ -29,6 +30,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrAmount = TextEditingController();
+  TextEditingController ctrWarranty = TextEditingController();
 
   TextEditingController ctrHow = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
@@ -243,9 +245,20 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                   hint: 'Desconto',
                                   function: editServiceDiscount,
                                 ),
+                                ActionTextFieldComponent(
+                                  controller: ctrWarranty,
+                                  icon: LineIcons.money,
+                                  hint:
+                                      'Garantia em ${_detailServiceDataModel.data.data.warrantyUnity}',
+                                  function: editServiceDiscount,
+                                ),
                                 Expanded(child: Container()),
                                 Column(
                                   children: [
+                                    ServiceInfoComponent(
+                                        title: 'Garantia',
+                                        info:
+                                            '${_detailServiceDataModel.data.data.warranty.toString()} ${_detailServiceDataModel.data.data.warrantyUnity}'),
                                     ServiceInfoComponent(
                                         title: 'Mão de Obra',
                                         info: Utils.formatMoney(

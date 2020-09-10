@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:oficina/model/create_payment_data_model.dart';
 import 'package:oficina/model/get_payments_data_model.dart';
 
 class PaymentRequests {
-  Future<CreatePaymentDataModel> create(data) async {
+  Future<bool> create(data) async {
     String url = '${DotEnv().env['BASE_URL']}/payments/';
 
     try {
@@ -18,12 +17,12 @@ class PaymentRequests {
           body: json.encode(data));
 
       if (res.statusCode == 201) {
-        return CreatePaymentDataModel.fromJson(json.decode(res.body));
+        return true;
       } else {
-        return null;
+        return false;
       }
     } catch (e) {
-      return null;
+      return false;
     }
   }
 

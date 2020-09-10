@@ -11,17 +11,17 @@ class PaymentController {
     requests = PaymentRequests();
   }
 
-  create(data, scaffoldKey) async {
-    CreatePaymentDataModel res = await requests.create(data);
+  Future<bool> create(data, scaffoldKey) async {
+    bool res = await requests.create(data);
 
-    if (res != null) {
+    if (res) {
       Utils.showInSnackBar('Pagamento adicionado', Colors.green, scaffoldKey);
       return res;
     }
 
     Utils.showInSnackBar(
         'Erro ao adicionar pagamento', Colors.red, scaffoldKey);
-    return null;
+    return false;
   }
 
   delete(id, scaffoldKey) async {
