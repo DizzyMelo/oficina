@@ -69,6 +69,11 @@ class Utils {
     return '$dia/$mes/${dt.year} às $hora:$minuto';
   }
 
+  static formatDateReverse(String dt) {
+    var res = dt.split('/');
+    return '${res[2]}-${res[1]}-${res[0]}';
+  }
+
   static Text validadeAmount(ProductModel p) {
     int qtd = int.parse(p.qtd);
     int qtdMin = int.parse(p.qtdMin);
@@ -196,5 +201,11 @@ class Utils {
         );
       },
     );
+  }
+
+  static String getCurrentDate({int days = 0}) {
+    DateTime date = DateTime.now().add(Duration(days: days));
+
+    return formatDate(date);
   }
 }

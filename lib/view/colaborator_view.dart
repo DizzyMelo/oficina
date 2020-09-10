@@ -164,7 +164,8 @@ class _ColaboratorViewState extends State<ColaboratorView> {
                             ),
                             Expanded(
                               child: Container(
-                                child: users == null
+                                child: users == null ||
+                                        users.data.users.length == 0
                                     ? Center(
                                         child: Text('Buscar colaborador'),
                                       )

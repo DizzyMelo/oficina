@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oficina/api_requests/service_requests.dart';
 import 'package:oficina/model/create_service_data_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
+import 'package:oficina/model/report_service_data_model.dart';
 import 'package:oficina/shared/utils.dart';
 
 class ServiceController {
@@ -16,6 +17,14 @@ class ServiceController {
 
     if (res != null) return res;
     Utils.showInSnackBar('Erro ao iniciar o serviço', Colors.red, scaffoldKey);
+    return null;
+  }
+
+  Future<ReportServiceDataModel> report(data, scaffoldKey) async {
+    ReportServiceDataModel res = await requests.report(data);
+
+    if (res != null) return res;
+    Utils.showInSnackBar('Erro ao buscar serviços', Colors.red, scaffoldKey);
     return null;
   }
 

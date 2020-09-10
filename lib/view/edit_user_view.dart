@@ -7,8 +7,12 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/phone_textfield_component.dart';
+import 'package:oficina/components/search_service_row_component.dart';
+import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/controller/user_controller.dart';
+import 'package:oficina/model/report_service_data_model.dart' as rep;
 import 'package:oficina/model/search_user_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -28,13 +32,17 @@ class _EditUserViewState extends State<EditUserView> {
   TextEditingController ctrCar = TextEditingController();
   TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00');
 
-  MaskedTextController ctrInitDate = MaskedTextController(mask: '00/00/00');
-  MaskedTextController ctrFinalDate = MaskedTextController(mask: '00/00/00');
+  MaskedTextController ctrInitDate = MaskedTextController(mask: '00/00/0000');
+  MaskedTextController ctrFinalDate = MaskedTextController(mask: '00/00/0000');
+
+  rep.ReportServiceDataModel report;
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool loading = false;
   bool loadingDelete = false;
+
+  bool loadingSearch = false;
 
   IconData iconPhone = LineIcons.phone;
   IconData iconPhone2 = LineIcons.phone;
@@ -43,6 +51,7 @@ class _EditUserViewState extends State<EditUserView> {
   double containerWidth = 800;
 
   UserController _userController;
+  ServiceController _serviceController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,37 +158,28 @@ class _EditUserViewState extends State<EditUserView> {
                               ),
                             ],
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          loadingSearch
+                              ? LoadingComponent()
+                              : MainButtomComponent(
+                                  title: 'BUSCAR SERVIÇOS',
+                                  function: getReport),
                           Expanded(
-                            child: ListView.builder(
-                                itemCount: 5,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    title: Text(
-                                      'Celta Prisma 2009',
-                                      style: Style.mainClientNameText,
-                                    ),
-                                    subtitle: Text(
-                                      'Gilvan Silva',
-                                      style: Style.carNameText,
-                                    ),
-                                    trailing: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          Utils.formatMoney(400),
-                                          style: Style.totalValueText,
-                                        ),
-                                        Text(
-                                          '20/20/2020',
-                                          style: Style.phoneText,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }),
+                            child: report == null || report.results == 0
+                                ? Center(
+                                    child: Text('Nenhum serviço a ser exibido'),
+                                  )
+                                : ListView.builder(
+                                    itemCount: report.results,
+                                    itemBuilder: (context, index) {
+                                      rep.Service service =
+                                          report.data.services[index];
+                                      return SearchServiceRowComponent(
+                                        service: service,
+                                      );
+                                    }),
                           ),
                         ],
                       ),
@@ -221,6 +221,46 @@ class _EditUserViewState extends State<EditUserView> {
     await _userController.edit(
         data, widget.user.id, false, context, _scaffoldKey);
     this.changeLoadingState();
+  }
+
+  validateDates() {
+    try {
+      DateTime.parse(Utils.formatDateReverse(ctrInitDate.text));
+      DateTime.parse("${Utils.formatDateReverse(ctrFinalDate.text)} 24:00:00");
+
+      return true;
+    } catch (e) {
+      Utils.showInSnackBar('Data inválida', Colors.red, _scaffoldKey);
+      return false;
+    }
+  }
+
+  getReport() async {
+    if (!validateDates()) return;
+    String userType = widget.user.role == 'cliente' ? 'client' : 'colaborator';
+    Map<String, dynamic> data = {
+      "shop": SessionVariables.userDataModel.data.data.shop.id,
+      userType: widget.user.id,
+      "date": {
+        "\$gte": Utils.formatDateReverse(ctrInitDate.text),
+        "\$lte": "${Utils.formatDateReverse(ctrFinalDate.text)} 24:00:00"
+      }
+    };
+    setState(() {
+      loadingSearch = true;
+    });
+    rep.ReportServiceDataModel res =
+        await _serviceController.report(data, _scaffoldKey);
+
+    setState(() {
+      loadingSearch = false;
+    });
+
+    if (res != null) {
+      setState(() {
+        report = res;
+      });
+    }
   }
 
   delete() async {
@@ -300,6 +340,10 @@ class _EditUserViewState extends State<EditUserView> {
     ctrPhone.text = widget.user.primaryphone;
     ctrPhone2.text = widget.user.secondaryphone;
 
+    ctrInitDate.text = Utils.getCurrentDate(days: -7);
+    ctrFinalDate.text = Utils.getCurrentDate();
+
     _userController = UserController();
+    _serviceController = ServiceController();
   }
 }
