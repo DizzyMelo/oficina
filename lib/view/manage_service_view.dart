@@ -7,7 +7,6 @@ import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/search_textfield_component.dart';
-import 'package:oficina/components/select_role_component.dart';
 import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/product_controller.dart';
 import 'package:oficina/controller/product_service_controller.dart';
@@ -30,7 +29,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrAmount = TextEditingController();
-  TextEditingController ctrWarranty = TextEditingController();
+  TextEditingController ctrWarranty = MaskedTextController(mask: '00000');
 
   TextEditingController ctrHow = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
@@ -250,11 +249,20 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                   icon: LineIcons.money,
                                   hint:
                                       'Garantia em ${_detailServiceDataModel.data.data.warrantyUnity}',
-                                  function: editServiceDiscount,
+                                  function: () {
+                                    Map<String, dynamic> data = {
+                                      'warranty': ctrWarranty.text
+                                    };
+                                    updateService(data);
+                                  },
                                 ),
                                 Expanded(child: Container()),
                                 Column(
                                   children: [
+                                    ServiceInfoComponent(
+                                        title: 'Status',
+                                        info: _detailServiceDataModel
+                                            .data.data.status),
                                     ServiceInfoComponent(
                                         title: 'Garantia',
                                         info:
@@ -286,7 +294,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                   height: 10,
                                 ),
                                 CancelButtomComponent(
-                                    title: 'CANCELAR', function: () {})
+                                    title: 'CANCELAR', function: cancelService)
                               ],
                             ),
                           ),
@@ -346,6 +354,21 @@ class _ManageServiceViewState extends State<ManageServiceView> {
     if (res) this.getServiceDetails();
   }
 
+  cancelService() async {
+    Map<String, dynamic> data = {'status': 'cancelado'};
+    bool res =
+        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+
+    if (res) {}
+  }
+
+  updateService(data) async {
+    bool res =
+        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+
+    if (res) this.getServiceDetails();
+  }
+
   searchProducts(name) async {
     SearchProductDataModel res =
         await _productController.search(name, _scaffoldKey);
@@ -369,6 +392,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
       ctrHow.text = _detailServiceDataModel.data.data.how.toStringAsFixed(2);
       ctrDiscount.text =
           _detailServiceDataModel.data.data.discount.toStringAsFixed(2);
+      ctrWarranty.text = _detailServiceDataModel.data.data.warranty.toString();
     }
   }
 

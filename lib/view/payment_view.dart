@@ -8,7 +8,6 @@ import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/select_role_component.dart';
 import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/payment_controller.dart';
-import 'package:oficina/model/create_payment_data_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/get_payments_data_model.dart';
 import 'package:oficina/shared/style.dart';
@@ -41,6 +40,7 @@ class _PaymentViewState extends State<PaymentView> {
   bool loadingPayments = false;
 
   String paymentMethod = 'Dinheiro';
+  String servicePaidMessage = '';
 
   String selectedPayment = '';
 
@@ -112,64 +112,38 @@ class _PaymentViewState extends State<PaymentView> {
                                   title: 'ADICIONAR', function: addPayment),
                           SizedBox(height: 30),
                           Divider(),
-
                           ServiceInfoComponent(
                               title: 'Valor Total',
                               info: Utils.formatMoney(
                                   widget.service.data.data.value)),
-
                           ServiceInfoComponent(
                               title: 'Valor Pago',
                               info: Utils.formatMoney(totalPaid)),
-
                           ServiceInfoComponent(
                               title: 'Valor a Pagar',
                               info: Utils.formatMoney(
                                   widget.service.data.data.value - totalPaid)),
-                          // RichText(
-                          //   text: TextSpan(children: [
-                          //     TextSpan(
-                          //       text: Utils.formatMoney(totalPaid),
-                          //       style: Style.paymentValueLarge,
-                          //     ),
-                          //     TextSpan(
-                          //       text: ' valor pago',
-                          //       style: Style.paymentLabel,
-                          //     ),
-                          //   ]),
-                          // ),
-                          // SizedBox(
-                          //   height: 5,
-                          // ),
-                          // RichText(
-                          //   text: TextSpan(children: [
-                          //     TextSpan(
-                          //       text: Utils.formatMoney(
-                          //           widget.service.data.data.value - totalPaid),
-                          //       style: Style.paymentValueSmall,
-                          //     ),
-                          //     TextSpan(
-                          //       text: ' valor a pagar',
-                          //       style: Style.paymentLabel,
-                          //     ),
-                          //   ]),
-                          // ),
-                          // SizedBox(
-                          //   height: 5,
-                          // ),
-                          // RichText(
-                          //   text: TextSpan(children: [
-                          //     TextSpan(
-                          //       text: Utils.formatMoney(
-                          //           widget.service.data.data.value),
-                          //       style: Style.paymentValueSmall,
-                          //     ),
-                          //     TextSpan(
-                          //       text: ' valor total',
-                          //       style: Style.paymentLabel,
-                          //     ),
-                          //   ]),
-                          // ),
+                          Expanded(child: Container()),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              totalPaid >= widget.service.data.data.value
+                                  ? Icon(
+                                      LineIcons.check,
+                                      color: Style.primaryColor,
+                                    )
+                                  : Icon(
+                                      LineIcons.warning,
+                                      color: Colors.red,
+                                    ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(totalPaid >= widget.service.data.data.value
+                                  ? 'Pagamento concluído'
+                                  : 'Pagamento pendente')
+                            ],
+                          ),
                         ],
                       ),
                     ),
