@@ -23,4 +23,25 @@ class ShopRequests {
       return null;
     }
   }
+
+  Future<bool> edit(data, id) async {
+    String url = '${DotEnv().env['BASE_URL']}/shops/$id';
+
+    try {
+      var res = await http.patch(url,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+          body: json.encode(data));
+
+      if (res.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -19,4 +19,18 @@ class ShopController {
     Utils.showInSnackBar('Nenhum serviço encontrado', Colors.red, scaffoldKey);
     return null;
   }
+
+  Future<bool> edit(data, scaffoldKey) async {
+    bool res = await requests.edit(
+        data, SessionVariables.userDataModel.data.data.shop.id);
+
+    if (res) {
+      Utils.showInSnackBar(
+          'Informações salvas com sucesso', Colors.green, scaffoldKey);
+      return res;
+    }
+    Utils.showInSnackBar(
+        'Erro ao atualizar as informações', Colors.red, scaffoldKey);
+    return false;
+  }
 }

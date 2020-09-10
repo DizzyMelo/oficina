@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/main_textfield_component.dart';
@@ -67,6 +68,19 @@ class Utils {
     String minuto = dt.minute < 10 ? '0${dt.minute}' : '${dt.minute}';
 
     return '$dia/$mes/${dt.year} às $hora:$minuto';
+  }
+
+  changeMaskPhone(String str, MaskedTextController controller) {
+    if (str.length >= 4) {
+      print(str);
+      String txt = Utils.clearPhone(str);
+      int number = int.parse(txt.substring(3, 4));
+      if (number < 6) {
+        controller.mask = '(00) 0000-0000';
+      } else {
+        controller.mask = '(00) 00000-0000';
+      }
+    }
   }
 
   static formatDateReverse(String dt) {

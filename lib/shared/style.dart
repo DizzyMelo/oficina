@@ -256,4 +256,10 @@ class Style {
 
   static TextStyle paymentValueLarge = TextStyle(
       color: Colors.grey[800], fontSize: 25, fontWeight: FontWeight.w500);
+
+  static BoxDecoration containerSeparator = BoxDecoration(
+    border: Border(
+      left: BorderSide(color: Colors.grey[800], width: 0.5),
+    ),
+  );
 }
