@@ -6,8 +6,10 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/search_service_row_component.dart';
+import 'package:oficina/controller/payment_controller.dart';
 import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/model/report_service_data_model.dart';
+import 'package:oficina/model/stats_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
@@ -25,112 +27,161 @@ class _ReportViewState extends State<ReportView> {
   bool loadingSearch = false;
 
   ReportServiceDataModel report;
+  StatsDataModel stats;
+
   ServiceController _serviceController = ServiceController();
+  PaymentController _paymentController = PaymentController();
   int results = 0;
   double totalValue = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            AppBarComponent(
-              icon: LineIcons.history,
-              title: 'histórico de Serviços',
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Material(
-              elevation: 10,
-              borderRadius: BorderRadius.circular(5),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                height: 600,
-                width: 500,
-                decoration: BoxDecoration(
+        key: _scaffoldKey,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                AppBarComponent(
+                  icon: LineIcons.history,
+                  title: 'histórico de Serviços',
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Material(
+                  elevation: 10,
                   borderRadius: BorderRadius.circular(5),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 200,
-                          child: MainTextFieldComponent(
-                              controller: ctrInitDate,
-                              icon: LineIcons.calendar,
-                              hint: 'Data Inicial'),
-                        ),
-                        Container(
-                          width: 200,
-                          child: MainTextFieldComponent(
-                              controller: ctrFinalDate,
-                              icon: LineIcons.calendar,
-                              hint: 'Data Final'),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    loadingSearch
-                        ? LoadingComponent()
-                        : MainButtomComponent(
-                            title: 'BUSCAR SERVIÇOS', function: getReport),
-                    Expanded(
-                      child: report == null || report.results == 0
-                          ? Center(
-                              child: Text('Nenhum serviço a ser exibido'),
-                            )
-                          : ListView.builder(
-                              itemCount: report.results,
-                              itemBuilder: (context, index) {
-                                Service service = report.data.services[index];
-                                return SearchServiceRowComponent(
-                                  service: service,
-                                );
-                              }),
-                    ),
-                    Container(
-                      height: 60,
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'resultados: ', style: Style.smallText),
-                              TextSpan(
-                                  text: '$results', style: Style.largeText),
-                            ]),
-                          ),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                  text: 'Valor Total: ',
-                                  style: Style.smallText),
-                              TextSpan(
-                                  text: Utils.formatMoney(totalValue),
-                                  style: Style.largeText),
-                            ]),
-                          ),
-                        ],
+                  child: Container(
+                      height: 600,
+                      width: 800,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            width: 400,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: 180,
+                                      child: MainTextFieldComponent(
+                                          controller: ctrInitDate,
+                                          icon: LineIcons.calendar,
+                                          hint: 'Data Inicial'),
+                                    ),
+                                    Container(
+                                      width: 180,
+                                      child: MainTextFieldComponent(
+                                          controller: ctrFinalDate,
+                                          icon: LineIcons.calendar,
+                                          hint: 'Data Final'),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                loadingSearch
+                                    ? LoadingComponent()
+                                    : MainButtomComponent(
+                                        title: 'BUSCAR SERVIÇOS',
+                                        function: getCompleteReport),
+                                Expanded(
+                                  child: report == null || report.results == 0
+                                      ? Center(
+                                          child: Text(
+                                              'Nenhum serviço a ser exibido'),
+                                        )
+                                      : ListView.builder(
+                                          itemCount: report.results,
+                                          itemBuilder: (context, index) {
+                                            Service service =
+                                                report.data.services[index];
+                                            return SearchServiceRowComponent(
+                                              service: service,
+                                            );
+                                          }),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            width: 400,
+                            child: Column(
+                              children: [
+                                Text('Estatíscas de pagamentos no período'),
+                                Expanded(
+                                  child: stats == null ||
+                                          stats.data.stats.length == 0
+                                      ? Center(
+                                          child: Text(
+                                              'Sem dados a serem exibidos'),
+                                        )
+                                      : ListView.builder(
+                                          itemCount: stats.data.stats.length,
+                                          itemBuilder: (context, index) {
+                                            Stat stat = stats.data.stats[index];
+                                            return ListTile(
+                                              title: Text(stat.id.toUpperCase(),
+                                                  style:
+                                                      Style.mainClientNameText),
+                                              subtitle: Text(
+                                                'qtd: ${stat.counter} - med: ${stat.ave} - max: ${stat.max} - min: ${stat.min}',
+                                                style: Style.carNameText,
+                                              ),
+                                              trailing: Text(
+                                                Utils.formatMoney(stat.total),
+                                                style: Style.totalValueText,
+                                              ),
+                                            );
+                                          }),
+                                ),
+                                Divider(),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: 'pagamentos: ',
+                                            style: Style.smallText),
+                                        TextSpan(
+                                            text: '$results',
+                                            style: Style.largeText),
+                                      ]),
+                                    ),
+                                    RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                            text: 'Valor Total: ',
+                                            style: Style.smallText),
+                                        TextSpan(
+                                            text: Utils.formatMoney(totalValue),
+                                            style: Style.largeText),
+                                      ]),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 
   validateDates() {
@@ -145,8 +196,13 @@ class _ReportViewState extends State<ReportView> {
     }
   }
 
-  getReport() async {
+  getCompleteReport() async {
     if (!validateDates()) return;
+    await getReport();
+    await getStats();
+  }
+
+  getReport() async {
     Map<String, dynamic> data = {
       "shop": SessionVariables.userDataModel.data.data.shop.id,
       "date": {
@@ -165,14 +221,32 @@ class _ReportViewState extends State<ReportView> {
     });
 
     if (res != null) {
-      double value = 0;
-
-      res.data.services.forEach((element) {
-        value += element.value;
-      });
       setState(() {
         report = res;
-        results = report.results;
+      });
+    }
+  }
+
+  getStats() async {
+    Map<String, dynamic> data = {
+      "shop": SessionVariables.userDataModel.data.data.shop.id,
+      "date_init": "${Utils.formatDateReverse(ctrInitDate.text)} 00:00:00",
+      "date_final": "${Utils.formatDateReverse(ctrFinalDate.text)} 24:00:00",
+    };
+
+    StatsDataModel res = await _paymentController.stats(data, _scaffoldKey);
+
+    if (res != null) {
+      double value = 0;
+      int counter = 0;
+
+      res.data.stats.forEach((element) {
+        value += element.total;
+        counter += element.counter;
+      });
+      setState(() {
+        stats = res;
+        results = counter;
         totalValue = value;
       });
     }

@@ -220,6 +220,8 @@ class _PaymentViewState extends State<PaymentView> {
       "value": value,
       "method": paymentMethod,
       "service": widget.service.data.data.id,
+      "shop": widget.service.data.data.shop,
+      "client": widget.service.data.data.client.id,
       "paid": totalPaid + value >= widget.service.data.data.value
     };
     setState(() {
@@ -230,9 +232,8 @@ class _PaymentViewState extends State<PaymentView> {
     setState(() {
       loadingAddPayment = !loadingAddPayment;
     });
-    if (res) {
-      this.getPayments();
-    }
+
+    this.getPayments();
   }
 
   delete() async {
@@ -292,6 +293,5 @@ class _PaymentViewState extends State<PaymentView> {
   void initState() {
     super.initState();
     this.getPayments();
-    print(widget.service.data.data.id);
   }
 }

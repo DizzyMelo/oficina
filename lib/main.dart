@@ -5,7 +5,6 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:oficina/view/client_view.dart';
 import 'package:oficina/view/edit_user_view.dart';
 import 'package:oficina/view/edit_product_view.dart';
-import 'package:oficina/view/finish_service_view.dart';
 import 'package:oficina/view/land_view.dart';
 import 'package:oficina/view/login_view.dart';
 import 'package:oficina/view/main_view.dart';
@@ -102,12 +101,12 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(builder: (context) => ClientView());
             break;
 
-          case "/finish_service":
-            page = MaterialPageRoute(
-                builder: (context) => FinishServiceView(
-                      service: settings.arguments,
-                    ));
-            break;
+          // case "/finish_service":
+          //   page = MaterialPageRoute(
+          //       builder: (context) => FinishServiceView(
+          //             service: settings.arguments,
+          //           ));
+          //   break;
 
           case "/settings":
             page = MaterialPageRoute(builder: (context) => SettingsView());

@@ -65,7 +65,7 @@ class _MainViewState extends State<MainView> {
                         children: [
                           Flexible(flex: 2, child: SideMenuComponent()),
                           Flexible(
-                            flex: 7,
+                            flex: 9,
                             child: Container(
                               child: Column(
                                 children: [

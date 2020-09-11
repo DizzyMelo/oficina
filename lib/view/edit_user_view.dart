@@ -109,6 +109,16 @@ class _EditUserViewState extends State<EditUserView> {
                                 controller: ctrEmail,
                                 icon: LineIcons.envelope_o,
                                 hint: 'Email'),
+                            widget.user.role != 'cliente'
+                                ? SizedBox(
+                                    height: 1,
+                                  )
+                                : FlatButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/new_car',
+                                          arguments: widget.user.id);
+                                    },
+                                    child: Text('Veículos')),
                             Expanded(child: Container()),
                             loading
                                 ? Center(

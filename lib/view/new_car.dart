@@ -13,7 +13,7 @@ import 'package:oficina/shared/utils.dart';
 
 class NewCarView extends StatefulWidget {
   final String userId;
-  NewCarView({this.userId = '5f550852e56fc20dc5cda323'});
+  NewCarView({this.userId});
 
   @override
   _NewCarViewState createState() => _NewCarViewState();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oficina/api_requests/payment_requests.dart';
 import 'package:oficina/model/create_payment_data_model.dart';
 import 'package:oficina/model/get_payments_data_model.dart';
+import 'package:oficina/model/stats_data_model.dart';
 import 'package:oficina/shared/utils.dart';
 
 class PaymentController {
@@ -22,6 +23,17 @@ class PaymentController {
     Utils.showInSnackBar(
         'Erro ao adicionar pagamento', Colors.red, scaffoldKey);
     return false;
+  }
+
+  Future<StatsDataModel> stats(data, scaffoldKey) async {
+    StatsDataModel res = await requests.stats(data);
+
+    if (res != null) {
+      return res;
+    }
+
+    Utils.showInSnackBar('Erro ao buscar dados', Colors.red, scaffoldKey);
+    return null;
   }
 
   delete(id, scaffoldKey) async {
