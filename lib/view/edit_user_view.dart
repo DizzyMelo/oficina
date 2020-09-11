@@ -218,8 +218,7 @@ class _EditUserViewState extends State<EditUserView> {
     });
 
     this.changeLoadingState();
-    await _userController.edit(
-        data, widget.user.id, false, context, _scaffoldKey);
+    await _userController.edit(data, widget.user.id, false, _scaffoldKey);
     this.changeLoadingState();
   }
 
@@ -268,8 +267,7 @@ class _EditUserViewState extends State<EditUserView> {
       "active": false,
     };
     this.changeLoadingDeleteState();
-    await _userController.edit(
-        data, widget.user.id, true, context, _scaffoldKey);
+    await _userController.edit(data, widget.user.id, true, _scaffoldKey);
     this.changeLoadingDeleteState();
   }
 

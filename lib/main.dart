@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/payment',
+      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      initialRoute: '/new_car',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -88,12 +88,9 @@ class MyApp extends StatelessWidget {
                     ));
             break;
           case "/new_car":
-            String client = settings.arguments ?? '62';
-            String clientName = settings.arguments ?? 'Daniel';
             page = MaterialPageRoute(
                 builder: (context) => NewCarView(
-                      clientName,
-                      client: client,
+                      userId: settings.arguments,
                     ));
             break;
           case "/stock":

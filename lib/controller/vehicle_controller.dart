@@ -10,7 +10,7 @@ class VehicleController {
     requests = VehicleRequests();
   }
 
-  Future create(data, context, scaffoldKey) async {
+  Future<CreateVehicleDataModel> create(data, context, scaffoldKey) async {
     CreateVehicleDataModel res = await requests.create(data);
 
     if (res != null) {

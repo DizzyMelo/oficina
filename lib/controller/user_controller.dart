@@ -15,19 +15,21 @@ class UserController {
     requests = UserRequests();
   }
 
-  Future create(data, context, scaffoldKey) async {
+  Future<CreateUserDataModel> create(data, context, scaffoldKey) async {
     CreateUserDataModel res = await requests.create(data);
 
     if (res != null) {
       Utils.showInSnackBar(
           'Cliente cadastrado com sucesso', Colors.green, scaffoldKey);
+      return res;
     } else {
       Utils.showInSnackBar(
           'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+      return null;
     }
   }
 
-  Future edit(data, id, delete, context, scaffoldKey) async {
+  Future edit(data, id, delete, scaffoldKey) async {
     CreateUserDataModel res = await requests.edit(data, id);
 
     if (res != null) {
@@ -86,7 +88,7 @@ class UserController {
     }
   }
 
-  Future getVehicles(userId, context, scaffoldKey) async {
+  Future<VehicleDataModel> getVehicles(userId, context, scaffoldKey) async {
     VehicleDataModel res = await requests.getUserVehicles(userId);
 
     if (res != null) {
@@ -94,6 +96,8 @@ class UserController {
     } else {
       Utils.showInSnackBar(
           'Nenhum veículo encontrado', Colors.red, scaffoldKey);
+
+      return null;
     }
   }
 }

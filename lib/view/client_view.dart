@@ -6,8 +6,11 @@ import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/phone_textfield_component.dart';
+import 'package:oficina/components/small_buttom_component.dart';
+import 'package:oficina/components/small_cancel_buttom_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/client_model.dart';
+import 'package:oficina/model/create_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/shared/session_variables.dart';
@@ -22,7 +25,6 @@ class ClientView extends StatefulWidget {
 class _ClientViewState extends State<ClientView> {
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrSearchService = TextEditingController();
-  //ctrSearchService
   TextEditingController ctrName = TextEditingController();
   MaskedTextController ctrPhone = MaskedTextController(mask: '(00) 00000-0000');
 
@@ -31,14 +33,8 @@ class _ClientViewState extends State<ClientView> {
   TextEditingController ctrCar = TextEditingController();
   TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String _selectedCar = '';
 
-  List<ClientModel> clients = new List();
   SearchUserDataModel users;
-  ClientModel selectedClient;
-
-  List<ServiceModel> services = new List();
-
   UserController controller;
 
   IconData iconPhone = LineIcons.phone;
@@ -59,53 +55,53 @@ class _ClientViewState extends State<ClientView> {
               title: 'Clientes',
             ),
             Expanded(
-                child: Container(
-              child: Row(
-                children: [
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            MainTextFieldComponent(
-                              controller: ctrName,
-                              icon: LineIcons.user,
-                              hint: 'Nome',
-                              mandatory: true,
-                            ),
-                            MainTextFieldComponent(
-                                controller: ctrCpf,
+              child: Container(
+                child: Row(
+                  children: [
+                    Flexible(
+                        flex: 1,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: [
+                              MainTextFieldComponent(
+                                controller: ctrName,
                                 icon: LineIcons.user,
-                                hint: 'CPF/CNPJ'),
-                            PhoneTextFieldComponent(
-                              controller: ctrPhone,
-                              icon: iconPhone,
-                              hint: 'Contato 1',
-                              function: changeMaskPhone,
-                              mandatory: true,
-                            ),
-                            PhoneTextFieldComponent(
-                                controller: ctrPhone2,
-                                icon: iconPhone2,
-                                hint: 'Contato 2',
-                                function: changeMaskPhone2),
-                            MainTextFieldComponent(
-                                controller: ctrEmail,
-                                icon: LineIcons.envelope_o,
-                                hint: 'Email'),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            loading
-                                ? LoadingComponent()
-                                : MainButtomComponent(
-                                    title: 'ADICIONAR CLIENTE',
-                                    function: createUser)
-                          ],
-                        ),
-                      )),
-                  Flexible(
+                                hint: 'Nome',
+                                mandatory: true,
+                              ),
+                              MainTextFieldComponent(
+                                  controller: ctrCpf,
+                                  icon: LineIcons.user,
+                                  hint: 'CPF/CNPJ'),
+                              PhoneTextFieldComponent(
+                                controller: ctrPhone,
+                                icon: iconPhone,
+                                hint: 'Contato 1',
+                                function: changeMaskPhone,
+                                mandatory: true,
+                              ),
+                              PhoneTextFieldComponent(
+                                  controller: ctrPhone2,
+                                  icon: iconPhone2,
+                                  hint: 'Contato 2',
+                                  function: changeMaskPhone2),
+                              MainTextFieldComponent(
+                                  controller: ctrEmail,
+                                  icon: LineIcons.envelope_o,
+                                  hint: 'Email'),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              loading
+                                  ? LoadingComponent()
+                                  : MainButtomComponent(
+                                      title: 'ADICIONAR CLIENTE',
+                                      function: createUser)
+                            ],
+                          ),
+                        )),
+                    Flexible(
                       flex: 2,
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -161,10 +157,12 @@ class _ClientViewState extends State<ClientView> {
                             ),
                           ],
                         ),
-                      )),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ))
+            )
           ],
         ),
       ),
@@ -212,8 +210,12 @@ class _ClientViewState extends State<ClientView> {
     });
 
     this.changeLoadingState();
-    await controller.create(data, context, _scaffoldKey);
+    CreateUserDataModel res =
+        await controller.create(data, context, _scaffoldKey);
     this.changeLoadingState();
+    if (res != null) {
+      _addCardDialog(res.data.data.id);
+    }
   }
 
   void _addCardDialog(String id) async {
@@ -222,30 +224,28 @@ class _ClientViewState extends State<ClientView> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: Text("Desaja adicionar um veículo ao cliente",
-              style: Style.dialogTitle),
+          title: Text("Adione um veículo ao cliente", style: Style.dialogTitle),
           content: Container(
-              height: 180,
+              height: 120,
               child: Center(
                   child: Text(
-                'Adione um veículo ao cliente',
+                'Desaja adicionar um veículo ao cliente?',
                 style: Style.dialogMessage,
               ))),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
-            FlatButton(
-              child: Text("FECHAR", style: Style.closeButton),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
 
-            FlatButton(
-              child: Text("SIM", style: Style.okButton),
-              onPressed: () {
-                Navigator.pushNamed(context, '/new_car', arguments: id);
-              },
-            ),
+            SmallCancelButtomComponent(
+                title: "FECHAR",
+                function: () {
+                  Navigator.of(context).pop();
+                }),
+
+            SmallButtomComponent(
+                title: 'ADICIONAR',
+                function: () {
+                  Navigator.pushNamed(context, '/new_car', arguments: id);
+                }),
           ],
         );
       },

@@ -32,6 +32,12 @@ class Style {
   static TextStyle smallButtonText = GoogleFonts.lato(
       textStyle: TextStyle(color: secondaryColor, fontSize: 12));
 
+  static TextStyle smallText = GoogleFonts.lato(
+      textStyle: TextStyle(color: secondaryColor, fontSize: 12));
+
+  static TextStyle smallCancelButtonText =
+      GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontSize: 12));
+
   static TextStyle whiteButtonText =
       GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontSize: 15));
 

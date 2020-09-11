@@ -7,6 +7,7 @@ import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/phone_textfield_component.dart';
 import 'package:oficina/controller/shop_controller.dart';
+import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
@@ -30,10 +31,13 @@ class _ProfileViewState extends State<ProfileView> {
   TextEditingController ctrShopName = TextEditingController();
   TextEditingController ctrShopEmail = TextEditingController();
   TextEditingController ctrShopAddress = TextEditingController();
-  MaskedTextController ctrShopPrimaryPhone = MaskedTextController();
-  MaskedTextController ctrShopSecondaryPhone = MaskedTextController();
+  MaskedTextController ctrShopPrimaryPhone =
+      MaskedTextController(mask: '(00) 00000-0000');
+  MaskedTextController ctrShopSecondaryPhone =
+      MaskedTextController(mask: '(00) 00000-0000');
 
   ShopController _shopController = ShopController();
+  UserController _userController = UserController();
 
   double containerHeight = 500;
   double containerWidth = 800;
@@ -41,6 +45,9 @@ class _ProfileViewState extends State<ProfileView> {
   bool loadingEditShop = false;
   bool loadingEditUser = false;
   bool loadingEditPass = false;
+
+  IconData iconPhone = LineIcons.phone;
+  IconData iconPhone2 = LineIcons.phone;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +107,8 @@ class _ProfileViewState extends State<ProfileView> {
                           SizedBox(
                             height: 10,
                           ),
-                          MainButtomComponent(title: 'SALVAR', function: () {}),
+                          MainButtomComponent(
+                              title: 'SALVAR', function: editUser),
                           SizedBox(
                             height: 20,
                           ),
@@ -141,15 +149,17 @@ class _ProfileViewState extends State<ProfileView> {
                               hint: 'E-mail loja'),
                           PhoneTextFieldComponent(
                             controller: ctrShopPrimaryPhone,
-                            icon: LineIcons.phone,
+                            icon: iconPhone,
                             hint: 'Contato 1',
-                            function: (e) {},
+                            function: changeMaskPhone,
                             mandatory: true,
                           ),
-                          MainTextFieldComponent(
-                              controller: ctrShopSecondaryPhone,
-                              icon: LineIcons.phone,
-                              hint: 'Contato 2'),
+                          PhoneTextFieldComponent(
+                            controller: ctrShopSecondaryPhone,
+                            icon: iconPhone2,
+                            hint: 'Contato 2',
+                            function: changeMaskPhone2,
+                          ),
                           Expanded(child: Container()),
                           loadingEditShop
                               ? LoadingComponent()
@@ -174,45 +184,64 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   String setMaskPhone(String str) {
-    print(str);
     if (str.length >= 4) {
       String txt = Utils.clearPhone(str);
       int number = int.parse(txt.substring(3, 4));
       if (number < 6) {
-        print('tel');
         return '(00) 0000-0000';
       } else {
-        print('cel');
         return '(00) 00000-0000';
       }
     } else {
-      print('cel*');
       return '(00) 00000-0000';
     }
   }
 
-  // changeMaskPhone(String str) {
-  //   if (str.isEmpty) {
-  //     setState(() {
-  //       iconPhone = LineIcons.phone;
-  //     });
-  //   }
-  //   if (str.length >= 4) {
-  //     String txt = Utils.clearPhone(str);
-  //     int number = int.parse(txt.substring(3, 4));
-  //     if (number < 6) {
-  //       ctrPhone.mask = '(00) 0000-0000';
-  //       setState(() {
-  //         iconPhone = LineIcons.phone;
-  //       });
-  //     } else {
-  //       ctrPhone.mask = '(00) 00000-0000';
-  //       setState(() {
-  //         iconPhone = LineIcons.mobile;
-  //       });
-  //     }
-  //   }
-  // }
+  changeMaskPhone(String str) {
+    if (str.isEmpty) {
+      setState(() {
+        iconPhone = LineIcons.phone;
+      });
+    }
+    if (str.length >= 4) {
+      String txt = Utils.clearPhone(str);
+      int number = int.parse(txt.substring(3, 4));
+      if (number < 6) {
+        ctrShopPrimaryPhone.mask = '(00) 0000-0000';
+        setState(() {
+          iconPhone = LineIcons.phone;
+        });
+      } else {
+        ctrShopPrimaryPhone.mask = '(00) 00000-0000';
+        setState(() {
+          iconPhone = LineIcons.mobile;
+        });
+      }
+    }
+  }
+
+  changeMaskPhone2(String str) {
+    if (str.isEmpty) {
+      setState(() {
+        iconPhone2 = LineIcons.phone;
+      });
+    }
+    if (str.length >= 4) {
+      String txt = Utils.clearPhone(str);
+      int number = int.parse(txt.substring(3, 4));
+      if (number < 6) {
+        ctrShopSecondaryPhone.mask = '(00) 0000-0000';
+        setState(() {
+          iconPhone2 = LineIcons.phone;
+        });
+      } else {
+        ctrShopSecondaryPhone.mask = '(00) 00000-0000';
+        setState(() {
+          iconPhone2 = LineIcons.mobile;
+        });
+      }
+    }
+  }
 
   editShop() async {
     Map<String, dynamic> data = {
@@ -231,6 +260,24 @@ class _ProfileViewState extends State<ProfileView> {
     });
   }
 
+  editUser() async {
+    Map<String, dynamic> data = {
+      "name": ctrName.text,
+      "email": ctrEmail.text,
+      "cpfcnpj": ctrCpf.text,
+      "primaryphone": ctrPrimaryPhone.text,
+      "secondaryphone": ctrSecondary.text
+    };
+    setState(() {
+      loadingEditUser = !loadingEditUser;
+    });
+    await _userController.edit(
+        data, SessionVariables.userDataModel.data.data.id, false, _scaffoldKey);
+    setState(() {
+      loadingEditUser = !loadingEditUser;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -241,6 +288,9 @@ class _ProfileViewState extends State<ProfileView> {
     ctrShopEmail.text = SessionVariables.userDataModel.data.data.shop.email;
 
     ctrShopPrimaryPhone.mask = setMaskPhone(Utils.clearPhone(
+        SessionVariables.userDataModel.data.data.shop.primaryphone));
+
+    ctrShopSecondaryPhone.mask = setMaskPhone(Utils.clearPhone(
         SessionVariables.userDataModel.data.data.shop.primaryphone));
 
     ctrShopPrimaryPhone.text =
