@@ -41,7 +41,6 @@ class _EditUserViewState extends State<EditUserView> {
 
   bool loading = false;
   bool loadingDelete = false;
-
   bool loadingSearch = false;
 
   IconData iconPhone = LineIcons.phone;
@@ -50,8 +49,9 @@ class _EditUserViewState extends State<EditUserView> {
   double containerHeight = 500;
   double containerWidth = 800;
 
-  UserController _userController;
-  ServiceController _serviceController;
+  UserController _userController = UserController();
+  ServiceController _serviceController = ServiceController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -340,8 +340,5 @@ class _EditUserViewState extends State<EditUserView> {
 
     ctrInitDate.text = Utils.getCurrentDate(days: -7);
     ctrFinalDate.text = Utils.getCurrentDate();
-
-    _userController = UserController();
-    _serviceController = ServiceController();
   }
 }

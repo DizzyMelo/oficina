@@ -260,7 +260,7 @@ class Style {
   static TextStyle paymentValueSmall = TextStyle(
       color: Colors.grey[800], fontSize: 15, fontWeight: FontWeight.w400);
 
-  static TextStyle paymentValueLarge = TextStyle(
+  static TextStyle largeText = TextStyle(
       color: Colors.grey[800], fontSize: 25, fontWeight: FontWeight.w500);
 
   static BoxDecoration containerSeparator = BoxDecoration(

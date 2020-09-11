@@ -13,6 +13,13 @@ class SearchServiceRowComponent extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, '/manage_service', arguments: service.id);
       },
+      leading: Padding(
+        padding: EdgeInsets.all(10),
+        child: CircleAvatar(
+          maxRadius: 5,
+          backgroundColor: Utils.selectServiceColor(service.status),
+        ),
+      ),
       title: Text(
         service.car.name,
         style: Style.mainClientNameText,

@@ -26,7 +26,7 @@ class MenuList {
     MenuItem(
         color: Colors.red,
         title: 'Estoque',
-        icon: LineIcons.square,
+        icon: LineIcons.square_o,
         screen: '/stock',
         img: 'stock.png'),
     MenuItem(
@@ -35,6 +35,12 @@ class MenuList {
         icon: LineIcons.wrench,
         screen: '/colaborator',
         img: 'mechanic.png'),
+    MenuItem(
+        color: Colors.orange,
+        title: 'Histórico',
+        icon: LineIcons.history,
+        screen: '/report',
+        img: 'settings.png'),
     MenuItem(
         color: Colors.orange,
         title: 'Configurações',

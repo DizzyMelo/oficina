@@ -18,11 +18,16 @@ class SideMenuComponent extends StatelessWidget {
                 MenuItem item = MenuList.listMenu[index];
                 return ListTile(
                   onTap: () => Navigator.pushNamed(context, item.screen),
-                  leading: Image.asset(
-                    'assets/img/${item.img}',
-                    height: 25,
-                    width: 25,
+                  leading: Icon(
+                    item.icon,
+                    color: Style.primaryColor,
                   ),
+
+                  // Image.asset(
+                  //   'assets/img/${item.img}',
+                  //   height: 25,
+                  //   width: 25,
+                  // ),
                   title: Text(
                     item.title ?? 'no-data',
                     style: Style.optionTitleTextLight,

@@ -222,4 +222,27 @@ class Utils {
 
     return formatDate(date);
   }
+
+  static Color selectServiceColor(String status) {
+    switch (status) {
+      case 'iniciado':
+        return Colors.blue;
+        break;
+
+      case 'espera':
+        return Colors.orange;
+        break;
+
+      case 'concluido':
+        return Colors.green;
+        break;
+
+      case 'cancelado':
+        return Colors.red;
+        break;
+      default:
+        return Colors.grey;
+        break;
+    }
+  }
 }

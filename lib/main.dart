@@ -14,6 +14,7 @@ import 'package:oficina/view/new_car.dart';
 import 'package:oficina/view/new_service_view.dart';
 import 'package:oficina/view/payment_view.dart';
 import 'package:oficina/view/profile_view.dart';
+import 'package:oficina/view/report_view.dart';
 import 'package:oficina/view/select_car_view.dart';
 import 'package:oficina/view/select_client_view.dart';
 import 'package:oficina/view/select_colaborator_view.dart';
@@ -47,8 +48,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      initialRoute: '/new_car',
+      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      //initialRoute: '/report',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -89,9 +90,7 @@ class MyApp extends StatelessWidget {
             break;
           case "/new_car":
             page = MaterialPageRoute(
-                builder: (context) => NewCarView(
-                      userId: settings.arguments,
-                    ));
+                builder: (context) => NewCarView(userId: settings.arguments));
             break;
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());
@@ -161,6 +160,12 @@ class MyApp extends StatelessWidget {
               builder: (context) => PaymentView(
                 service: settings.arguments,
               ),
+            );
+            break;
+
+          case "/report":
+            page = MaterialPageRoute(
+              builder: (context) => ReportView(),
             );
             break;
         }
