@@ -64,6 +64,8 @@ class DataData {
     this.car,
     this.shop,
     this.v,
+    this.dateEnd,
+    this.observation,
     this.addedProducts,
     this.dataId,
   });
@@ -74,7 +76,7 @@ class DataData {
   bool paid;
   double how;
   double discount;
-  int warranty;
+  double warranty;
   String warrantyUnity;
   String id;
   Client client;
@@ -82,6 +84,8 @@ class DataData {
   Car car;
   String shop;
   int v;
+  DateTime dateEnd;
+  String observation;
   List<AddedProduct> addedProducts;
   String dataId;
 
@@ -100,6 +104,8 @@ class DataData {
         car: Car.fromJson(json["car"]),
         shop: json["shop"],
         v: json["__v"],
+        dateEnd: DateTime.parse(json["date_end"]),
+        observation: json["observation"],
         addedProducts: List<AddedProduct>.from(
             json["added_products"].map((x) => AddedProduct.fromJson(x))),
         dataId: json["id"],
@@ -120,6 +126,8 @@ class DataData {
         "car": car.toJson(),
         "shop": shop,
         "__v": v,
+        "date_end": dateEnd.toIso8601String(),
+        "observation": observation,
         "added_products":
             List<dynamic>.from(addedProducts.map((x) => x.toJson())),
         "id": dataId,
@@ -143,7 +151,7 @@ class AddedProduct {
   String service;
   Product product;
   int amount;
-  double totalPrice;
+  int totalPrice;
   int v;
   String addedProductId;
 
@@ -187,13 +195,13 @@ class Product {
 
   bool active;
   int minimumAmount;
-  double priceBought;
+  int priceBought;
   String id;
   String name;
   String description;
   String code;
   int currentAmount;
-  double priceSale;
+  int priceSale;
   String shop;
   int v;
 
@@ -203,8 +211,8 @@ class Product {
         priceBought: json["price_bought"],
         id: json["_id"],
         name: json["name"],
-        description: json["description"],
-        code: json["code"],
+        description: json["description"] == null ? null : json["description"],
+        code: json["code"] == null ? null : json["code"],
         currentAmount: json["current_amount"],
         priceSale: json["price_sale"],
         shop: json["shop"],
@@ -217,8 +225,8 @@ class Product {
         "price_bought": priceBought,
         "_id": id,
         "name": name,
-        "description": description,
-        "code": code,
+        "description": description == null ? null : description,
+        "code": code == null ? null : code,
         "current_amount": currentAmount,
         "price_sale": priceSale,
         "shop": shop,
