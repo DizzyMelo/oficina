@@ -5,7 +5,6 @@ import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
-import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class UserController {
@@ -20,11 +19,11 @@ class UserController {
 
     if (res != null) {
       Utils.showInSnackBar(
-          'Cliente cadastrado com sucesso', Colors.green, scaffoldKey);
+          'Usuário cadastrado com sucesso', Colors.green, scaffoldKey);
       return res;
     } else {
       Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+          'Erro ao tentar cadastrar o usuário', Colors.red, scaffoldKey);
       return null;
     }
   }
