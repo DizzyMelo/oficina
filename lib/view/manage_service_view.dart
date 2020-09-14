@@ -366,7 +366,10 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   }
 
   cancelService() async {
-    Map<String, dynamic> data = {'status': 'cancelado'};
+    Map<String, dynamic> data = {
+      'status': 'cancelado',
+      'date_end': DateTime.now().toString()
+    };
     bool res =
         await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
 

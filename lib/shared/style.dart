@@ -30,7 +30,7 @@ class Style {
       textStyle: TextStyle(color: secondaryColor, fontSize: 15));
 
   static TextStyle smallButtonText = GoogleFonts.lato(
-      textStyle: TextStyle(color: secondaryColor, fontSize: 12));
+      textStyle: TextStyle(color: secondaryColor, fontSize: 11));
 
   static TextStyle smallText = GoogleFonts.lato(
       textStyle: TextStyle(color: secondaryColor, fontSize: 12));

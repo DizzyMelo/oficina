@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oficina/components/small_buttom_component.dart';
 import 'package:oficina/shared/style.dart';
 
 class ActionTextFieldComponent extends StatelessWidget {
@@ -38,7 +39,8 @@ class ActionTextFieldComponent extends StatelessWidget {
                   )
                 : null,
             suffixIcon:
-                FlatButton(onPressed: function, child: Text(actionText)),
+                SmallButtomComponent(title: actionText, function: function),
+            //FlatButton(onPressed: function, child: Text(actionText)),
             labelText: hint,
             labelStyle: Style.textField,
             enabledBorder: UnderlineInputBorder(

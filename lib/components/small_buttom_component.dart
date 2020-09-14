@@ -12,8 +12,8 @@ class SmallButtomComponent extends StatelessWidget {
       onTap: function,
       child: AnimatedContainer(
         duration: Duration(milliseconds: 500),
-        height: 35,
-        width: 100,
+        height: 30,
+        width: 90,
         decoration: BoxDecoration(
             color: Style.primary, borderRadius: BorderRadius.circular(4)),
         child: Center(
