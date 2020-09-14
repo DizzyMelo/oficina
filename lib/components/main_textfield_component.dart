@@ -6,12 +6,14 @@ class MainTextFieldComponent extends StatelessWidget {
   final IconData icon;
   final String hint;
   final bool mandatory;
+  final int maxlines;
 
   MainTextFieldComponent(
       {@required this.controller,
       @required this.icon,
       @required this.hint,
-      this.mandatory = false});
+      this.mandatory = false,
+      this.maxlines = 1});
 
   @override
   Widget build(BuildContext context) {

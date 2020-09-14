@@ -68,6 +68,8 @@ class Service {
     this.car,
     this.shop,
     this.v,
+    this.dateEnd,
+    this.observation,
     this.serviceId,
   });
 
@@ -75,8 +77,8 @@ class Service {
   double value;
   String status;
   bool paid;
-  int how;
-  int discount;
+  double how;
+  double discount;
   int warranty;
   String warrantyUnity;
   String id;
@@ -85,15 +87,17 @@ class Service {
   Car car;
   String shop;
   int v;
+  DateTime dateEnd;
+  String observation;
   String serviceId;
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
         date: DateTime.parse(json["date"]),
-        value: json["value"],
+        value: json["value"].toDouble(),
         status: json["status"],
         paid: json["paid"],
-        how: json["how"],
-        discount: json["discount"],
+        how: json["how"].toDouble(),
+        discount: json["discount"].toDouble(),
         warranty: json["warranty"],
         warrantyUnity: json["warrantyUnity"],
         id: json["_id"],
@@ -102,6 +106,9 @@ class Service {
         car: Car.fromJson(json["car"]),
         shop: json["shop"],
         v: json["__v"],
+        dateEnd:
+            json["date_end"] == null ? null : DateTime.parse(json["date_end"]),
+        observation: json["observation"] == null ? null : json["observation"],
         serviceId: json["id"],
       );
 
@@ -120,6 +127,8 @@ class Service {
         "car": car.toJson(),
         "shop": shop,
         "__v": v,
+        "date_end": dateEnd == null ? null : dateEnd.toIso8601String(),
+        "observation": observation == null ? null : observation,
         "id": serviceId,
       };
 }
@@ -129,18 +138,21 @@ class Car {
     this.plate,
     this.id,
     this.name,
+    this.user,
     this.v,
   });
 
   String plate;
   String id;
   String name;
+  String user;
   int v;
 
   factory Car.fromJson(Map<String, dynamic> json) => Car(
         plate: json["plate"],
         id: json["_id"],
         name: json["name"],
+        user: json["user"],
         v: json["__v"],
       );
 
@@ -148,6 +160,7 @@ class Car {
         "plate": plate,
         "_id": id,
         "name": name,
+        "user": user,
         "__v": v,
       };
 }
@@ -165,6 +178,8 @@ class Client {
     this.v,
     this.cpfcnpj,
     this.clientId,
+    this.email,
+    this.secondaryphone,
   });
 
   String photo;
@@ -178,6 +193,8 @@ class Client {
   int v;
   String cpfcnpj;
   String clientId;
+  String email;
+  String secondaryphone;
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         photo: json["photo"],
@@ -191,6 +208,9 @@ class Client {
         v: json["__v"],
         cpfcnpj: json["cpfcnpj"],
         clientId: json["id"],
+        email: json["email"] == null ? null : json["email"],
+        secondaryphone:
+            json["secondaryphone"] == null ? null : json["secondaryphone"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -205,5 +225,7 @@ class Client {
         "__v": v,
         "cpfcnpj": cpfcnpj,
         "id": clientId,
+        "email": email == null ? null : email,
+        "secondaryphone": secondaryphone == null ? null : secondaryphone,
       };
 }

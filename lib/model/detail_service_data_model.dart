@@ -76,7 +76,7 @@ class DataData {
   bool paid;
   double how;
   double discount;
-  double warranty;
+  int warranty;
   String warrantyUnity;
   String id;
   Client client;
@@ -91,11 +91,11 @@ class DataData {
 
   factory DataData.fromJson(Map<String, dynamic> json) => DataData(
         date: DateTime.parse(json["date"]),
-        value: json["value"],
+        value: json["value"].toDouble(),
         status: json["status"],
         paid: json["paid"],
-        how: json["how"],
-        discount: json["discount"],
+        how: json["how"].toDouble(),
+        discount: json["discount"].toDouble(),
         warranty: json["warranty"],
         warrantyUnity: json["warrantyUnity"],
         id: json["_id"],
@@ -104,8 +104,9 @@ class DataData {
         car: Car.fromJson(json["car"]),
         shop: json["shop"],
         v: json["__v"],
-        dateEnd: DateTime.parse(json["date_end"]),
-        observation: json["observation"],
+        dateEnd:
+            json["date_end"] == null ? null : DateTime.parse(json["date_end"]),
+        observation: json["observation"] == null ? null : json["observation"],
         addedProducts: List<AddedProduct>.from(
             json["added_products"].map((x) => AddedProduct.fromJson(x))),
         dataId: json["id"],

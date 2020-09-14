@@ -8,6 +8,8 @@ class ActionTextFieldComponent extends StatelessWidget {
   final String actionText;
   final bool mandatory;
   final Function function;
+  final int maxlines;
+  final bool hasIcon;
 
   ActionTextFieldComponent(
       {@required this.controller,
@@ -15,7 +17,9 @@ class ActionTextFieldComponent extends StatelessWidget {
       @required this.hint,
       @required this.function,
       this.actionText = 'ATUALIZAR',
-      this.mandatory = false});
+      this.mandatory = false,
+      this.maxlines = 1,
+      this.hasIcon = true});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +29,14 @@ class ActionTextFieldComponent extends StatelessWidget {
         TextField(
           controller: controller,
           style: Style.textField,
+          maxLines: maxlines,
           decoration: InputDecoration(
-            prefixIcon: Icon(
-              icon,
-              size: 15,
-            ),
+            prefixIcon: hasIcon
+                ? Icon(
+                    icon,
+                    size: 15,
+                  )
+                : null,
             suffixIcon:
                 FlatButton(onPressed: function, child: Text(actionText)),
             labelText: hint,

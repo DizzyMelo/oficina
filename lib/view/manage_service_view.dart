@@ -30,6 +30,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   TextEditingController ctrSearch = TextEditingController();
   TextEditingController ctrAmount = TextEditingController();
   TextEditingController ctrWarranty = MaskedTextController(mask: '00000');
+  TextEditingController ctrObservation = TextEditingController();
 
   TextEditingController ctrHow = MoneyMaskedTextController(
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
@@ -51,7 +52,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     double mainContainerWidth = screen.width - 20;
-    double mainContainerHeight = 600;
+    double mainContainerHeight = 700;
     double secondaryContainerWidth = mainContainerWidth / 3;
     return Scaffold(
       key: _scaffoldKey,
@@ -256,6 +257,16 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                     updateService(data);
                                   },
                                 ),
+                                ActionTextFieldComponent(
+                                  controller: ctrObservation,
+                                  icon: LineIcons.money,
+                                  hint: 'Observações',
+                                  maxlines: 5,
+                                  hasIcon: false,
+                                  function: () {
+                                    updateObservation();
+                                  },
+                                ),
                                 Expanded(child: Container()),
                                 Column(
                                   children: [
@@ -362,6 +373,14 @@ class _ManageServiceViewState extends State<ManageServiceView> {
     if (res) {}
   }
 
+  updateObservation() async {
+    Map<String, dynamic> data = {'observation': ctrObservation.text};
+    bool res =
+        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+
+    if (res) {}
+  }
+
   updateService(data) async {
     bool res =
         await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
@@ -393,6 +412,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
       ctrDiscount.text =
           _detailServiceDataModel.data.data.discount.toStringAsFixed(2);
       ctrWarranty.text = _detailServiceDataModel.data.data.warranty.toString();
+      ctrObservation.text = _detailServiceDataModel.data.data.observation;
     }
   }
 

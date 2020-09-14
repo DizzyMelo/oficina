@@ -37,7 +37,7 @@ class SearchServiceRowComponent extends StatelessWidget {
             style: Style.totalValueText,
           ),
           Text(
-            Utils.formatDate(service.date),
+            service.dateEnd == null ? '-----' : Utils.formatDate(service.date),
             style: Style.phoneText,
           ),
         ],

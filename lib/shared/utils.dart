@@ -217,6 +217,33 @@ class Utils {
     );
   }
 
+  static void writeObservation(String title, String message, Function function,
+      String buttonTitle, TextEditingController controller, context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title, style: Style.dialogTitle),
+          content: Container(
+            height: 200,
+            child: Center(
+              child: MainTextFieldComponent(
+                controller: controller,
+                icon: LineIcons.calculator,
+                hint: message,
+                maxlines: 3,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            SmallButtomComponent(title: buttonTitle, function: function)
+          ],
+        );
+      },
+    );
+  }
+
   static String getCurrentDate({int days = 0}) {
     DateTime date = DateTime.now().add(Duration(days: days));
 
