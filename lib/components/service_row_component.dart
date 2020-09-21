@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:oficina/model/get_services_data_model.dart';
+import 'package:oficina/model/report_service_data_model.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class ServiceRowComponent extends StatelessWidget {
-  final Datum serviceModel;
+  final Service serviceModel;
   ServiceRowComponent(this.serviceModel);
 
   @override
@@ -22,75 +22,91 @@ class ServiceRowComponent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Flexible(
-                flex: 1,
-                child: Container(
-                  width: double.infinity,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          serviceModel.client.name,
-                          style: Style.mainClientNameText,
-                        ),
-                        Text(
-                          serviceModel.car.name,
-                          style: Style.carNameText,
-                        ),
-                      ]),
-                )),
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      maxRadius: 5,
+                      backgroundColor:
+                          Utils.selectServiceColor(serviceModel.status),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            serviceModel.client.name,
+                            style: Style.mainClientNameText,
+                          ),
+                          Text(
+                            serviceModel.car.name,
+                            style: Style.carNameText,
+                          ),
+                        ]),
+                  ],
+                ),
+              ),
+            ),
             Flexible(
-                flex: 1,
-                child: Container(
-                  width: double.infinity,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          serviceModel.client.primaryphone,
-                          style: Style.phoneText,
-                        ),
-                        serviceModel.client.secondaryphone == null
-                            ? SizedBox()
-                            : Text(
-                                serviceModel.client.secondaryphone ?? '',
-                                style: Style.phoneText,
-                              ),
-                      ]),
-                )),
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        serviceModel.client.primaryphone,
+                        style: Style.phoneText,
+                      ),
+                      serviceModel.client.secondaryphone == null
+                          ? SizedBox()
+                          : Text(
+                              serviceModel.client.secondaryphone ?? '',
+                              style: Style.phoneText,
+                            ),
+                    ]),
+              ),
+            ),
             Flexible(
-                flex: 1,
-                child: Container(
-                  width: double.infinity,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          serviceModel.colaborator.name,
-                          style: Style.workerNameText,
-                        ),
-                      ]),
-                )),
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        serviceModel.colaborator.name,
+                        style: Style.workerNameText,
+                      ),
+                    ]),
+              ),
+            ),
             Flexible(
-                flex: 1,
-                child: Container(
-                  width: double.infinity,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          Utils.formatMoney(serviceModel.value.toDouble()),
-                          style: Style.totalValueText,
-                        ),
-                        Text(
-                          Utils.formatMoney(serviceModel.how.toDouble()),
-                          style: Style.mdoText,
-                        ),
-                      ]),
-                )),
+              flex: 1,
+              child: Container(
+                width: double.infinity,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        Utils.formatMoney(serviceModel.value.toDouble()),
+                        style: Style.totalValueText,
+                      ),
+                      Text(
+                        Utils.formatMoney(serviceModel.how.toDouble()),
+                        style: Style.mdoText,
+                      ),
+                    ]),
+              ),
+            ),
           ],
         ),
       ),
