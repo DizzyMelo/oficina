@@ -70,35 +70,53 @@ class _MainViewState extends State<MainView> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    child: Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 150,
-                                              child: MainTextFieldComponent(
-                                                  controller: ctrDateInit,
-                                                  icon: LineIcons.calendar,
-                                                  hint: 'Data inicial'),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Container(
-                                              width: 150,
-                                              child: MainTextFieldComponent(
-                                                  controller: ctrDateFinal,
-                                                  icon: LineIcons.calendar,
-                                                  hint: 'Data final'),
-                                            ),
-                                          ],
+                                        Flexible(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Flexible(
+                                                    child: Container(
+                                                      child:
+                                                          MainTextFieldComponent(
+                                                              controller:
+                                                                  ctrDateInit,
+                                                              icon: LineIcons
+                                                                  .calendar,
+                                                              hint:
+                                                                  'Data inicial'),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Flexible(
+                                                    child: Container(
+                                                      child:
+                                                          MainTextFieldComponent(
+                                                              controller:
+                                                                  ctrDateFinal,
+                                                              icon: LineIcons
+                                                                  .calendar,
+                                                              hint:
+                                                                  'Data final'),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 10),
+                                              Container(
+                                                child: MainButtomComponent(
+                                                    title: 'BUSCAR',
+                                                    function: getReport),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        SizedBox(height: 10),
-                                        Container(
-                                          width: 310,
-                                          child: MainButtomComponent(
-                                              title: 'BUSCAR',
-                                              function: getReport),
+                                        Flexible(
+                                          child: Container(),
                                         )
                                       ],
                                     ),
@@ -146,10 +164,49 @@ class _MainViewState extends State<MainView> {
                             ),
                           ),
                           Flexible(
-                              flex: 3,
-                              child: Container(
-                                color: Colors.pink,
-                              )),
+                            flex: 3,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  left: BorderSide(
+                                      width: 0.5, color: Style.secondaryColor),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  Text('LIST DA ESPERA'),
+                                  SizedBox(height: 20),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    height: 0.5,
+                                    width: double.infinity,
+                                    color: Style.secondaryColor,
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                        itemCount: 5,
+                                        itemBuilder: (context, index) {
+                                          return ListTile(
+                                            onTap: () {},
+                                            title: Text('Carlos Fernandes',
+                                                style: TextStyle(fontSize: 13)),
+                                            subtitle: Text(
+                                              'Celta 2009',
+                                              style: TextStyle(fontSize: 11),
+                                            ),
+                                            trailing: Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 15,
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
