@@ -102,7 +102,9 @@ class Service {
         warrantyUnity: json["warrantyUnity"],
         id: json["_id"],
         client: Client.fromJson(json["client"]),
-        colaborator: Client.fromJson(json["colaborator"]),
+        colaborator: json["colaborator"] == null
+            ? null
+            : Client.fromJson(json["colaborator"]),
         car: Car.fromJson(json["car"]),
         shop: json["shop"],
         v: json["__v"],
@@ -123,7 +125,7 @@ class Service {
         "warrantyUnity": warrantyUnity,
         "_id": id,
         "client": client.toJson(),
-        "colaborator": colaborator.toJson(),
+        "colaborator": colaborator == null ? null : colaborator.toJson(),
         "car": car.toJson(),
         "shop": shop,
         "__v": v,
@@ -206,7 +208,7 @@ class Client {
         shop: json["shop"],
         primaryphone: json["primaryphone"],
         v: json["__v"],
-        cpfcnpj: json["cpfcnpj"],
+        cpfcnpj: json["cpfcnpj"] == null ? null : json["cpfcnpj"],
         clientId: json["id"],
         email: json["email"] == null ? null : json["email"],
         secondaryphone:
@@ -223,7 +225,7 @@ class Client {
         "shop": shop,
         "primaryphone": primaryphone,
         "__v": v,
-        "cpfcnpj": cpfcnpj,
+        "cpfcnpj": cpfcnpj == null ? null : cpfcnpj,
         "id": clientId,
         "email": email == null ? null : email,
         "secondaryphone": secondaryphone == null ? null : secondaryphone,

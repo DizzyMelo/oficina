@@ -23,7 +23,7 @@ class NewServiceView extends StatefulWidget {
 class _NewServiceViewState extends State<NewServiceView> {
   TextEditingController ctrSearch = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ServiceController _shopController;
+  ServiceController _shopController = ServiceController();
 
   User client;
   User colaborator;
@@ -68,11 +68,18 @@ class _NewServiceViewState extends State<NewServiceView> {
                           title: Text(vehicle.name),
                           subtitle: Text('Veículo'),
                         ),
-                        ListTile(
-                          leading: Icon(LineIcons.user),
-                          title: Text(colaborator.name),
-                          subtitle: Text('Colaborador'),
-                        ),
+                        colaborator == null
+                            ? ListTile(
+                                leading: Icon(LineIcons.user),
+                                title:
+                                    Text('Colaborador ainda não selecionado'),
+                                subtitle: Text('Colaborador'),
+                              )
+                            : ListTile(
+                                leading: Icon(LineIcons.user),
+                                title: Text(colaborator.name),
+                                subtitle: Text('Colaborador'),
+                              ),
                       ],
                     ),
                     Column(
@@ -112,17 +119,26 @@ class _NewServiceViewState extends State<NewServiceView> {
   }
 
   createService() async {
-    Map<String, dynamic> data = {
-      "client": client.id,
-      "colaborator": colaborator.id,
-      "car": vehicle.id,
-      "shop": SessionVariables.userDataModel.data.data.shop.id
-    };
+    Map<String, dynamic> data;
+    if (widget.args.length >= 3) {
+      data = {
+        "client": client.id,
+        "colaborator": colaborator.id,
+        "car": vehicle.id,
+        "shop": SessionVariables.userDataModel.data.data.shop.id
+      };
+    } else {
+      data = {
+        "client": client.id,
+        "car": vehicle.id,
+        "shop": SessionVariables.userDataModel.data.data.shop.id,
+        "status": "espera"
+      };
+    }
 
-    service.CreateServiceDataModel res =
-        await _shopController.create(data, context, _scaffoldKey);
+    bool res = await _shopController.create(data, context, _scaffoldKey);
 
-    if (res != null) {
+    if (res) {
       navigateToMain();
     }
   }
@@ -133,12 +149,20 @@ class _NewServiceViewState extends State<NewServiceView> {
         arguments: JwtDecoder.decode(prefs.getString('token'))['id']);
   }
 
+  setProperties() {
+    if (widget.args.length >= 3) {
+      client = widget.args[0];
+      vehicle = widget.args[1];
+      colaborator = widget.args[2];
+    } else {
+      client = widget.args[0];
+      vehicle = widget.args[1];
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _shopController = ServiceController();
-    client = widget.args[0];
-    vehicle = widget.args[1];
-    colaborator = widget.args[2];
+    this.setProperties();
   }
 }

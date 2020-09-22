@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/loading_component.dart';
@@ -8,10 +9,12 @@ import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/select_role_component.dart';
 import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/payment_controller.dart';
+import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/get_payments_data_model.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentView extends StatefulWidget {
   final DetailServiceDataModel service;
@@ -27,6 +30,7 @@ class _PaymentViewState extends State<PaymentView> {
       leftSymbol: "R\$ ", decimalSeparator: ',', thousandSeparator: '.');
 
   PaymentController _paymentController = PaymentController();
+  ServiceController _serviceController = ServiceController();
   GetPaymentsDataModel _payments;
   double containerHeight = 500;
   double containerWidth = 800;
@@ -155,42 +159,54 @@ class _PaymentViewState extends State<PaymentView> {
                           left: BorderSide(width: 0.5, color: Colors.grey[800]),
                         ),
                       ),
-                      child: _payments == null ||
-                              _payments.data.payments.length == 0
-                          ? Center(
-                              child: Text('Nenhum pagamento a ser exibido'),
-                            )
-                          : Scrollbar(
-                              child: ListView.builder(
-                                  itemCount: _payments.data.payments.length,
-                                  itemBuilder: (context, index) {
-                                    Payment payment =
-                                        _payments.data.payments[index];
-                                    return ListTile(
-                                      onLongPress: () {
-                                        selectedPayment = payment.id;
-                                        Utils.confirmDialog(
-                                            'Excluir Pagamento',
-                                            'Tem certeza que deseja excluir o pagamento',
-                                            delete,
-                                            'EXCLUIR',
-                                            context);
-                                      },
-                                      title: Text(
-                                        Utils.formatMoney(payment.value),
-                                        style: Style.itemValueText,
-                                      ),
-                                      subtitle: Text(
-                                        Utils.formatDate(payment.date),
-                                        style: Style.paymenyDateText,
-                                      ),
-                                      trailing: Text(
-                                        payment.method,
-                                        style: Style.itemNameText,
-                                      ),
-                                    );
-                                  }),
-                            ),
+                      child: Column(
+                        children: [
+                          _payments == null ||
+                                  _payments.data.payments.length == 0
+                              ? Center(
+                                  child: Text('Nenhum pagamento a ser exibido'),
+                                )
+                              : Expanded(
+                                  child: Scrollbar(
+                                    child: ListView.builder(
+                                        itemCount:
+                                            _payments.data.payments.length,
+                                        itemBuilder: (context, index) {
+                                          Payment payment =
+                                              _payments.data.payments[index];
+                                          return ListTile(
+                                            onLongPress: () {
+                                              selectedPayment = payment.id;
+                                              Utils.confirmDialog(
+                                                  'Excluir Pagamento',
+                                                  'Tem certeza que deseja excluir o pagamento',
+                                                  delete,
+                                                  'EXCLUIR',
+                                                  context);
+                                            },
+                                            title: Text(
+                                              Utils.formatMoney(payment.value),
+                                              style: Style.itemValueText,
+                                            ),
+                                            subtitle: Text(
+                                              Utils.formatDate(payment.date),
+                                              style: Style.paymenyDateText,
+                                            ),
+                                            trailing: Text(
+                                              payment.method,
+                                              style: Style.itemNameText,
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                ),
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: MainButtomComponent(
+                                title: 'FINALIZAR SERVIÇO', function: finish),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -234,6 +250,28 @@ class _PaymentViewState extends State<PaymentView> {
     });
 
     this.getPayments();
+  }
+
+  finish() async {
+    Map<String, dynamic> data = {
+      "status": "concluido",
+      "date_end": DateTime.now().toString()
+    };
+    bool res = await _serviceController.edit(
+        data, widget.service.data.data.id, '', _scaffoldKey);
+
+    if (res) {
+      navigateToMain();
+    } else {
+      Utils.showInSnackBar('Algo não deu certo ao finalizar o serviço',
+          Colors.red, _scaffoldKey);
+    }
+  }
+
+  navigateToMain() async {
+    final prefs = await SharedPreferences.getInstance();
+    Navigator.pushNamed(context, '/main',
+        arguments: JwtDecoder.decode(prefs.getString('token'))['id']);
   }
 
   delete() async {

@@ -12,12 +12,12 @@ class ServiceController {
     requests = ServiceRequests();
   }
 
-  Future<CreateServiceDataModel> create(data, context, scaffoldKey) async {
-    CreateServiceDataModel res = await requests.create(data);
+  Future<bool> create(data, context, scaffoldKey) async {
+    bool res = await requests.create(data);
 
     if (res != null) return res;
     Utils.showInSnackBar('Erro ao iniciar o serviço', Colors.red, scaffoldKey);
-    return null;
+    return false;
   }
 
   Future<ReportServiceDataModel> report(data, scaffoldKey) async {

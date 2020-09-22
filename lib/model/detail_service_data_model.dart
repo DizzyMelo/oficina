@@ -100,7 +100,9 @@ class DataData {
         warrantyUnity: json["warrantyUnity"],
         id: json["_id"],
         client: Client.fromJson(json["client"]),
-        colaborator: Client.fromJson(json["colaborator"]),
+        colaborator: json["colaborator"] == null
+            ? null
+            : Client.fromJson(json["colaborator"]),
         car: Car.fromJson(json["car"]),
         shop: json["shop"],
         v: json["__v"],
@@ -123,7 +125,7 @@ class DataData {
         "warrantyUnity": warrantyUnity,
         "_id": id,
         "client": client.toJson(),
-        "colaborator": colaborator.toJson(),
+        "colaborator": colaborator == null ? null : colaborator.toJson(),
         "car": car.toJson(),
         "shop": shop,
         "__v": v,

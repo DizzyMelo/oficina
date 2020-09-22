@@ -82,7 +82,9 @@ class ServiceRowComponent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        serviceModel.colaborator.name,
+                        serviceModel.colaborator == null
+                            ? 'Não informado'
+                            : serviceModel.colaborator.name,
                         style: Style.workerNameText,
                       ),
                     ]),

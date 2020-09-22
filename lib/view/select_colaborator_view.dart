@@ -97,6 +97,8 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                               Navigator.pushNamed(
                                                   context, '/new_service',
                                                   arguments: widget.args);
+
+                                              print(widget.args.length);
                                             };
                                           });
                                         },
@@ -127,10 +129,26 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                 setState(() {
                                   colaborator = null;
                                   function = null;
+                                  while (widget.args.length > 2) {
+                                    widget.args
+                                        .removeAt(widget.args.length - 1);
+                                  }
                                 });
                               }),
                     ),
-                    MainButtomComponent(title: 'CONTINUAR', function: function)
+                    MainButtomComponent(title: 'CONTINUAR', function: function),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    MainButtomComponent(
+                        title: 'COLOCAR EM ESPERA',
+                        function: () {
+                          while (widget.args.length > 2) {
+                            widget.args.removeAt(widget.args.length - 1);
+                          }
+                          Navigator.pushNamed(context, '/new_service',
+                              arguments: widget.args);
+                        }),
                   ],
                 ),
               ),

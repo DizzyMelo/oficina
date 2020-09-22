@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:oficina/model/create_service_data_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/report_service_data_model.dart';
 
 class ServiceRequests {
-  Future<CreateServiceDataModel> create(data) async {
+  Future<bool> create(data) async {
     String url = '${DotEnv().env['BASE_URL']}/services/';
 
     try {
@@ -19,12 +18,12 @@ class ServiceRequests {
           body: json.encode(data));
 
       if (res.statusCode == 201) {
-        return CreateServiceDataModel.fromJson(json.decode(res.body));
+        return true;
       } else {
-        return null;
+        return false;
       }
     } catch (e) {
-      return null;
+      return false;
     }
   }
 

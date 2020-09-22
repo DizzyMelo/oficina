@@ -227,7 +227,11 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                     ServiceInfoComponent(
                                         title: 'Colaborador',
                                         info: _detailServiceDataModel
-                                            .data.data.client.name),
+                                                    .data.data.colaborator ==
+                                                null
+                                            ? 'Não informado'
+                                            : _detailServiceDataModel
+                                                .data.data.colaborator.name),
                                   ],
                                 ),
                                 SizedBox(
