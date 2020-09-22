@@ -56,105 +56,51 @@ class _ManageServiceViewState extends State<ManageServiceView> {
     double secondaryContainerWidth = mainContainerWidth / 3;
     return Scaffold(
       key: _scaffoldKey,
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: _detailServiceDataModel == null
-            ? Center(
-                child: LoadingComponent(),
-              )
-            : Column(
-                children: [
-                  AppBarComponent(
-                    icon: LineIcons.automobile,
-                    title: 'Serviço',
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: _detailServiceDataModel == null
+              ? Container(
+                  height: screen.height,
+                  width: double.infinity,
+                  child: Center(
+                    child: LoadingComponent(),
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Material(
-                    elevation: 10,
-                    borderRadius: BorderRadius.circular(5),
-                    child: Container(
-                      height: mainContainerHeight,
-                      width: mainContainerWidth,
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            height: mainContainerHeight,
-                            width: secondaryContainerWidth,
-                            child: Column(
-                              children: [
-                                SearchTextFieldComponent(
-                                    controller: ctrSearch,
-                                    hint: 'Buscar produtos',
-                                    function: searchProducts),
-                                Expanded(
-                                  child: _searchProductDataModel == null ||
-                                          _searchProductDataModel
-                                                  .data.data.length ==
-                                              0
-                                      ? Center(
-                                          child: Text(
-                                              'Nenhum produto a ser exibido'),
-                                        )
-                                      : Scrollbar(
-                                          child: ListView.builder(
-                                              itemCount: _searchProductDataModel
-                                                  .data.data.length,
-                                              itemBuilder: (context, index) {
-                                                Datum product =
-                                                    _searchProductDataModel
-                                                        .data.data[index];
-                                                return ListTile(
-                                                  onTap: () {
-                                                    productId = product.id;
-                                                    requestAmount();
-                                                  },
-                                                  title: Text(
-                                                    product.name,
-                                                    style: Style.itemNameText,
-                                                  ),
-                                                  trailing: Text(
-                                                      Utils.formatMoney(product
-                                                              .priceSale
-                                                              .toDouble()) ??
-                                                          'no-data',
-                                                      style:
-                                                          Style.itemValueText),
-                                                  subtitle: Text(
-                                                      '${product.currentAmount} itens disponiveis' ??
-                                                          'no-data',
-                                                      style:
-                                                          Style.itemValueText),
-                                                );
-                                              }),
-                                        ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
+                )
+              : Column(
+                  children: [
+                    AppBarComponent(
+                      icon: LineIcons.automobile,
+                      title: 'Serviço',
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Material(
+                      elevation: 10,
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        height: mainContainerHeight,
+                        width: mainContainerWidth,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                          children: [
+                            Container(
                               padding: EdgeInsets.all(10),
                               height: mainContainerHeight,
                               width: secondaryContainerWidth,
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  left: BorderSide(
-                                      width: 0.5, color: Colors.grey[800]),
-                                  right: BorderSide(
-                                      width: 0.5, color: Colors.grey[800]),
-                                ),
-                              ),
                               child: Column(
                                 children: [
-                                  Text('Itens Adicionados'),
+                                  SearchTextFieldComponent(
+                                      controller: ctrSearch,
+                                      hint: 'Buscar produtos',
+                                      function: searchProducts),
                                   Expanded(
-                                    child: _detailServiceDataModel.data.data
-                                                .addedProducts.length ==
-                                            0
+                                    child: _searchProductDataModel == null ||
+                                            _searchProductDataModel
+                                                    .data.data.length ==
+                                                0
                                         ? Center(
                                             child: Text(
                                                 'Nenhum produto a ser exibido'),
@@ -162,41 +108,30 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                         : Scrollbar(
                                             child: ListView.builder(
                                                 itemCount:
-                                                    _detailServiceDataModel
-                                                        .data
-                                                        .data
-                                                        .addedProducts
-                                                        .length,
+                                                    _searchProductDataModel
+                                                        .data.data.length,
                                                 itemBuilder: (context, index) {
-                                                  AddedProduct product =
-                                                      _detailServiceDataModel
-                                                          .data
-                                                          .data
-                                                          .addedProducts[index];
+                                                  Datum product =
+                                                      _searchProductDataModel
+                                                          .data.data[index];
                                                   return ListTile(
-                                                    onLongPress: () {
-                                                      addedProductId =
-                                                          product.id;
-                                                      Utils.confirmDialog(
-                                                          'Remover Produto',
-                                                          'Tem certeza que deseja remover este produto',
-                                                          removeProduct,
-                                                          'REMOVER',
-                                                          context);
+                                                    onTap: () {
+                                                      productId = product.id;
+                                                      requestAmount();
                                                     },
                                                     title: Text(
-                                                      product.product.name,
+                                                      product.name,
                                                       style: Style.itemNameText,
                                                     ),
                                                     trailing: Text(
                                                         Utils.formatMoney(product
-                                                                .totalPrice
+                                                                .priceSale
                                                                 .toDouble()) ??
                                                             'no-data',
                                                         style: Style
                                                             .itemValueText),
                                                     subtitle: Text(
-                                                        '${product.amount} itens' ??
+                                                        '${product.currentAmount} itens disponiveis' ??
                                                             'no-data',
                                                         style: Style
                                                             .itemValueText),
@@ -205,120 +140,196 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                           ),
                                   ),
                                 ],
-                              )),
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            height: mainContainerHeight,
-                            width: secondaryContainerWidth,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text('Informações Gerais'),
-                                Column(
-                                  children: [
-                                    ServiceInfoComponent(
-                                        title: 'Cliente',
-                                        info: _detailServiceDataModel
-                                            .data.data.client.name),
-                                    ServiceInfoComponent(
-                                        title: 'Carro',
-                                        info: _detailServiceDataModel
-                                            .data.data.car.name),
-                                    ServiceInfoComponent(
-                                        title: 'Colaborador',
-                                        info: _detailServiceDataModel
-                                                    .data.data.colaborator ==
-                                                null
-                                            ? 'Não informado'
-                                            : _detailServiceDataModel
-                                                .data.data.colaborator.name),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                ActionTextFieldComponent(
-                                  controller: ctrHow,
-                                  icon: LineIcons.hand_stop_o,
-                                  hint: 'Mão de obra',
-                                  function: editServiceHow,
-                                ),
-                                ActionTextFieldComponent(
-                                  controller: ctrDiscount,
-                                  icon: LineIcons.money,
-                                  hint: 'Desconto',
-                                  function: editServiceDiscount,
-                                ),
-                                ActionTextFieldComponent(
-                                  controller: ctrWarranty,
-                                  icon: LineIcons.money,
-                                  hint:
-                                      'Garantia em ${_detailServiceDataModel.data.data.warrantyUnity}',
-                                  function: () {
-                                    Map<String, dynamic> data = {
-                                      'warranty': ctrWarranty.text
-                                    };
-                                    updateService(data);
-                                  },
-                                ),
-                                ActionTextFieldComponent(
-                                  controller: ctrObservation,
-                                  icon: LineIcons.money,
-                                  hint: 'Observações',
-                                  maxlines: 5,
-                                  hasIcon: false,
-                                  function: () {
-                                    updateObservation();
-                                  },
-                                ),
-                                Expanded(child: Container()),
-                                Column(
-                                  children: [
-                                    ServiceInfoComponent(
-                                        title: 'Status',
-                                        info: _detailServiceDataModel
-                                            .data.data.status),
-                                    ServiceInfoComponent(
-                                        title: 'Garantia',
-                                        info:
-                                            '${_detailServiceDataModel.data.data.warranty.toString()} ${_detailServiceDataModel.data.data.warrantyUnity}'),
-                                    ServiceInfoComponent(
-                                        title: 'Mão de Obra',
-                                        info: Utils.formatMoney(
-                                            _detailServiceDataModel
-                                                .data.data.how)),
-                                    ServiceInfoComponent(
-                                        title: 'Desconto',
-                                        info: Utils.formatMoney(
-                                            _detailServiceDataModel
-                                                .data.data.discount)),
-                                    ServiceInfoComponent(
-                                        title: 'Total',
-                                        info: Utils.formatMoney(
-                                            _detailServiceDataModel
-                                                .data.data.value)),
-                                  ],
-                                ),
-                                MainButtomComponent(
-                                    title: 'CONCLUIR',
-                                    function: () {
-                                      Navigator.pushNamed(context, '/payment',
-                                          arguments: _detailServiceDataModel);
-                                    }),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                CancelButtomComponent(
-                                    title: 'CANCELAR', function: cancelService)
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                                padding: EdgeInsets.all(10),
+                                height: mainContainerHeight,
+                                width: secondaryContainerWidth,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    left: BorderSide(
+                                        width: 0.5, color: Colors.grey[800]),
+                                    right: BorderSide(
+                                        width: 0.5, color: Colors.grey[800]),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text('Itens Adicionados'),
+                                    Expanded(
+                                      child: _detailServiceDataModel.data.data
+                                                  .addedProducts.length ==
+                                              0
+                                          ? Center(
+                                              child: Text(
+                                                  'Nenhum produto a ser exibido'),
+                                            )
+                                          : Scrollbar(
+                                              child: ListView.builder(
+                                                  itemCount:
+                                                      _detailServiceDataModel
+                                                          .data
+                                                          .data
+                                                          .addedProducts
+                                                          .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    AddedProduct product =
+                                                        _detailServiceDataModel
+                                                                .data
+                                                                .data
+                                                                .addedProducts[
+                                                            index];
+                                                    return ListTile(
+                                                      onLongPress: () {
+                                                        addedProductId =
+                                                            product.id;
+                                                        Utils.confirmDialog(
+                                                            'Remover Produto',
+                                                            'Tem certeza que deseja remover este produto',
+                                                            removeProduct,
+                                                            'REMOVER',
+                                                            context);
+                                                      },
+                                                      title: Text(
+                                                        product.product.name,
+                                                        style:
+                                                            Style.itemNameText,
+                                                      ),
+                                                      trailing: Text(
+                                                          Utils.formatMoney(product
+                                                                  .totalPrice
+                                                                  .toDouble()) ??
+                                                              'no-data',
+                                                          style: Style
+                                                              .itemValueText),
+                                                      subtitle: Text(
+                                                          '${product.amount} itens' ??
+                                                              'no-data',
+                                                          style: Style
+                                                              .itemValueText),
+                                                    );
+                                                  }),
+                                            ),
+                                    ),
+                                  ],
+                                )),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              height: mainContainerHeight,
+                              width: secondaryContainerWidth,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('Informações Gerais'),
+                                  Column(
+                                    children: [
+                                      ServiceInfoComponent(
+                                          title: 'Cliente',
+                                          info: _detailServiceDataModel
+                                              .data.data.client.name),
+                                      ServiceInfoComponent(
+                                          title: 'Carro',
+                                          info: _detailServiceDataModel
+                                              .data.data.car.name),
+                                      ServiceInfoComponent(
+                                          title: 'Colaborador',
+                                          info: _detailServiceDataModel
+                                                      .data.data.colaborator ==
+                                                  null
+                                              ? 'Não informado'
+                                              : _detailServiceDataModel
+                                                  .data.data.colaborator.name),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  ActionTextFieldComponent(
+                                    controller: ctrHow,
+                                    icon: LineIcons.hand_stop_o,
+                                    hint: 'Mão de obra',
+                                    function: editServiceHow,
+                                  ),
+                                  ActionTextFieldComponent(
+                                    controller: ctrDiscount,
+                                    icon: LineIcons.money,
+                                    hint: 'Desconto',
+                                    function: editServiceDiscount,
+                                  ),
+                                  ActionTextFieldComponent(
+                                    controller: ctrWarranty,
+                                    icon: LineIcons.money,
+                                    hint:
+                                        'Garantia em ${_detailServiceDataModel.data.data.warrantyUnity}',
+                                    function: () {
+                                      Map<String, dynamic> data = {
+                                        'warranty': ctrWarranty.text
+                                      };
+                                      updateService(data);
+                                    },
+                                  ),
+                                  ActionTextFieldComponent(
+                                    controller: ctrObservation,
+                                    icon: LineIcons.money,
+                                    hint: 'Observações',
+                                    maxlines: 5,
+                                    hasIcon: false,
+                                    function: () {
+                                      updateObservation();
+                                    },
+                                  ),
+                                  Expanded(child: Container()),
+                                  Column(
+                                    children: [
+                                      ServiceInfoComponent(
+                                          title: 'Status',
+                                          info: _detailServiceDataModel
+                                              .data.data.status),
+                                      ServiceInfoComponent(
+                                          title: 'Garantia',
+                                          info:
+                                              '${_detailServiceDataModel.data.data.warranty.toString()} ${_detailServiceDataModel.data.data.warrantyUnity}'),
+                                      ServiceInfoComponent(
+                                          title: 'Mão de Obra',
+                                          info: Utils.formatMoney(
+                                              _detailServiceDataModel
+                                                  .data.data.how)),
+                                      ServiceInfoComponent(
+                                          title: 'Desconto',
+                                          info: Utils.formatMoney(
+                                              _detailServiceDataModel
+                                                  .data.data.discount)),
+                                      ServiceInfoComponent(
+                                          title: 'Total',
+                                          info: Utils.formatMoney(
+                                              _detailServiceDataModel
+                                                  .data.data.value)),
+                                    ],
+                                  ),
+                                  MainButtomComponent(
+                                      title: 'CONCLUIR',
+                                      function: () {
+                                        Navigator.pushNamed(context, '/payment',
+                                            arguments: _detailServiceDataModel);
+                                      }),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  CancelButtomComponent(
+                                      title: 'CANCELAR',
+                                      function: cancelService)
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+        ),
       ),
     );
   }

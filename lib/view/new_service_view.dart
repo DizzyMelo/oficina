@@ -144,9 +144,8 @@ class _NewServiceViewState extends State<NewServiceView> {
   }
 
   navigateToMain() async {
-    final prefs = await SharedPreferences.getInstance();
     Navigator.pushNamed(context, '/main',
-        arguments: JwtDecoder.decode(prefs.getString('token'))['id']);
+        arguments: SessionVariables.userDataModel.data.data.id);
   }
 
   setProperties() {

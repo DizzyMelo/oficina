@@ -8,6 +8,7 @@ import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/phone_textfield_component.dart';
 import 'package:oficina/controller/shop_controller.dart';
 import 'package:oficina/controller/user_controller.dart';
+import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
@@ -48,6 +49,8 @@ class _ProfileViewState extends State<ProfileView> {
 
   IconData iconPhone = LineIcons.phone;
   IconData iconPhone2 = LineIcons.phone;
+
+  GetUserDataModel _userDataModel;
 
   @override
   Widget build(BuildContext context) {
@@ -113,11 +116,11 @@ class _ProfileViewState extends State<ProfileView> {
                             height: 20,
                           ),
                           MainTextFieldComponent(
-                              controller: ctrPrimaryPhone,
+                              controller: ctrPass,
                               icon: LineIcons.lock,
                               hint: 'Senha'),
                           MainTextFieldComponent(
-                              controller: ctrPrimaryPhone,
+                              controller: ctrPassConfirm,
                               icon: LineIcons.lock,
                               hint: 'Confirmar Senha'),
                           Expanded(child: Container()),
@@ -273,29 +276,47 @@ class _ProfileViewState extends State<ProfileView> {
     });
     await _userController.edit(
         data, SessionVariables.userDataModel.data.data.id, false, _scaffoldKey);
+
+    await this.getUserInformation();
     setState(() {
       loadingEditUser = !loadingEditUser;
     });
+  }
+
+  getUserInformation() async {
+    GetUserDataModel res = await _userController.getUserInformation(
+        SessionVariables.userDataModel.data.data.id, context, _scaffoldKey);
+
+    if (res != null) {
+      setState(() {
+        _userDataModel = res;
+      });
+
+      ctrName.text = _userDataModel.data.data.name;
+      ctrCpf.text = _userDataModel.data.data.cpfcnpj;
+      ctrEmail.text = _userDataModel.data.data.email;
+      ctrPrimaryPhone.text = _userDataModel.data.data.primaryphone;
+      ctrSecondary.text = _userDataModel.data.data.secondaryphone;
+
+      ctrShopName.text = _userDataModel.data.data.shop.name;
+      ctrShopAddress.text = _userDataModel.data.data.shop.address;
+      ctrShopEmail.text = _userDataModel.data.data.shop.email;
+
+      ctrShopPrimaryPhone.mask = setMaskPhone(
+          Utils.clearPhone(_userDataModel.data.data.shop.primaryphone));
+
+      ctrShopSecondaryPhone.mask = setMaskPhone(
+          Utils.clearPhone(_userDataModel.data.data.shop.primaryphone));
+
+      ctrShopPrimaryPhone.text = _userDataModel.data.data.shop.primaryphone;
+      ctrShopSecondaryPhone.text = _userDataModel.data.data.shop.secondaryphone;
+    }
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    ctrShopName.text = SessionVariables.userDataModel.data.data.shop.name;
-    ctrShopAddress.text = SessionVariables.userDataModel.data.data.shop.address;
-    ctrShopEmail.text = SessionVariables.userDataModel.data.data.shop.email;
-
-    ctrShopPrimaryPhone.mask = setMaskPhone(Utils.clearPhone(
-        SessionVariables.userDataModel.data.data.shop.primaryphone));
-
-    ctrShopSecondaryPhone.mask = setMaskPhone(Utils.clearPhone(
-        SessionVariables.userDataModel.data.data.shop.primaryphone));
-
-    ctrShopPrimaryPhone.text =
-        SessionVariables.userDataModel.data.data.shop.primaryphone;
-    ctrShopSecondaryPhone.text =
-        SessionVariables.userDataModel.data.data.shop.secondaryphone;
+    this.getUserInformation();
   }
 }

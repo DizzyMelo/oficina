@@ -17,6 +17,7 @@ import 'package:oficina/view/report_view.dart';
 import 'package:oficina/view/select_car_view.dart';
 import 'package:oficina/view/select_client_view.dart';
 import 'package:oficina/view/select_colaborator_view.dart';
+import 'package:oficina/view/select_colaborator_waiting_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/settings_view.dart';
 import 'package:oficina/view/stock_view.dart';
@@ -128,6 +129,14 @@ class MyApp extends StatelessWidget {
             page = MaterialPageRoute(
               builder: (context) => SelectColaboratorView(
                 args: settings.arguments,
+              ),
+            );
+            break;
+
+          case "/select_colaborator_waiting":
+            page = MaterialPageRoute(
+              builder: (context) => SelectColaboratorWaitingView(
+                serviceId: settings.arguments,
               ),
             );
             break;

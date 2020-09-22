@@ -163,8 +163,13 @@ class _PaymentViewState extends State<PaymentView> {
                         children: [
                           _payments == null ||
                                   _payments.data.payments.length == 0
-                              ? Center(
-                                  child: Text('Nenhum pagamento a ser exibido'),
+                              ? Expanded(
+                                  child: Container(
+                                    child: Center(
+                                      child: Text(
+                                          'Nenhum pagamento a ser exibido'),
+                                    ),
+                                  ),
                                 )
                               : Expanded(
                                   child: Scrollbar(
@@ -200,6 +205,7 @@ class _PaymentViewState extends State<PaymentView> {
                                         }),
                                   ),
                                 ),
+                          Expanded(child: Container()),
                           Padding(
                             padding: EdgeInsets.all(10),
                             child: MainButtomComponent(
@@ -237,8 +243,7 @@ class _PaymentViewState extends State<PaymentView> {
       "method": paymentMethod,
       "service": widget.service.data.data.id,
       "shop": widget.service.data.data.shop,
-      "client": widget.service.data.data.client.id,
-      "paid": totalPaid + value >= widget.service.data.data.value
+      "client": widget.service.data.data.client.id
     };
     setState(() {
       loadingAddPayment = !loadingAddPayment;

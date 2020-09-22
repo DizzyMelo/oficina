@@ -8,7 +8,6 @@ import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/service_row_component.dart';
 import 'package:oficina/components/side_menu_component.dart';
 import 'package:oficina/controller/service_controller.dart';
-import 'package:oficina/controller/shop_controller.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/model/report_service_data_model.dart';
@@ -42,6 +41,7 @@ class _MainViewState extends State<MainView> {
 
   GetUserDataModel _userDataModel;
   List<Service> services = List();
+  List<Service> waitingservices = List();
 
   @override
   Widget build(BuildContext context) {
@@ -186,14 +186,20 @@ class _MainViewState extends State<MainView> {
                                   ),
                                   Expanded(
                                     child: ListView.builder(
-                                        itemCount: 5,
+                                        itemCount: waitingservices.length,
                                         itemBuilder: (context, index) {
+                                          Service service =
+                                              waitingservices[index];
                                           return ListTile(
-                                            onTap: () {},
-                                            title: Text('Carlos Fernandes',
+                                            onTap: () {
+                                              Navigator.pushNamed(context,
+                                                  '/select_colaborator_waiting',
+                                                  arguments: service.id);
+                                            },
+                                            title: Text(service.client.name,
                                                 style: TextStyle(fontSize: 13)),
                                             subtitle: Text(
-                                              'Celta 2009',
+                                              service.car.name,
                                               style: TextStyle(fontSize: 11),
                                             ),
                                             trailing: Icon(
@@ -243,22 +249,27 @@ class _MainViewState extends State<MainView> {
     if (res != null) {
       setState(() {
         report = res;
-        services = res.data.services;
+        services = res.data.services.reversed.toList();
+
+        res.data.services.forEach((element) {
+          if (element.status == 'espera') waitingservices.add(element);
+        });
       });
     }
   }
 
   search(String str) {
-    services = report.data.services;
+    services = report.data.services.reversed.toList();
     List<Service> tempServices = List();
     tempServices = services
         .where((s) =>
             s.client.name.toLowerCase().contains(str.toLowerCase()) ||
-            s.colaborator.name.toLowerCase().contains(str.toLowerCase()) ||
+            //s.colaborator.name.toLowerCase().contains(str.toLowerCase()) ||
             s.value.toString().toLowerCase().contains(str.toLowerCase()) ||
             s.status.toString().toLowerCase().contains(str.toLowerCase()) ||
             s.car.name.toLowerCase().contains(str.toLowerCase()))
         .toList();
+
     setState(() {
       services = tempServices;
     });
