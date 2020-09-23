@@ -8,6 +8,7 @@ import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/controller/vehicle_controller.dart';
 import 'package:oficina/model/create_vehicle_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -40,6 +41,14 @@ class _NewCarViewState extends State<NewCarView> {
             AppBarComponent(
               icon: LineIcons.car,
               title: 'Carros',
+              function: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/main',
+                  (route) => false,
+                  arguments: SessionVariables.userDataModel.data.data.id,
+                );
+              },
             ),
             Material(
               elevation: 10,

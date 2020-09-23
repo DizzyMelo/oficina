@@ -204,9 +204,9 @@ class _ClientViewState extends State<ClientView> {
       "passwordConfirm": password,
       "shop": SessionVariables.userDataModel.data.data.shop.id,
       "role": "cliente",
-      "cpfcnpj": ctrCpf.text,
-      "primaryphone": ctrPhone.text,
-      "secondaryphone": ctrPhone2.text,
+      "cpfcnpj": Utils.removeSpecialCharacters(ctrCpf.text),
+      "primaryphone": Utils.removeSpecialCharacters(ctrPhone.text),
+      "secondaryphone": Utils.removeSpecialCharacters(ctrPhone2.text),
     });
 
     this.changeLoadingState();

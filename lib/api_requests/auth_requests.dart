@@ -11,6 +11,7 @@ class AuthRequests {
       "cpfcnpj": cpfcnpj,
       "password": password,
     };
+
     try {
       var res = await http.post(url,
           headers: {

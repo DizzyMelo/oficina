@@ -14,6 +14,7 @@ import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/model/create_product_service_data_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/search_product_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -72,6 +73,15 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                     AppBarComponent(
                       icon: LineIcons.automobile,
                       title: 'Serviço',
+                      function: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/main',
+                          (route) => false,
+                          arguments:
+                              SessionVariables.userDataModel.data.data.id,
+                        );
+                      },
                     ),
                     SizedBox(
                       height: 20,

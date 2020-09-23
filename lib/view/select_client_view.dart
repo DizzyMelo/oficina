@@ -6,7 +6,6 @@ import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/search_textfield_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/search_user_data_model.dart';
-import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 

@@ -238,9 +238,9 @@ class _ColaboratorViewState extends State<ColaboratorView> {
       "passwordConfirm": password,
       "shop": SessionVariables.userDataModel.data.data.shop.id,
       "role": role,
-      "cpfcnpj": ctrCpf.text,
-      "primaryphone": ctrPhone.text,
-      "secondaryphone": ctrPhone2.text,
+      "cpfcnpj": Utils.removeSpecialCharacters(ctrCpf.text),
+      "primaryphone": Utils.removeSpecialCharacters(ctrPhone.text),
+      "secondaryphone": Utils.removeSpecialCharacters(ctrPhone2.text),
     });
 
     print(data);

@@ -11,8 +11,13 @@ class ServiceRowComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/manage_service',
-            arguments: serviceModel.id);
+        if (serviceModel.status == 'espera') {
+          Navigator.pushNamed(context, '/select_colaborator_waiting',
+              arguments: serviceModel.id);
+        } else {
+          Navigator.pushNamed(context, '/manage_service',
+              arguments: serviceModel.id);
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),

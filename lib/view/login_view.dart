@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:oficina/api_requests/auth_requests.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/logo_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
@@ -17,8 +16,9 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   //TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
+  //97857865785
   TextEditingController ctrCpf =
-      MaskedTextController(mask: '000.000.000-00', text: '099.281.414-60');
+      MaskedTextController(mask: '000.000.000-00', text: '978.578.657-85');
   TextEditingController ctrPass = TextEditingController(text: '12345678');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool obscure = true;
@@ -113,7 +113,8 @@ class _LoginViewState extends State<LoginView> {
       setState(() {
         loading = true;
       });
-      await controller.login(ctrCpf.text, ctrPass.text, context, _scaffoldKey);
+      await controller.login(Utils.removeSpecialCharacters(ctrCpf.text),
+          ctrPass.text, context, _scaffoldKey);
       setState(() {
         loading = false;
       });
