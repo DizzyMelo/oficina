@@ -7,12 +7,14 @@ class LoadingComponent extends StatelessWidget {
   LoadingComponent({this.delete});
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 30,
-      width: 30,
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation(
-            delete != null && delete ? Colors.red : Style.primary),
+    return Center(
+      child: SizedBox(
+        height: 30,
+        width: 30,
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(
+              delete != null && delete ? Colors.red : Style.primary),
+        ),
       ),
     );
   }

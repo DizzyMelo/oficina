@@ -205,6 +205,7 @@ class _ReportViewState extends State<ReportView> {
   getReport() async {
     Map<String, dynamic> data = {
       "shop": SessionVariables.userDataModel.data.data.shop.id,
+      "status": "concluido",
       "date": {
         "\$gte": Utils.formatDateReverse(ctrInitDate.text),
         "\$lte": "${Utils.formatDateReverse(ctrFinalDate.text)} 24:00:00"

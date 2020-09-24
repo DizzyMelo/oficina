@@ -14,6 +14,9 @@ class ServiceRowComponent extends StatelessWidget {
         if (serviceModel.status == 'espera') {
           Navigator.pushNamed(context, '/select_colaborator_waiting',
               arguments: serviceModel.id);
+        } else if (serviceModel.status == 'concluido') {
+          Navigator.pushNamed(context, '/manage_finished_service',
+              arguments: serviceModel.id);
         } else {
           Navigator.pushNamed(context, '/manage_service',
               arguments: serviceModel.id);
@@ -49,7 +52,9 @@ class ServiceRowComponent extends StatelessWidget {
                             style: Style.mainClientNameText,
                           ),
                           Text(
-                            serviceModel.car.name,
+                            serviceModel.car == null
+                                ? 'Não informado'
+                                : serviceModel.car.name,
                             style: Style.carNameText,
                           ),
                         ]),
@@ -107,10 +112,10 @@ class ServiceRowComponent extends StatelessWidget {
                         Utils.formatMoney(serviceModel.value.toDouble()),
                         style: Style.totalValueText,
                       ),
-                      Text(
-                        Utils.formatMoney(serviceModel.how.toDouble()),
-                        style: Style.mdoText,
-                      ),
+                      // Text(
+                      //   Utils.formatMoney(serviceModel.how.toDouble()),
+                      //   style: Style.mdoText,
+                      // ),
                     ]),
               ),
             ),

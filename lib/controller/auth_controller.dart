@@ -12,20 +12,23 @@ class AuthController {
     requests = AuthRequests();
   }
 
-  Future login(cpfcnpj, password, context, scaffoldKey) async {
-    LoginDataModel l = await requests.login(cpfcnpj, password);
+  Future<bool> login(cpfcnpj, password, context, scaffoldKey) async {
+    try {
+      LoginDataModel l = await requests.login(cpfcnpj, password);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', l.token);
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(l.token);
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', l.token);
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(l.token);
+      String userId = decodedToken['id'];
 
-    String userId = decodedToken['id'];
-
-    if (l != null) {
-      Navigator.pushNamed(context, '/main', arguments: userId);
-    } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar realizar o login', Colors.red, scaffoldKey);
+      if (l != null) {
+        Navigator.pushNamed(context, '/main', arguments: userId);
+      } else {
+        Utils.showInSnackBar(
+            'Usuário não encontrado!', Colors.red, scaffoldKey);
+      }
+    } catch (e) {
+      Utils.showInSnackBar('Usuário não encontrado!', Colors.red, scaffoldKey);
     }
   }
 }

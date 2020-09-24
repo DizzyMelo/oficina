@@ -3,8 +3,11 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/main_textfield_component.dart';
+import 'package:oficina/components/medium_buttom_component.dart';
+import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/components/small_buttom_component.dart';
 import 'package:oficina/model/client_model.dart';
+import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/shared/style.dart';
 
@@ -27,6 +30,13 @@ class Utils {
   static String formatFirstName(String name) {
     var str = name.split(" ");
     return str[0];
+  }
+
+  static String calculateProfit(double priceSale, double priceBought) {
+    if (priceSale == 0 || priceBought == 0) {
+      return '${formatMoney(priceSale)} - 100%';
+    }
+    return '${formatMoney(priceSale - priceBought)} - ${(((priceSale - priceBought) / priceBought) * 100).toStringAsFixed(0)}%';
   }
 
   static String formatMoney(double value) {
@@ -197,6 +207,64 @@ class Utils {
           ),
           actions: <Widget>[
             SmallButtomComponent(title: buttonTitle, function: function)
+          ],
+        );
+      },
+    );
+  }
+
+  static void confirmFinishService(String title, DetailServiceDataModel service,
+      Function function, context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title, style: Style.dialogTitle),
+          content: Container(
+              height: 320,
+              width: 400,
+              child: Column(
+                children: [
+                  ServiceInfoComponent(
+                      title: 'Cliente', info: service.data.data.client.name),
+                  ServiceInfoComponent(
+                      title: 'Veículo', info: service.data.data.car.name),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ServiceInfoComponent(
+                      title: 'Colaborador',
+                      info: service.data.data.colaborator.name),
+                  ServiceInfoComponent(
+                      title: 'Status', info: service.data.data.status),
+                  ServiceInfoComponent(
+                      title: 'Garantia',
+                      info:
+                          '${service.data.data.warranty} ${service.data.data.warrantyUnity}'),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ServiceInfoComponent(
+                      title: 'Valor',
+                      info: Utils.formatMoney(service.data.data.value)),
+                  ServiceInfoComponent(
+                      title: 'Mão de Obra',
+                      info: Utils.formatMoney(service.data.data.how)),
+                  ServiceInfoComponent(
+                      title: 'Desconto',
+                      info: Utils.formatMoney(service.data.data.discount)),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'O status do serviço será alterado para conlcuído',
+                    style: Style.smallText,
+                  )
+                ],
+              )),
+          actions: <Widget>[
+            MediumButtomComponent(title: 'CONCLUIR', function: function)
           ],
         );
       },

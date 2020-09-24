@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/controller/service_controller.dart';
-import 'package:oficina/model/create_service_data_model.dart' as service;
 import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NewServiceView extends StatefulWidget {
+  NewService newService;
   final List<dynamic> args;
   NewServiceView({@required this.args});
   @override

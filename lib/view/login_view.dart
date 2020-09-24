@@ -18,7 +18,7 @@ class _LoginViewState extends State<LoginView> {
   //TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
   //97857865785
   TextEditingController ctrCpf =
-      MaskedTextController(mask: '000.000.000-00', text: '978.578.657-85');
+      MaskedTextController(mask: '000.000.000-00', text: '09928141460');
   TextEditingController ctrPass = TextEditingController(text: '12345678');
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool obscure = true;
@@ -46,35 +46,41 @@ class _LoginViewState extends State<LoginView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LogoComponent(),
-                MainTextFieldComponent(
-                    controller: ctrCpf, icon: LineIcons.user, hint: 'CPF/CNPJ'),
-                SizedBox(height: 10),
-                TextField(
-                  controller: ctrPass,
-                  obscureText: obscure,
-                  style: Style.textField,
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        LineIcons.lock,
-                        color: Colors.grey[400],
-                      ),
-                      labelText: "Senha",
-                      labelStyle: Style.textField,
-                      suffixIcon: IconButton(
-                          icon: Icon(
-                              obscure ? LineIcons.eye : LineIcons.eye_slash),
-                          onPressed: changeObscure),
-                      enabledBorder: UnderlineInputBorder(
+                Column(
+                  children: [
+                    MainTextFieldComponent(
+                        controller: ctrCpf,
+                        icon: LineIcons.user,
+                        hint: 'CPF/CNPJ'),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: ctrPass,
+                      obscureText: obscure,
+                      style: Style.textField,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          LineIcons.lock,
+                          color: Colors.grey[400],
+                        ),
+                        labelText: "Senha",
+                        labelStyle: Style.textField,
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                                obscure ? LineIcons.eye : LineIcons.eye_slash),
+                            onPressed: changeObscure),
+                        enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.grey[800],
-                      ))),
+                            width: 1,
+                            color: Colors.grey[800],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
                 loading
                     ? LoadingComponent()
                     : MainButtomComponent(title: 'ENTRAR', function: login),
-                SizedBox(height: 10),
                 FlatButton(
                     onPressed: () {},
                     child: Text(

@@ -105,7 +105,7 @@ class Service {
         colaborator: json["colaborator"] == null
             ? null
             : Client.fromJson(json["colaborator"]),
-        car: Car.fromJson(json["car"]),
+        car: json["car"] == null ? null : Car.fromJson(json["car"]),
         shop: json["shop"],
         v: json["__v"],
         dateEnd:
@@ -126,7 +126,7 @@ class Service {
         "_id": id,
         "client": client.toJson(),
         "colaborator": colaborator == null ? null : colaborator.toJson(),
-        "car": car.toJson(),
+        "car": car == null ? null : car.toJson(),
         "shop": shop,
         "__v": v,
         "date_end": dateEnd == null ? null : dateEnd.toIso8601String(),

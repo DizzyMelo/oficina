@@ -126,9 +126,10 @@ class _StockViewState extends State<StockView> {
                                     : Scrollbar(
                                         child: ListView.separated(
                                           separatorBuilder: (context, index) =>
-                                              Divider(
-                                            thickness: 0.6,
-                                            color: Colors.grey[800],
+                                              Container(
+                                            height: 0.5,
+                                            width: double.infinity,
+                                            color: Style.secondaryColor,
                                           ),
                                           itemCount: _searchProductDataModel
                                               .data.data.length,
@@ -138,17 +139,67 @@ class _StockViewState extends State<StockView> {
                                                     .data.data[index];
 
                                             return ListTile(
-                                                onTap: () {
-                                                  Navigator.pushNamed(
-                                                      context, '/edit_product',
-                                                      arguments: product);
-                                                },
-                                                title: Text(
-                                                  product.name ?? '',
-                                                  style: Style.clientNameText,
-                                                ),
-                                                subtitle: Text(
-                                                    product.description ?? ''));
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                    context, '/edit_product',
+                                                    arguments: product);
+                                              },
+                                              title: Text(
+                                                product.name ?? '',
+                                                style: Style.clientNameText,
+                                              ),
+                                              trailing: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  RichText(
+                                                    text: TextSpan(children: [
+                                                      TextSpan(
+                                                          text: 'Venda: ',
+                                                          style: Style
+                                                              .valueTitleText),
+                                                      TextSpan(
+                                                          text: Utils.formatMoney(
+                                                              product
+                                                                  .priceSale),
+                                                          style: Style
+                                                              .totalValueText),
+                                                    ]),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(children: [
+                                                      TextSpan(
+                                                          text: 'Compra: ',
+                                                          style: Style
+                                                              .valueTitleText),
+                                                      TextSpan(
+                                                          text: Utils.formatMoney(
+                                                              product
+                                                                  .priceBought),
+                                                          style: Style
+                                                              .totalValueText),
+                                                    ]),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(children: [
+                                                      TextSpan(
+                                                          text: 'Lucro: ',
+                                                          style: Style
+                                                              .valueTitleText),
+                                                      TextSpan(
+                                                          text:
+                                                              '${Utils.calculateProfit(product.priceSale, product.priceBought)}',
+                                                          style: Style
+                                                              .totalValueText),
+                                                    ]),
+                                                  ),
+                                                ],
+                                              ),
+                                              subtitle: Text(
+                                                'Qtd.${product.currentAmount} - Min. Qtd. ${product.minimumAmount}',
+                                                style: Style.smallGreyText,
+                                              ),
+                                            );
                                           },
                                         ),
                                       ),

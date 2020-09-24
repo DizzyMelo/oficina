@@ -35,6 +35,9 @@ class Style {
   static TextStyle smallText = GoogleFonts.lato(
       textStyle: TextStyle(color: secondaryColor, fontSize: 12));
 
+  static TextStyle smallGreyText =
+      GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey, fontSize: 12));
+
   static TextStyle smallCancelButtonText =
       GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontSize: 12));
 
@@ -109,9 +112,11 @@ class Style {
   static TextStyle shopNameText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[100], fontWeight: FontWeight.w400, fontSize: 15));
+
   static TextStyle totalValueText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.green, fontWeight: FontWeight.w700, fontSize: 11));
+
   static TextStyle mdoText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[500], fontWeight: FontWeight.w700, fontSize: 11));

@@ -209,7 +209,14 @@ class _PaymentViewState extends State<PaymentView> {
                           Padding(
                             padding: EdgeInsets.all(10),
                             child: MainButtomComponent(
-                                title: 'FINALIZAR SERVIÇO', function: finish),
+                                title: 'FINALIZAR SERVIÇO',
+                                function: () {
+                                  Utils.confirmFinishService(
+                                      'Conlusão de serviço',
+                                      widget.service,
+                                      finish,
+                                      context);
+                                }),
                           )
                         ],
                       ),

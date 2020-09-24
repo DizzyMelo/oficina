@@ -99,8 +99,10 @@ class Datum {
         warrantyUnity: json["warrantyUnity"],
         id: json["_id"],
         client: Client.fromJson(json["client"]),
-        colaborator: Client.fromJson(json["colaborator"]),
-        car: Car.fromJson(json["car"]),
+        colaborator: json["colaborator"] == null
+            ? null
+            : Client.fromJson(json["colaborator"]),
+        car: json["car"] == null ? null : Car.fromJson(json["car"]),
         shop: json["shop"],
         dateEnd:
             json["date_end"] == null ? null : DateTime.parse(json["date_end"]),
@@ -119,8 +121,8 @@ class Datum {
         "warrantyUnity": warrantyUnity,
         "_id": id,
         "client": client.toJson(),
-        "colaborator": colaborator.toJson(),
-        "car": car.toJson(),
+        "colaborator": colaborator == null ? null : colaborator.toJson(),
+        "car": car == null ? null : car.toJson(),
         "shop": shop,
         "date_end": dateEnd == null ? null : dateEnd.toIso8601String(),
         "observation": observation == null ? null : observation,

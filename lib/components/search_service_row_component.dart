@@ -25,7 +25,9 @@ class SearchServiceRowComponent extends StatelessWidget {
         style: Style.mainClientNameText,
       ),
       subtitle: Text(
-        service.colaborator.name,
+        service.colaborator == null
+            ? 'Não informado'
+            : service.colaborator.name,
         style: Style.carNameText,
       ),
       trailing: Column(

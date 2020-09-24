@@ -128,7 +128,14 @@ class _SelectCarViewState extends State<SelectCarView> {
                                     }),
                           ),
                           MainButtomComponent(
-                              title: 'CONTINUAR', function: function)
+                              title: 'CONTINUAR', function: function),
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, '/select_colaborator',
+                                    arguments: [widget.user]);
+                              },
+                              child: Text('PULAR'))
                         ],
                       ),
               ),
