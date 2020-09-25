@@ -72,13 +72,17 @@ class _StockViewState extends State<StockView> {
                                 icon: LineIcons.wrench,
                                 hint: 'Descrição'),
                             MainTextFieldComponent(
-                                controller: ctrPricePaid,
-                                icon: LineIcons.money,
-                                hint: 'Valor de Compra'),
+                              controller: ctrPricePaid,
+                              icon: LineIcons.money,
+                              hint: 'Valor de Compra',
+                              label: true,
+                            ),
                             MainTextFieldComponent(
-                                controller: ctrPriceSale,
-                                icon: LineIcons.money,
-                                hint: 'Valor de Venda'),
+                              controller: ctrPriceSale,
+                              icon: LineIcons.money,
+                              hint: 'Valor de Venda',
+                              label: true,
+                            ),
                             MainTextFieldComponent(
                                 controller: ctrQtd,
                                 icon: LineIcons.calculator,

@@ -9,10 +9,8 @@ import 'package:oficina/components/phone_textfield_component.dart';
 import 'package:oficina/components/small_buttom_component.dart';
 import 'package:oficina/components/small_cancel_buttom_component.dart';
 import 'package:oficina/controller/user_controller.dart';
-import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/create_user_data_model.dart';
 import 'package:oficina/model/search_user_data_model.dart';
-import 'package:oficina/model/service_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
@@ -214,11 +212,11 @@ class _ClientViewState extends State<ClientView> {
         await controller.create(data, context, _scaffoldKey);
     this.changeLoadingState();
     if (res != null) {
-      _addCardDialog(res.data.data.id);
+      _addCardDialog(res.data.data.id, res.data.data.name);
     }
   }
 
-  void _addCardDialog(String id) async {
+  void _addCardDialog(String id, String name) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -244,7 +242,8 @@ class _ClientViewState extends State<ClientView> {
             SmallButtomComponent(
                 title: 'ADICIONAR',
                 function: () {
-                  Navigator.pushNamed(context, '/new_car', arguments: id);
+                  Client c = Client(id: id, name: name);
+                  Navigator.pushNamed(context, '/new_car', arguments: c);
                 }),
           ],
         );

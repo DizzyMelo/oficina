@@ -93,12 +93,12 @@ class MyApp extends StatelessWidget {
           case "/new_service":
             page = MaterialPageRoute(
                 builder: (context) => NewServiceView(
-                      args: settings.arguments,
+                      newService: settings.arguments,
                     ));
             break;
           case "/new_car":
             page = MaterialPageRoute(
-                builder: (context) => NewCarView(userId: settings.arguments));
+                builder: (context) => NewCarView(user: settings.arguments));
             break;
           case "/stock":
             page = MaterialPageRoute(builder: (context) => StockView());
@@ -128,7 +128,7 @@ class MyApp extends StatelessWidget {
           case "/select_car":
             page = MaterialPageRoute(
               builder: (context) => SelectCarView(
-                user: settings.arguments,
+                newService: settings.arguments,
               ),
             );
             break;
@@ -136,7 +136,7 @@ class MyApp extends StatelessWidget {
           case "/select_colaborator":
             page = MaterialPageRoute(
               builder: (context) => SelectColaboratorView(
-                args: settings.arguments,
+                newService: settings.arguments,
               ),
             );
             break;

@@ -13,8 +13,8 @@ import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class NewCarView extends StatefulWidget {
-  final String userId;
-  NewCarView({this.userId});
+  final Client user;
+  NewCarView({@required this.user});
 
   @override
   _NewCarViewState createState() => _NewCarViewState();
@@ -123,7 +123,17 @@ class _NewCarViewState extends State<NewCarView> {
                                           itemBuilder: (context, index) {
                                             Car car = vehicles.data.cars[index];
                                             return ListTile(
-                                              onTap: () {},
+                                              onTap: () {
+                                                NewService newService =
+                                                    NewService();
+
+                                                newService.client = widget.user;
+                                                newService.vehicle = Vehicle(
+                                                    id: car.id, name: car.name);
+                                                Navigator.pushNamed(context,
+                                                    '/select_colaborator',
+                                                    arguments: newService);
+                                              },
                                               title: Text(
                                                 car.name,
                                                 style: Style.carTitleText,
@@ -135,7 +145,11 @@ class _NewCarViewState extends State<NewCarView> {
                                             );
                                           }),
                                     ),
-                            )
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text('Selecione um veículo para iniciar um serviço')
                           ],
                         ),
                       ),
@@ -151,8 +165,8 @@ class _NewCarViewState extends State<NewCarView> {
   }
 
   getVehicles() async {
-    VehicleDataModel res =
-        await _userController.getVehicles(widget.userId, context, _scaffoldKey);
+    VehicleDataModel res = await _userController.getVehicles(
+        widget.user.id, context, _scaffoldKey);
 
     if (res != null) {
       setState(() {
@@ -178,7 +192,7 @@ class _NewCarViewState extends State<NewCarView> {
     Map<String, dynamic> data = {
       "name": ctrModel.text,
       "plate": ctrPlate.text,
-      "user": widget.userId
+      "user": widget.user.id
     };
 
     CreateVehicleDataModel res =

@@ -240,9 +240,13 @@ class _ManageServiceViewState extends State<ManageServiceView> {
                                           info: _detailServiceDataModel
                                               .data.data.client.name),
                                       ServiceInfoComponent(
-                                          title: 'Carro',
+                                          title: 'Veículo',
                                           info: _detailServiceDataModel
-                                              .data.data.car.name),
+                                                      .data.data.car ==
+                                                  null
+                                              ? 'Não informado'
+                                              : _detailServiceDataModel
+                                                  .data.data.car.name),
                                       ServiceInfoComponent(
                                           title: 'Colaborador',
                                           info: _detailServiceDataModel

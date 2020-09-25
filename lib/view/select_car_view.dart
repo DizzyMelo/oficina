@@ -7,14 +7,14 @@ import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/medium_buttom_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/controller/vehicle_controller.dart';
-import 'package:oficina/model/search_user_data_model.dart';
 import 'package:oficina/model/vehicle_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 
 class SelectCarView extends StatefulWidget {
-  final User user;
+  final NewService newService;
 
-  SelectCarView({@required this.user});
+  SelectCarView({@required this.newService});
   @override
   _SelectCarViewState createState() => _SelectCarViewState();
 }
@@ -87,13 +87,14 @@ class _SelectCarViewState extends State<SelectCarView> {
                                           onTap: () {
                                             setState(() {
                                               vehicle = v;
+                                              widget.newService.vehicle =
+                                                  Vehicle(
+                                                      id: v.id, name: v.name);
                                               function = () {
                                                 Navigator.pushNamed(context,
                                                     '/select_colaborator',
-                                                    arguments: [
-                                                      widget.user,
-                                                      v
-                                                    ]);
+                                                    arguments:
+                                                        widget.newService);
                                               };
                                             });
                                           },
@@ -124,6 +125,7 @@ class _SelectCarViewState extends State<SelectCarView> {
                                       setState(() {
                                         vehicle = null;
                                         function = null;
+                                        widget.newService.vehicle = null;
                                       });
                                     }),
                           ),
@@ -133,7 +135,7 @@ class _SelectCarViewState extends State<SelectCarView> {
                               onPressed: () {
                                 Navigator.pushNamed(
                                     context, '/select_colaborator',
-                                    arguments: [widget.user]);
+                                    arguments: widget.newService);
                               },
                               child: Text('PULAR'))
                         ],
@@ -149,7 +151,7 @@ class _SelectCarViewState extends State<SelectCarView> {
   getVehicles() async {
     this.changeLodingState();
     VehicleDataModel res = await _userController.getVehicles(
-        widget.user.id, context, _scaffoldKey);
+        widget.newService.client.id, context, _scaffoldKey);
     this.changeLodingState();
 
     if (res != null) {
@@ -166,7 +168,7 @@ class _SelectCarViewState extends State<SelectCarView> {
     Map<String, dynamic> data = {
       "name": ctrName.text,
       "plate": ctrPlate.text,
-      "user": widget.user.id
+      "user": widget.newService.client.id
     };
     await _vehicleController.create(data, context, _scaffoldKey);
     this.changeLodingState();

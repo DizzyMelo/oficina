@@ -14,9 +14,9 @@ import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class SelectColaboratorView extends StatefulWidget {
-  final List<dynamic> args;
+  final NewService newService;
 
-  SelectColaboratorView({@required this.args});
+  SelectColaboratorView({@required this.newService});
   @override
   _SelectColaboratorViewState createState() => _SelectColaboratorViewState();
 }
@@ -92,13 +92,14 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                           setState(() {
                                             colaborator = user;
                                             function = () {
-                                              widget.args.add(user);
+                                              widget.newService.colaborator =
+                                                  Colaborator(
+                                                      id: user.id,
+                                                      name: user.name);
 
                                               Navigator.pushNamed(
                                                   context, '/new_service',
-                                                  arguments: widget.args);
-
-                                              print(widget.args.length);
+                                                  arguments: widget.newService);
                                             };
                                           });
                                         },
@@ -129,10 +130,7 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                 setState(() {
                                   colaborator = null;
                                   function = null;
-                                  while (widget.args.length > 2) {
-                                    widget.args
-                                        .removeAt(widget.args.length - 1);
-                                  }
+                                  widget.newService.colaborator = null;
                                 });
                               }),
                     ),
@@ -143,11 +141,8 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                     MainButtomComponent(
                         title: 'COLOCAR EM ESPERA',
                         function: () {
-                          while (widget.args.length > 2) {
-                            widget.args.removeAt(widget.args.length - 1);
-                          }
                           Navigator.pushNamed(context, '/new_service',
-                              arguments: widget.args);
+                              arguments: widget.newService);
                         }),
                   ],
                 ),

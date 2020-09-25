@@ -6,6 +6,7 @@ import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/search_textfield_component.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/search_user_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
@@ -23,6 +24,7 @@ class _SelectClientViewState extends State<SelectClientView> {
   UserController _userController;
   bool loading = false;
   Function function = null;
+  NewService newService = NewService();
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +74,12 @@ class _SelectClientViewState extends State<SelectClientView> {
                                         onTap: () {
                                           setState(() {
                                             client = user;
+                                            newService.client = Client(
+                                                id: user.id, name: user.name);
                                             function = () {
                                               Navigator.pushNamed(
                                                   context, '/select_car',
-                                                  arguments: client);
+                                                  arguments: newService);
                                             };
                                           });
                                         },
@@ -102,6 +106,7 @@ class _SelectClientViewState extends State<SelectClientView> {
                                 setState(() {
                                   client = null;
                                   function = null;
+                                  newService.client = null;
                                 });
                               }),
                     ),

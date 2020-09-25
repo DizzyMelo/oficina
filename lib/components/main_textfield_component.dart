@@ -7,13 +7,15 @@ class MainTextFieldComponent extends StatelessWidget {
   final String hint;
   final bool mandatory;
   final int maxlines;
+  final bool label;
 
   MainTextFieldComponent(
       {@required this.controller,
       @required this.icon,
       @required this.hint,
       this.mandatory = false,
-      this.maxlines = 1});
+      this.maxlines = 1,
+      this.label = false});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,8 @@ class MainTextFieldComponent extends StatelessWidget {
             ),
             hintText: hint,
             hintStyle: Style.textField,
+            labelText: label ? hint : null,
+            labelStyle: Style.textField,
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
                 width: 1,

@@ -5,15 +5,12 @@ import 'package:oficina/components/cancel_buttom_component.dart';
 import 'package:oficina/components/loading_component.dart';
 import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/controller/service_controller.dart';
-import 'package:oficina/model/search_user_data_model.dart';
-import 'package:oficina/model/vehicle_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/utils.dart';
 
 class NewServiceView extends StatefulWidget {
-  NewService newService;
-  final List<dynamic> args;
-  NewServiceView({@required this.args});
+  final NewService newService;
+  NewServiceView({@required this.newService});
   @override
   _NewServiceViewState createState() => _NewServiceViewState();
 }
@@ -23,9 +20,9 @@ class _NewServiceViewState extends State<NewServiceView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   ServiceController _shopController = ServiceController();
 
-  User client;
-  User colaborator;
-  Car vehicle;
+  Client client;
+  Colaborator colaborator;
+  Vehicle vehicle;
 
   bool loading = false;
   bool loadingDelete = false;
@@ -56,16 +53,28 @@ class _NewServiceViewState extends State<NewServiceView> {
                   children: <Widget>[
                     Column(
                       children: [
-                        ListTile(
-                          leading: Icon(LineIcons.user),
-                          title: Text(client.name),
-                          subtitle: Text('Cliente'),
-                        ),
-                        ListTile(
-                          leading: Icon(LineIcons.car),
-                          title: Text(vehicle.name),
-                          subtitle: Text('Veículo'),
-                        ),
+                        client == null
+                            ? ListTile(
+                                leading: Icon(LineIcons.user),
+                                title: Text('Cliente não informado'),
+                                subtitle: Text('Cliente'),
+                              )
+                            : ListTile(
+                                leading: Icon(LineIcons.user),
+                                title: Text(client.name),
+                                subtitle: Text('Cliente'),
+                              ),
+                        vehicle == null
+                            ? ListTile(
+                                leading: Icon(LineIcons.car),
+                                title: Text('Veículo não informado'),
+                                subtitle: Text('Veículo'),
+                              )
+                            : ListTile(
+                                leading: Icon(LineIcons.car),
+                                title: Text(vehicle.name),
+                                subtitle: Text('Veículo'),
+                              ),
                         colaborator == null
                             ? ListTile(
                                 leading: Icon(LineIcons.user),
@@ -118,22 +127,41 @@ class _NewServiceViewState extends State<NewServiceView> {
 
   createService() async {
     Map<String, dynamic> data;
-    if (widget.args.length >= 3) {
+    if (widget.newService.client != null &&
+        widget.newService.colaborator != null &&
+        widget.newService.vehicle != null) {
       data = {
         "client": client.id,
         "colaborator": colaborator.id,
         "car": vehicle.id,
         "shop": SessionVariables.userDataModel.data.data.shop.id
       };
-    } else {
+    } else if (widget.newService.client != null &&
+        widget.newService.colaborator == null &&
+        widget.newService.vehicle != null) {
       data = {
         "client": client.id,
         "car": vehicle.id,
         "shop": SessionVariables.userDataModel.data.data.shop.id,
         "status": "espera"
       };
+    } else if (widget.newService.client != null &&
+        widget.newService.colaborator != null &&
+        widget.newService.vehicle == null) {
+      data = {
+        "client": client.id,
+        "colaborator": colaborator.id,
+        "shop": SessionVariables.userDataModel.data.data.shop.id
+      };
+    } else if (widget.newService.client != null &&
+        widget.newService.colaborator == null &&
+        widget.newService.vehicle == null) {
+      data = {
+        "client": client.id,
+        "shop": SessionVariables.userDataModel.data.data.shop.id,
+        "status": "espera"
+      };
     }
-
     bool res = await _shopController.create(data, context, _scaffoldKey);
 
     if (res) {
@@ -147,14 +175,9 @@ class _NewServiceViewState extends State<NewServiceView> {
   }
 
   setProperties() {
-    if (widget.args.length >= 3) {
-      client = widget.args[0];
-      vehicle = widget.args[1];
-      colaborator = widget.args[2];
-    } else {
-      client = widget.args[0];
-      vehicle = widget.args[1];
-    }
+    client = widget.newService.client;
+    colaborator = widget.newService.colaborator;
+    vehicle = widget.newService.vehicle;
   }
 
   @override

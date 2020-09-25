@@ -229,13 +229,18 @@ class Utils {
                   ServiceInfoComponent(
                       title: 'Cliente', info: service.data.data.client.name),
                   ServiceInfoComponent(
-                      title: 'Veículo', info: service.data.data.car.name),
+                      title: 'Veículo',
+                      info: service.data.data.car == null
+                          ? 'Não informado'
+                          : service.data.data.car.name),
                   SizedBox(
                     height: 20,
                   ),
                   ServiceInfoComponent(
                       title: 'Colaborador',
-                      info: service.data.data.colaborator.name),
+                      info: service.data.data.colaborator == null
+                          ? 'Não informado'
+                          : service.data.data.colaborator.name),
                   ServiceInfoComponent(
                       title: 'Status', info: service.data.data.status),
                   ServiceInfoComponent(

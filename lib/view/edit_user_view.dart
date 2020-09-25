@@ -115,8 +115,11 @@ class _EditUserViewState extends State<EditUserView> {
                                   )
                                 : FlatButton(
                                     onPressed: () {
+                                      Client c = Client(
+                                          id: widget.user.id,
+                                          name: widget.user.name);
                                       Navigator.pushNamed(context, '/new_car',
-                                          arguments: widget.user.id);
+                                          arguments: c);
                                     },
                                     child: Text('Veículos')),
                             Expanded(child: Container()),

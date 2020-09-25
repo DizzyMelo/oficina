@@ -261,13 +261,16 @@ class _MainViewState extends State<MainView> {
   search(String str) {
     services = report.data.services.reversed.toList();
     List<Service> tempServices = List();
+
     tempServices = services
         .where((s) =>
             s.client.name.toLowerCase().contains(str.toLowerCase()) ||
-            //s.colaborator.name.toLowerCase().contains(str.toLowerCase()) ||
+            (s.colaborator != null &&
+                s.colaborator.name.toLowerCase().contains(str.toLowerCase())) ||
             s.value.toString().toLowerCase().contains(str.toLowerCase()) ||
             s.status.toString().toLowerCase().contains(str.toLowerCase()) ||
-            s.car.name.toLowerCase().contains(str.toLowerCase()))
+            (s.car != null &&
+                s.car.name.toLowerCase().contains(str.toLowerCase())))
         .toList();
 
     setState(() {
@@ -283,7 +286,7 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
-    ctrDateInit.text = Utils.getCurrentDate(days: -30); //days: -7
+    ctrDateInit.text = Utils.getCurrentDate(days: 0); //days: -7
     ctrDateFinal.text = Utils.getCurrentDate();
     this.executeInitMethods();
   }

@@ -33,5 +33,5 @@ class NewService {
   Client client;
   Colaborator colaborator;
 
-  NewService({@required this.client, this.vehicle, this.colaborator});
+  NewService({this.client, this.vehicle, this.colaborator});
 }
