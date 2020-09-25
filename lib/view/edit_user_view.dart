@@ -121,7 +121,18 @@ class _EditUserViewState extends State<EditUserView> {
                                       Navigator.pushNamed(context, '/new_car',
                                           arguments: c);
                                     },
-                                    child: Text('Veículos')),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          LineIcons.car,
+                                          color: Style.primaryColor,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text('Veículos')
+                                      ],
+                                    )),
                             Expanded(child: Container()),
                             loading
                                 ? Center(

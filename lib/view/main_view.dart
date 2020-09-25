@@ -64,7 +64,7 @@ class _MainViewState extends State<MainView> {
                         children: [
                           Flexible(flex: 2, child: SideMenuComponent()),
                           Flexible(
-                            flex: 9,
+                            flex: 7,
                             child: Container(
                               child: Column(
                                 children: [
@@ -164,7 +164,7 @@ class _MainViewState extends State<MainView> {
                             ),
                           ),
                           Flexible(
-                            flex: 3,
+                            flex: 2,
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border(

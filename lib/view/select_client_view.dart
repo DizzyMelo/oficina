@@ -48,7 +48,7 @@ class _SelectClientViewState extends State<SelectClientView> {
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(5)),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SearchTextFieldComponent(
                         controller: ctrSearch,
@@ -110,7 +110,13 @@ class _SelectClientViewState extends State<SelectClientView> {
                                 });
                               }),
                     ),
-                    MainButtomComponent(title: 'CONTINUAR', function: function)
+                    MainButtomComponent(title: 'CONTINUAR', function: function),
+                    FlatButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/select_car',
+                              arguments: newService);
+                        },
+                        child: Text('Pular'))
                   ],
                 ),
               ),
