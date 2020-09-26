@@ -227,7 +227,10 @@ class Utils {
               child: Column(
                 children: [
                   ServiceInfoComponent(
-                      title: 'Cliente', info: service.data.data.client.name),
+                      title: 'Cliente',
+                      info: service.data.data.client == null
+                          ? 'Não informado'
+                          : service.data.data.client.name),
                   ServiceInfoComponent(
                       title: 'Veículo',
                       info: service.data.data.car == null

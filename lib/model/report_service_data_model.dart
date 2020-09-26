@@ -101,7 +101,7 @@ class Service {
         warranty: json["warranty"],
         warrantyUnity: json["warrantyUnity"],
         id: json["_id"],
-        client: Client.fromJson(json["client"]),
+        client: json["client"] == null ? null : Client.fromJson(json["client"]),
         colaborator: json["colaborator"] == null
             ? null
             : Client.fromJson(json["colaborator"]),
@@ -124,7 +124,7 @@ class Service {
         "warranty": warranty,
         "warrantyUnity": warrantyUnity,
         "_id": id,
-        "client": client.toJson(),
+        "client": client == null ? null : client.toJson(),
         "colaborator": colaborator == null ? null : colaborator.toJson(),
         "car": car == null ? null : car.toJson(),
         "shop": shop,

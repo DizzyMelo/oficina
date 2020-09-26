@@ -52,10 +52,14 @@ class _ManageFinishedServiceViewState extends State<ManageFinishedServiceView> {
                           Divider(),
                           ServiceInfoComponent(
                               title: 'Cliente',
-                              info: service.data.data.client.name),
+                              info: service.data.data.client == null
+                                  ? ''
+                                  : service.data.data.client.name),
                           ServiceInfoComponent(
                               title: 'Veículo',
-                              info: service.data.data.car.name),
+                              info: service.data.data.car == null
+                                  ? ''
+                                  : service.data.data.car.name),
                           ServiceInfoComponent(
                               title: 'Data Início',
                               info: Utils.formatDate(service.data.data.date)),

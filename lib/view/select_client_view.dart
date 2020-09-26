@@ -113,7 +113,7 @@ class _SelectClientViewState extends State<SelectClientView> {
                     MainButtomComponent(title: 'CONTINUAR', function: function),
                     FlatButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/select_car',
+                          Navigator.pushNamed(context, '/select_colaborator',
                               arguments: newService);
                         },
                         child: Text('Pular'))
