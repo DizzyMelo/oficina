@@ -9,6 +9,8 @@ class ServiceRequests {
   Future<bool> create(data) async {
     String url = '${DotEnv().env['BASE_URL']}/services/';
 
+    print(data);
+
     try {
       var res = await http.post(url,
           headers: {

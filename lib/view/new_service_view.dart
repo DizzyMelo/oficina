@@ -161,7 +161,23 @@ class _NewServiceViewState extends State<NewServiceView> {
         "shop": SessionVariables.userDataModel.data.data.shop.id,
         "status": "espera"
       };
+    } else if (widget.newService.client == null &&
+        widget.newService.colaborator == null &&
+        widget.newService.vehicle == null) {
+      data = {
+        "shop": SessionVariables.userDataModel.data.data.shop.id,
+        "status": "espera"
+      };
+    } else if (widget.newService.client == null &&
+        widget.newService.colaborator != null &&
+        widget.newService.vehicle == null) {
+      data = {
+        "colaborator": colaborator.id,
+        "shop": SessionVariables.userDataModel.data.data.shop.id,
+      };
     }
+
+    print(data);
     bool res = await _shopController.create(data, context, _scaffoldKey);
 
     if (res) {
