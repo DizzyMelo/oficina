@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/report',
+      //initialRoute: '/login',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 

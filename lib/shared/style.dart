@@ -61,6 +61,10 @@ class Style {
       textStyle: TextStyle(
           color: Colors.grey[600], fontWeight: FontWeight.w400, fontSize: 14));
 
+  static TextStyle mediumDarkText = GoogleFonts.lato(
+      textStyle: TextStyle(
+          color: Colors.grey[800], fontWeight: FontWeight.w300, fontSize: 12));
+
   static TextStyle valueTitleText = GoogleFonts.lato(
       textStyle: TextStyle(
           color: Colors.grey[600], fontWeight: FontWeight.w600, fontSize: 12));

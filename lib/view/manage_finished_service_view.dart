@@ -62,11 +62,12 @@ class _ManageFinishedServiceViewState extends State<ManageFinishedServiceView> {
                                   : service.data.data.car.name),
                           ServiceInfoComponent(
                               title: 'Data Início',
-                              info: Utils.formatDate(service.data.data.date)),
+                              info:
+                                  Utils.formatDateOnly(service.data.data.date)),
                           ServiceInfoComponent(
                               title: 'Data Final',
-                              info:
-                                  Utils.formatDate(service.data.data.dateEnd)),
+                              info: Utils.formatDateOnly(
+                                  service.data.data.dateEnd)),
                           SizedBox(
                             height: 20,
                           ),

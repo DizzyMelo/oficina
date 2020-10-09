@@ -45,7 +45,7 @@ class _ReportViewState extends State<ReportView> {
               children: [
                 AppBarComponent(
                   icon: LineIcons.history,
-                  title: 'histórico de Serviços',
+                  title: 'Histórico de Serviços',
                 ),
                 SizedBox(
                   height: 20,
@@ -55,7 +55,7 @@ class _ReportViewState extends State<ReportView> {
                   borderRadius: BorderRadius.circular(5),
                   child: Container(
                       height: 600,
-                      width: 800,
+                      width: 900,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -63,7 +63,7 @@ class _ReportViewState extends State<ReportView> {
                         children: [
                           Container(
                             padding: EdgeInsets.all(10),
-                            width: 400,
+                            width: 450,
                             child: Column(
                               children: [
                                 Row(
@@ -115,7 +115,7 @@ class _ReportViewState extends State<ReportView> {
                           ),
                           Container(
                             padding: EdgeInsets.all(10),
-                            width: 400,
+                            width: 450,
                             child: Column(
                               children: [
                                 Text('Estatíscas de pagamentos no período'),
@@ -135,7 +135,7 @@ class _ReportViewState extends State<ReportView> {
                                                   style:
                                                       Style.mainClientNameText),
                                               subtitle: Text(
-                                                'qtd: ${stat.counter} - med: ${stat.ave} - max: ${stat.max} - min: ${stat.min}',
+                                                'qtd: ${stat.counter} - med: ${Utils.formatMoney(stat.ave)} - max: ${Utils.formatMoney(stat.max)} - min: ${Utils.formatMoney(stat.min)}',
                                                 style: Style.carNameText,
                                               ),
                                               trailing: Text(

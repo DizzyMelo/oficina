@@ -7,6 +7,7 @@ import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/service_row_component.dart';
 import 'package:oficina/components/side_menu_component.dart';
+import 'package:oficina/components/status_label_component.dart';
 import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/controller/user_controller.dart';
 import 'package:oficina/model/get_user_data_model.dart';
@@ -116,8 +117,38 @@ class _MainViewState extends State<MainView> {
                                           ),
                                         ),
                                         Flexible(
-                                          child: Container(),
-                                        )
+                                          child: Container(
+                                              padding:
+                                                  EdgeInsets.only(left: 20),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Text(
+                                                    'Os serviços exibidos abaixo são referentes as datas ao lado. Altere as datas e clique em buscar para visualizar serviços de outros períodos',
+                                                    style: Style.smallText,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  StatusLabelComponent(
+                                                      status: 'espera',
+                                                      label: 'Espera'),
+                                                  StatusLabelComponent(
+                                                      status: 'iniciado',
+                                                      label: 'Iniciado'),
+                                                  StatusLabelComponent(
+                                                      status: 'concluido',
+                                                      label: 'Concluído'),
+                                                  StatusLabelComponent(
+                                                      status: 'cancelado',
+                                                      label: 'Cancelado'),
+                                                ],
+                                              )),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -129,9 +160,9 @@ class _MainViewState extends State<MainView> {
                                       controller: ctrSearch,
                                       style: Style.searchText,
                                       decoration: InputDecoration(
-                                          hintText: 'Buscar Serviço...',
+                                          hintText: 'Filtrar...',
                                           hintStyle: Style.searchText,
-                                          prefixIcon: Icon(Icons.search)),
+                                          prefixIcon: Icon(LineIcons.filter)),
                                     ),
                                   ),
                                   SizedBox(
@@ -264,7 +295,8 @@ class _MainViewState extends State<MainView> {
 
     tempServices = services
         .where((s) =>
-            s.client.name.toLowerCase().contains(str.toLowerCase()) ||
+            (s.client != null &&
+                s.client.name.toLowerCase().contains(str.toLowerCase())) ||
             (s.colaborator != null &&
                 s.colaborator.name.toLowerCase().contains(str.toLowerCase())) ||
             s.value.toString().toLowerCase().contains(str.toLowerCase()) ||

@@ -80,6 +80,16 @@ class Utils {
     return '$dia/$mes/${dt.year} às $hora:$minuto';
   }
 
+  static String formatDateOnly(DateTime dt) {
+    if (dt == null) {
+      return 'Não Informado';
+    }
+    String dia = dt.day < 10 ? '0${dt.day}' : '${dt.day}';
+    String mes = dt.month < 10 ? '0${dt.month}' : '${dt.month}';
+
+    return '$dia/$mes/${dt.year}';
+  }
+
   changeMaskPhone(String str, MaskedTextController controller) {
     if (str.length >= 4) {
       print(str);
