@@ -24,29 +24,20 @@ class Printer {
         ]);
   }
 
-  static print(ServiceModel service, List<ProdutosAdicionado> items) async {
+  static print(ServiceModel serviced, List<ProdutosAdicionado> itemsd) async {
     final doc = pw.Document();
     doc.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return pw.Column(children: [
-            title('Cliente', service.nomeCliente ?? 'Não informado'),
-            title('Colaborador', service.nomeColaborador ?? 'Não informado'),
-            title(
-                'Data Inicio',
-                service.dataInicio == null || service.dataInicio.isEmpty
-                    ? 'Não informado'
-                    : Utils.formatDate(DateTime.parse(service.dataInicio))),
-            title(
-                'Data Final',
-                service.dataFinal == null || service.dataFinal.isEmpty
-                    ? 'Não informado'
-                    : Utils.formatDate(DateTime.parse(service.dataFinal))),
+            title('Cliente', 'Não informado'),
+            title('Colaborador', 'Não informado'),
+            title('Data Inicio', 'Não informado'),
+            title('Data Final', 'Não informado'),
             pw.SizedBox(height: 10),
             pw.Expanded(
               child: pw.ListView.builder(
                   itemBuilder: (context, index) {
-                    ProdutosAdicionado item = items[index];
                     return pw.Container(
                         height: 40,
                         width: double.infinity,
@@ -58,23 +49,18 @@ class Printer {
                                   crossAxisAlignment:
                                       pw.CrossAxisAlignment.start,
                                   children: [
-                                    pw.Text(item.nome ?? 'Não informado'),
-                                    pw.Text(
-                                        '${item.qtd} X ${Utils.formatMoney(double.parse(item.valorVenda))}'),
+                                    pw.Text('Não informado'),
+                                    pw.Text('${10} X ${10}'),
                                   ]),
-                              pw.Text(Utils.formatMoney(
-                                      double.parse(item.valorTotal)) ??
-                                  'Não informado')
+                              pw.Text(Utils.formatMoney(5) ?? 'Não informado')
                             ]));
                   },
-                  itemCount: items.length),
+                  itemCount: 5),
             ),
-            bottom('Garantia', '${service.garantia} meses'),
-            bottom(
-                'Desconto', Utils.formatMoney(double.parse(service.desconto))),
-            bottom('Mão de Obra', Utils.formatMoney(double.parse(service.mdo))),
-            bottom(
-                'Total', Utils.formatMoney(double.parse(service.valorTotal))),
+            bottom('Garantia', '${10} meses'),
+            bottom('Desconto', Utils.formatMoney(50)),
+            bottom('Mão de Obra', Utils.formatMoney(50)),
+            bottom('Total', Utils.formatMoney(100)),
           ]); // Center
         }));
 

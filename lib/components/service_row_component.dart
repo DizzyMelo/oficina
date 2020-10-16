@@ -9,121 +9,130 @@ class ServiceRowComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (serviceModel.status == 'espera') {
-          Navigator.pushNamed(context, '/select_colaborator_waiting',
-              arguments: serviceModel.id);
-        } else if (serviceModel.status == 'concluido') {
-          Navigator.pushNamed(context, '/manage_finished_service',
-              arguments: serviceModel.id);
-        } else {
-          Navigator.pushNamed(context, '/manage_service',
-              arguments: serviceModel.id);
-        }
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      maxRadius: 5,
-                      backgroundColor:
-                          Utils.selectServiceColor(serviceModel.status),
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: InkWell(
+        onTap: () {
+          if (serviceModel.status == 'espera') {
+            Navigator.pushNamed(context, '/select_colaborator_waiting',
+                arguments: serviceModel.id);
+          } else if (serviceModel.status == 'concluido') {
+            Navigator.pushNamed(context, '/manage_finished_service',
+                arguments: serviceModel.id);
+          } else {
+            Navigator.pushNamed(context, '/manage_service',
+                arguments: serviceModel.id);
+          }
+        },
+        child: Material(
+          borderRadius: BorderRadius.circular(5),
+          elevation: 10,
+          child: Container(
+            //margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          maxRadius: 5,
+                          backgroundColor:
+                              Utils.selectServiceColor(serviceModel.status),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                serviceModel.client == null
+                                    ? 'Não informado'
+                                    : serviceModel.client.name,
+                                style: Style.mainClientNameText,
+                              ),
+                              Text(
+                                serviceModel.car == null
+                                    ? 'Não informado'
+                                    : serviceModel.car.name,
+                                style: Style.carNameText,
+                              ),
+                            ]),
+                      ],
                     ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Column(
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             serviceModel.client == null
                                 ? 'Não informado'
-                                : serviceModel.client.name,
-                            style: Style.mainClientNameText,
+                                : Utils.formatPhone(
+                                    serviceModel.client.primaryphone),
+                            style: Style.phoneText,
                           ),
                           Text(
-                            serviceModel.car == null
+                            serviceModel.client == null
                                 ? 'Não informado'
-                                : serviceModel.car.name,
-                            style: Style.carNameText,
+                                : serviceModel.client.secondaryphone ?? '-----',
+                            style: Style.phoneText,
                           ),
                         ]),
-                  ],
+                  ),
                 ),
-              ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            serviceModel.colaborator == null
+                                ? 'Não informado'
+                                : serviceModel.colaborator.name,
+                            style: Style.workerNameText,
+                          ),
+                        ]),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            Utils.formatMoney(serviceModel.value.toDouble()),
+                            style: Style.totalValueText,
+                          ),
+                          // Text(
+                          //   Utils.formatMoney(serviceModel.how.toDouble()),
+                          //   style: Style.mdoText,
+                          // ),
+                        ]),
+                  ),
+                ),
+              ],
             ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        serviceModel.client == null
-                            ? 'Não informado'
-                            : serviceModel.client.primaryphone,
-                        style: Style.phoneText,
-                      ),
-                      Text(
-                        serviceModel.client == null
-                            ? 'Não informado'
-                            : serviceModel.client.secondaryphone ?? '',
-                        style: Style.phoneText,
-                      ),
-                    ]),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        serviceModel.colaborator == null
-                            ? 'Não informado'
-                            : serviceModel.colaborator.name,
-                        style: Style.workerNameText,
-                      ),
-                    ]),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                width: double.infinity,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        Utils.formatMoney(serviceModel.value.toDouble()),
-                        style: Style.totalValueText,
-                      ),
-                      // Text(
-                      //   Utils.formatMoney(serviceModel.how.toDouble()),
-                      //   style: Style.mdoText,
-                      // ),
-                    ]),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

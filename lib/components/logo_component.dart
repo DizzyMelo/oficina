@@ -4,8 +4,8 @@ class LogoComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
-      width: 60,
+      height: 70,
+      width: 70,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/img/logo.png'),

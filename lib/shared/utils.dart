@@ -10,6 +10,7 @@ import 'package:oficina/model/client_model.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/product_model.dart';
 import 'package:oficina/shared/style.dart';
+import 'package:string_mask/string_mask.dart';
 
 class Utils {
   static void showInSnackBar(
@@ -368,5 +369,14 @@ class Utils {
         return Colors.grey;
         break;
     }
+  }
+
+  static String formatPhone(String str) {
+    if (str.length == 11) {
+      return StringMask('(00) 00000-0000').apply(str);
+    } else if (str.length == 10) {
+      return StringMask('(00) 0000-0000').apply(str);
+    }
+    return str;
   }
 }

@@ -12,6 +12,7 @@ import 'package:oficina/controller/payment_controller.dart';
 import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/model/get_payments_data_model.dart';
+import 'package:oficina/shared/print.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -227,6 +228,13 @@ class _PaymentViewState extends State<PaymentView> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Style.primaryColor,
+        onPressed: () async {
+          Printer.print(null, null);
+        },
+        child: Icon(LineIcons.print),
       ),
     );
   }
