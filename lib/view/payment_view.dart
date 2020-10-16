@@ -232,7 +232,7 @@ class _PaymentViewState extends State<PaymentView> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Style.primaryColor,
         onPressed: () async {
-          Printer.print(null, null);
+          Printer.print(widget.service);
         },
         child: Icon(LineIcons.print),
       ),

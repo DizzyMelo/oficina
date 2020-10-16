@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/main_textfield_component.dart';
 import 'package:oficina/components/medium_buttom_component.dart';
@@ -69,16 +70,8 @@ class Utils {
   }
 
   static String formatDate(DateTime dt) {
-    if (dt == null) {
-      return 'Não Informado';
-    }
-    String dia = dt.day < 10 ? '0${dt.day}' : '${dt.day}';
-    String mes = dt.month < 10 ? '0${dt.month}' : '${dt.month}';
-
-    String hora = dt.hour < 10 ? '0${dt.hour}' : '${dt.hour}';
-    String minuto = dt.minute < 10 ? '0${dt.minute}' : '${dt.minute}';
-
-    return '$dia/$mes/${dt.year} às $hora:$minuto';
+    if (dt == null) return 'Não Informado';
+    return DateFormat('dd/MM/yyyy HH:mm').format(dt);
   }
 
   static String formatDateOnly(DateTime dt) {

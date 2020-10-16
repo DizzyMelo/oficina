@@ -1,5 +1,4 @@
-import 'package:oficina/model/added_item_model.dart';
-import 'package:oficina/model/service_model.dart';
+import 'package:oficina/model/detail_service_data_model.dart';
 import 'package:oficina/shared/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -24,20 +23,41 @@ class Printer {
         ]);
   }
 
-  static print(ServiceModel serviced, List<ProdutosAdicionado> itemsd) async {
+  static print(DetailServiceDataModel service) async {
     final doc = pw.Document();
     doc.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return pw.Column(children: [
-            title('Cliente', 'Não informado'),
-            title('Colaborador', 'Não informado'),
-            title('Data Inicio', 'Não informado'),
-            title('Data Final', 'Não informado'),
+            title(
+                'Cliente',
+                service.data.data.client != null
+                    ? service.data.data.client.name
+                    : 'Não informado'),
+            title(
+                'Colaborador',
+                service.data.data.colaborator != null
+                    ? service.data.data.colaborator.name
+                    : 'Não informado'),
+            title(
+                'Data Inicio',
+                service.data.data.date != null
+                    ? Utils.formatDate(service.data.data.date)
+                    : 'Não informado'),
+            title(
+                'Data Final',
+                service.data.data.dateEnd != null
+                    ? Utils.formatDate(service.data.data.dateEnd)
+                    : 'Não informado'),
+            pw.SizedBox(height: 10),
+            pw.Text('PRODUTOS ADICIONADOS'),
+            pw.Divider(),
             pw.SizedBox(height: 10),
             pw.Expanded(
               child: pw.ListView.builder(
                   itemBuilder: (context, index) {
+                    AddedProduct product =
+                        service.data.data.addedProducts[index];
                     return pw.Container(
                         height: 40,
                         width: double.infinity,
@@ -49,18 +69,22 @@ class Printer {
                                   crossAxisAlignment:
                                       pw.CrossAxisAlignment.start,
                                   children: [
-                                    pw.Text('Não informado'),
-                                    pw.Text('${10} X ${10}'),
+                                    pw.Text(product.product.name),
+                                    pw.Text(
+                                        '${product.amount} X ${Utils.formatMoney(product.product.priceSale)}'),
                                   ]),
-                              pw.Text(Utils.formatMoney(5) ?? 'Não informado')
+                              pw.Text(Utils.formatMoney(product.totalPrice) ??
+                                  'Não informado')
                             ]));
                   },
-                  itemCount: 5),
+                  itemCount: service.data.data.addedProducts.length),
             ),
-            bottom('Garantia', '${10} meses'),
-            bottom('Desconto', Utils.formatMoney(50)),
-            bottom('Mão de Obra', Utils.formatMoney(50)),
-            bottom('Total', Utils.formatMoney(100)),
+            pw.Divider(),
+            bottom('Garantia',
+                '${service.data.data.warranty} ${service.data.data.warrantyUnity}'),
+            bottom('Desconto', Utils.formatMoney(service.data.data.discount)),
+            bottom('Mão de Obra', Utils.formatMoney(service.data.data.how)),
+            bottom('Total', Utils.formatMoney(service.data.data.value)),
           ]); // Center
         }));
 

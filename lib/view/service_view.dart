@@ -7,7 +7,6 @@ import 'package:oficina/model/item_model.dart';
 import 'package:oficina/model/service_model.dart';
 import 'package:oficina/service/item_service.dart';
 import 'package:oficina/service/service_service.dart';
-import 'package:oficina/shared/print.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 import 'package:oficina/widget/service_info_widget.dart';
@@ -408,8 +407,8 @@ class _ServiceViewState extends State<ServiceView> {
                     ],
                   ),
                   onPressed: () {
-                    Printer.print(
-                        widget.serviceModel, addedItems.produtosAdicionados);
+                    // Printer.print(
+                    //     widget.serviceModel, addedItems.produtosAdicionados);
                   }),
               SizedBox(width: 10),
               RaisedButton(

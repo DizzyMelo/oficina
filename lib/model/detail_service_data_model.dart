@@ -154,7 +154,7 @@ class AddedProduct {
   String service;
   Product product;
   int amount;
-  int totalPrice;
+  double totalPrice;
   int v;
   String addedProductId;
 
@@ -198,13 +198,13 @@ class Product {
 
   bool active;
   int minimumAmount;
-  int priceBought;
+  double priceBought;
   String id;
   String name;
   String description;
   String code;
   int currentAmount;
-  int priceSale;
+  double priceSale;
   String shop;
   int v;
 

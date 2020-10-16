@@ -27,6 +27,7 @@ class ServiceRowComponent extends StatelessWidget {
         child: Material(
           borderRadius: BorderRadius.circular(5),
           elevation: 10,
+          shadowColor: Style.secondaryColor,
           child: Container(
             //margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: EdgeInsets.symmetric(horizontal: 10),
