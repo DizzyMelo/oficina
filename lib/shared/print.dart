@@ -1,4 +1,5 @@
 import 'package:oficina/model/detail_service_data_model.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -18,8 +19,8 @@ class Printer {
     return pw.Row(
         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
-          pw.Text(title),
-          pw.Text(value),
+          pw.Text(title, style: pw.TextStyle(fontSize: 14)),
+          pw.Text(value, style: pw.TextStyle(fontSize: 14)),
         ]);
   }
 
@@ -29,6 +30,10 @@ class Printer {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return pw.Column(children: [
+            pw.Text(SessionVariables.userDataModel.data.data.shop.name,
+                style: pw.TextStyle(fontSize: 18)),
+            pw.Divider(),
+            pw.SizedBox(height: 10),
             title(
                 'Cliente',
                 service.data.data.client != null
