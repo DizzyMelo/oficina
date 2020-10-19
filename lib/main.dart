@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Oficina na Mão',
+      title: 'Oficinei',
       theme: ThemeData(
         primarySwatch: Style.themeColor,
         textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
