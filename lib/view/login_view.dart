@@ -17,9 +17,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   //TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
   //97857865785
-  TextEditingController ctrCpf =
-      MaskedTextController(mask: '000.000.000-00', text: '09928141460');
-  TextEditingController ctrPass = TextEditingController(text: '12345678');
+  TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00');
+  TextEditingController ctrPass = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool obscure = true;
   bool loading = false;

@@ -8,6 +8,7 @@ class MainTextFieldComponent extends StatelessWidget {
   final bool mandatory;
   final int maxlines;
   final bool label;
+  final hasFocus;
 
   MainTextFieldComponent(
       {@required this.controller,
@@ -15,7 +16,8 @@ class MainTextFieldComponent extends StatelessWidget {
       @required this.hint,
       this.mandatory = false,
       this.maxlines = 1,
-      this.label = false});
+      this.label = false,
+      this.hasFocus = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class MainTextFieldComponent extends StatelessWidget {
         TextField(
           controller: controller,
           style: Style.textField,
+          autofocus: hasFocus,
           decoration: InputDecoration(
             prefixIcon: Icon(
               icon,

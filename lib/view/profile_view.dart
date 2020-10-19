@@ -40,7 +40,7 @@ class _ProfileViewState extends State<ProfileView> {
   ShopController _shopController = ShopController();
   UserController _userController = UserController();
 
-  double containerHeight = 500;
+  double containerHeight = 530;
   double containerWidth = 800;
 
   bool loadingEditShop = false;

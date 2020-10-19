@@ -295,9 +295,11 @@ class Utils {
             height: 180,
             child: Center(
               child: MainTextFieldComponent(
-                  controller: controller,
-                  icon: LineIcons.calculator,
-                  hint: message),
+                controller: controller,
+                icon: LineIcons.calculator,
+                hint: message,
+                hasFocus: true,
+              ),
             ),
           ),
           actions: <Widget>[

@@ -41,11 +41,11 @@ class MenuList {
         icon: LineIcons.history,
         screen: '/report',
         img: 'settings.png'),
-    MenuItem(
-        color: Colors.orange,
-        title: 'Configurações',
-        icon: LineIcons.gear,
-        screen: '/settings',
-        img: 'settings.png'),
+    // MenuItem(
+    //     color: Colors.orange,
+    //     title: 'Configurações',
+    //     icon: LineIcons.gear,
+    //     screen: '/settings',
+    //     img: 'settings.png'),
   ];
 }

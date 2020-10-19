@@ -6,6 +6,8 @@ import 'package:oficina/components/main_buttom_component.dart';
 import 'package:oficina/components/service_info_component.dart';
 import 'package:oficina/controller/service_controller.dart';
 import 'package:oficina/model/detail_service_data_model.dart';
+import 'package:oficina/shared/print.dart';
+import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class ManageFinishedServiceView extends StatefulWidget {
@@ -106,6 +108,18 @@ class _ManageFinishedServiceViewState extends State<ManageFinishedServiceView> {
                   ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Style.primaryColor,
+        onPressed: () async {
+          if (service != null) {
+            Printer.print(service);
+          } else {
+            Utils.showInSnackBar(
+                'Serviço inválido para impressão', Colors.red, _scaffoldKey);
+          }
+        },
+        child: Icon(LineIcons.print),
       ),
     );
   }
