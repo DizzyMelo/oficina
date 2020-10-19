@@ -210,6 +210,21 @@ class Utils {
             ),
           ),
           actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'FECHAR',
+                style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            SizedBox(
+              width: 10,
+            ),
             SmallButtomComponent(title: buttonTitle, function: function)
           ],
         );

@@ -12,6 +12,7 @@ import 'package:oficina/model/get_user_data_model.dart';
 import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileView extends StatefulWidget {
   @override
@@ -183,8 +184,26 @@ class _ProfileViewState extends State<ProfileView> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Style.primaryColor,
+        onPressed: () => Utils.confirmDialog(
+            'Sair', 'Tem certeza que deseja sair?', () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('token', null);
+          Navigator.pushNamed(context, '/login');
+        }, 'SAIR', context),
+        child: Icon(LineIcons.arrow_right),
+      ),
     );
   }
+
+  /* 
+  () async {
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setString('token', null);
+          Navigator.pushNamed(context, '/login');
+        }
+  */
 
   String setMaskPhone(String str) {
     if (str.length >= 4) {
