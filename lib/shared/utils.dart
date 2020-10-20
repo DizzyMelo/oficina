@@ -71,17 +71,13 @@ class Utils {
 
   static String formatDate(DateTime dt) {
     if (dt == null) return 'Não Informado';
-    return DateFormat('dd/MM/yyyy HH:mm').format(dt);
+    return DateFormat('dd/MM/yyyy HH:mm')
+        .format(dt.subtract(Duration(hours: 3)));
   }
 
   static String formatDateOnly(DateTime dt) {
-    if (dt == null) {
-      return 'Não Informado';
-    }
-    String dia = dt.day < 10 ? '0${dt.day}' : '${dt.day}';
-    String mes = dt.month < 10 ? '0${dt.month}' : '${dt.month}';
-
-    return '$dia/$mes/${dt.year}';
+    if (dt == null) return 'Não Informado';
+    return DateFormat('dd/MM/yyyy').format(dt.subtract(Duration(hours: 3)));
   }
 
   changeMaskPhone(String str, MaskedTextController controller) {
