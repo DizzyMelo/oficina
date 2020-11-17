@@ -230,6 +230,38 @@ class Utils {
     );
   }
 
+  static void imageDialog(String url, context) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text('', style: Style.dialogTitle),
+          content: Container(
+            height: 250,
+            width: 250,
+            decoration:
+                BoxDecoration(image: DecorationImage(image: NetworkImage(url))),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'FECHAR',
+                style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 11,
+                    fontWeight: FontWeight.w300),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   static void confirmFinishService(String title, DetailServiceDataModel service,
       Function function, context) async {
     showDialog(

@@ -96,15 +96,22 @@ class _ProfileViewState extends State<ProfileView> {
                                   child: Stack(
                                   overflow: Overflow.visible,
                                   children: [
-                                    Container(
-                                      height: 90,
-                                      width: 90,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              '${DotEnv().env['BASE_URL_IMG']}/user/${_userDataModel.data.data.photo}'),
+                                    InkWell(
+                                      onTap: () {
+                                        Utils.imageDialog(
+                                            '${DotEnv().env['BASE_URL_IMG']}/user/${_userDataModel.data.data.photo}',
+                                            context);
+                                      },
+                                      child: Container(
+                                        height: 90,
+                                        width: 90,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                                '${DotEnv().env['BASE_URL_IMG']}/user/${_userDataModel.data.data.photo}'),
+                                          ),
                                         ),
                                       ),
                                     ),

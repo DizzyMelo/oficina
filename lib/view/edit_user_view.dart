@@ -92,15 +92,22 @@ class _EditUserViewState extends State<EditUserView> {
                                 child: Stack(
                               overflow: Overflow.visible,
                               children: [
-                                Container(
-                                  height: 90,
-                                  width: 90,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: NetworkImage(
-                                          '${DotEnv().env['BASE_URL_IMG']}/user/${widget.user.photo}'),
+                                InkWell(
+                                  onTap: () {
+                                    Utils.imageDialog(
+                                        '${DotEnv().env['BASE_URL_IMG']}/user/${widget.user.photo}',
+                                        context);
+                                  },
+                                  child: Container(
+                                    height: 90,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                            '${DotEnv().env['BASE_URL_IMG']}/user/${widget.user.photo}'),
+                                      ),
                                     ),
                                   ),
                                 ),
