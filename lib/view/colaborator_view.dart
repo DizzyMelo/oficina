@@ -243,8 +243,6 @@ class _ColaboratorViewState extends State<ColaboratorView> {
       "secondaryphone": Utils.removeSpecialCharacters(ctrPhone2.text),
     });
 
-    print(data);
-
     this.changeLoadingState();
     await controller.create(data, context, _scaffoldKey);
     this.changeLoadingState();

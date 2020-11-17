@@ -161,8 +161,10 @@ class _ProfileViewState extends State<ProfileView> {
                           SizedBox(
                             height: 10,
                           ),
-                          MainButtomComponent(
-                              title: 'SALVAR', function: editUser),
+                          loadingEditUser
+                              ? LoadingComponent()
+                              : MainButtomComponent(
+                                  title: 'SALVAR', function: editUser),
                           SizedBox(
                             height: 20,
                           ),
@@ -333,13 +335,13 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   editUser() async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = Utils.validateUserData({
       "name": ctrName.text,
       "email": ctrEmail.text,
-      "cpfcnpj": ctrCpf.text,
-      "primaryphone": ctrPrimaryPhone.text,
-      "secondaryphone": ctrSecondary.text
-    };
+      "cpfcnpj": Utils.removeSpecialCharacters(ctrCpf.text),
+      "primaryphone": Utils.removeSpecialCharacters(ctrPrimaryPhone.text),
+      "secondaryphone": Utils.removeSpecialCharacters(ctrSecondary.text)
+    });
     setState(() {
       loadingEditUser = !loadingEditUser;
     });

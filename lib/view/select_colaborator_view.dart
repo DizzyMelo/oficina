@@ -191,8 +191,6 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
     await _userController.create(data, context, _scaffoldKey);
 
     this.getColaborators();
-
-    print(data);
   }
 
   changeLodingState() {

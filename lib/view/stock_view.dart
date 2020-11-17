@@ -244,8 +244,6 @@ class _StockViewState extends State<StockView> {
       "shop": SessionVariables.userDataModel.data.data.shop.id
     });
 
-    print(data);
-
     this.changeLoadingCreateState();
     await _productController.create(data, context, _scaffoldKey);
     this.changeLoadingCreateState();

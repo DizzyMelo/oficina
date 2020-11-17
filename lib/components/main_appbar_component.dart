@@ -35,7 +35,8 @@ class MainAppbarComponent extends StatelessWidget {
               },
               child: CircleAvatar(
                 backgroundColor: Style.primaryColor,
-                backgroundImage: AssetImage('assets/img/user-black.png'),
+                backgroundImage: NetworkImage(
+                    '${DotEnv().env['BASE_URL_IMG']}/user/${user.data.data.photo}'),
               ),
             )
           ],

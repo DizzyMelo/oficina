@@ -82,7 +82,6 @@ class Utils {
 
   changeMaskPhone(String str, MaskedTextController controller) {
     if (str.length >= 4) {
-      print(str);
       String txt = Utils.clearPhone(str);
       int number = int.parse(txt.substring(3, 4));
       if (number < 6) {
@@ -167,6 +166,9 @@ class Utils {
     }
     if (data['secondaryphone'].toString().isEmpty) {
       data.remove('secondaryphone');
+    }
+    if (data['primaryphone'].toString().isEmpty) {
+      data.remove('primaryphone');
     }
 
     return data;

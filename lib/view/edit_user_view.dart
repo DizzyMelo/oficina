@@ -304,7 +304,7 @@ class _EditUserViewState extends State<EditUserView> {
     Map<String, dynamic> data = Utils.validateUserData({
       "name": ctrName.text,
       "email": ctrEmail.text,
-      "cpfcnpj": ctrCpf.text,
+      "cpfcnpj": Utils.removeSpecialCharacters(ctrCpf.text),
       "primaryphone": Utils.removeSpecialCharacters(ctrPhone.text),
       "secondaryphone": Utils.removeSpecialCharacters(ctrPhone2.text),
     });

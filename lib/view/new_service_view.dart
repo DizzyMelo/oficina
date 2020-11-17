@@ -176,8 +176,6 @@ class _NewServiceViewState extends State<NewServiceView> {
         "shop": SessionVariables.userDataModel.data.data.shop.id,
       };
     }
-
-    print(data);
     bool res = await _shopController.create(data, context, _scaffoldKey);
 
     if (res) {

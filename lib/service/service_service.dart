@@ -81,10 +81,11 @@ class ServiceService {
     }
   }
 
-  static Future<ItemAdicionadoModel> editItem(servico, int qtd,
-      double valor, ProdutosAdicionado p) async {
+  static Future<ItemAdicionadoModel> editItem(
+      servico, int qtd, double valor, ProdutosAdicionado p) async {
     await removeItem(p, servico);
-    var responseAdd = await addItem(int.parse(p.produtoId), servico, qtd, valor);
+    var responseAdd =
+        await addItem(int.parse(p.produtoId), servico, qtd, valor);
 
     if (responseAdd != null) {
       return responseAdd;
@@ -122,7 +123,7 @@ class ServiceService {
 
     try {
       var res = await dio.post(url, data: formData);
-      print(res.data);
+
       return true;
     } catch (e) {
       return false;
@@ -149,12 +150,9 @@ class ServiceService {
 
     FormData formData = new FormData.fromMap({'servico': servico, 'mdo': mdo});
 
-    print(servico);
-    print(mdo);
-
     try {
       var res = await dio.post(url, data: formData);
-      print(res.data);
+
       return true;
     } catch (e) {
       return false;

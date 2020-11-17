@@ -5,7 +5,8 @@ import 'package:oficina/model/user_base_model.dart';
 import 'package:oficina/shared/urls.dart';
 
 class UserService {
-  static Future<UserBaseModel> login(String user, String pass, String token) async {
+  static Future<UserBaseModel> login(
+      String user, String pass, String token) async {
     String url = '${Urls.baseUrl}usuario/login.php';
     Dio dio = new Dio();
     FormData formData = new FormData.fromMap({
@@ -15,7 +16,6 @@ class UserService {
     });
     try {
       var response = await dio.post(url, data: formData);
-      print(response.data);
       return UserBaseModel.fromJson(json.decode(response.data));
     } catch (e) {
       return null;
@@ -47,18 +47,14 @@ class UserService {
     });
     try {
       var response = await dio.post(url, data: formData);
-      print(response.data);
+
       return UserBaseModel.fromJson(json.decode(response.data));
     } catch (e) {
       return null;
     }
   }
 
-  Future<List> search() async {
+  Future<List> search() async {}
 
-  }
-
-  Future<List> list() async {
-
-  }
+  Future<List> list() async {}
 }

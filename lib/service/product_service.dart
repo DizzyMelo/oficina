@@ -43,7 +43,7 @@ class ProductService {
     });
     try {
       var response = await dio.post(url, data: formData);
-      //print(response.data);
+
       return ProductModel.fromJson(json.decode(response.data));
     } catch (e) {
       return null;
@@ -81,7 +81,7 @@ class ProductService {
       'id': id,
     });
     try {
-      var response = await dio.post(url, data: formData);      
+      var response = await dio.post(url, data: formData);
       return json.decode(response.data);
     } catch (e) {
       return false;
@@ -96,7 +96,7 @@ class ProductService {
       'qtd': qtd,
     });
     try {
-      var response = await dio.post(url, data: formData);      
+      var response = await dio.post(url, data: formData);
       return json.decode(response.data);
     } catch (e) {
       return false;

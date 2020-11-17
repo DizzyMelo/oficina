@@ -41,17 +41,22 @@ class PaymentService {
     }
   }
 
-  static Future<List<PaymentModel>> addPayment(servico, int forma, double valor) async {
+  static Future<List<PaymentModel>> addPayment(
+      servico, int forma, double valor) async {
     List<PaymentModel> services = new List();
     String url = '${Urls.baseUrl}pagamento/adicionar.php';
     Dio dio = new Dio();
 
-    Map<String, dynamic> map = {'forma': forma, 'servico': servico, 'valor': valor};
+    Map<String, dynamic> map = {
+      'forma': forma,
+      'servico': servico,
+      'valor': valor
+    };
 
     FormData formData = new FormData.fromMap(map);
-    print(map);
+
     var response = await dio.post(url, data: formData);
-    
+
     try {
       json.decode(response.data).forEach((element) {
         services.add(PaymentModel.fromJson(element));
