@@ -28,10 +28,11 @@ class UserController {
     }
   }
 
-  Future edit(data, id, delete, scaffoldKey) async {
-    CreateUserDataModel res = await requests.edit(data, id);
+  Future edit(Map<String, dynamic> data, String id, List<int> image,
+      String fileName, scaffoldKey) async {
+    bool res = await requests.edit(data, id, image, fileName);
 
-    if (res != null) {
+    if (res) {
       Utils.showInSnackBar(
           'Cliente editado com sucesso', Colors.green, scaffoldKey);
     } else {

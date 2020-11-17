@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:oficina/shared/session_variables.dart';
 import 'package:oficina/view/client_view.dart';
 import 'package:oficina/view/edit_user_view.dart';
 import 'package:oficina/view/edit_product_view.dart';
@@ -30,6 +31,7 @@ import 'shared/style.dart';
 void main() async {
   final prefs = await SharedPreferences.getInstance();
   String token = prefs.getString('token');
+  SessionVariables.token = token;
   await DotEnv().load('config.env');
   runApp(MyApp(token));
 }

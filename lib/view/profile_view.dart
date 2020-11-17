@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
@@ -41,7 +44,7 @@ class _ProfileViewState extends State<ProfileView> {
   ShopController _shopController = ShopController();
   UserController _userController = UserController();
 
-  double containerHeight = 530;
+  double containerHeight = 650;
   double containerWidth = 800;
 
   bool loadingEditShop = false;
@@ -52,6 +55,9 @@ class _ProfileViewState extends State<ProfileView> {
   IconData iconPhone2 = LineIcons.phone;
 
   GetUserDataModel _userDataModel;
+
+  String fileName = "Selecione uma foto";
+  List<int> image;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +90,50 @@ class _ProfileViewState extends State<ProfileView> {
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
+                          _userDataModel == null
+                              ? LoadingComponent()
+                              : Center(
+                                  child: Stack(
+                                  overflow: Overflow.visible,
+                                  children: [
+                                    Container(
+                                      height: 90,
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                              '${DotEnv().env['BASE_URL_IMG']}/user/${_userDataModel.data.data.photo}'),
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: -12,
+                                      right: -12,
+                                      child: InkWell(
+                                        onTap: () {
+                                          _pickImage();
+                                        },
+                                        child: Container(
+                                          height: 35,
+                                          width: 35,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Style.secondaryColor),
+                                          child: Icon(
+                                            LineIcons.camera_retro,
+                                            color: Colors.white,
+                                            size: 18,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          SizedBox(
+                            height: 20,
+                          ),
                           MainTextFieldComponent(
                             controller: ctrName,
                             icon: LineIcons.user,
@@ -294,11 +344,43 @@ class _ProfileViewState extends State<ProfileView> {
       loadingEditUser = !loadingEditUser;
     });
     await _userController.edit(
-        data, SessionVariables.userDataModel.data.data.id, false, _scaffoldKey);
+        data,
+        SessionVariables.userDataModel.data.data.id,
+        image,
+        fileName,
+        _scaffoldKey);
 
     await this.getUserInformation();
     setState(() {
       loadingEditUser = !loadingEditUser;
+    });
+  }
+
+  _pickImage() async {
+    InputElement uploadInput = FileUploadInputElement();
+    uploadInput.click();
+
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      if (files.length == 1) {
+        final file = files[0];
+        FileReader reader = FileReader();
+
+        reader.onLoadEnd.listen((e) {
+          setState(() {
+            image = reader.result;
+            fileName = file.name;
+          });
+        });
+
+        reader.onError.listen((fileEvent) {
+          setState(() {
+            fileName = "Algo deu errado ao ler o arquivo";
+          });
+        });
+
+        reader.readAsArrayBuffer(file);
+      }
     });
   }
 

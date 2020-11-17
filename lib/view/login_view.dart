@@ -17,7 +17,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   //TextEditingController ctrUser = TextEditingController(text: 'daniel.melo');
   //97857865785
-  TextEditingController ctrCpf = MaskedTextController(mask: '000.000.000-00');
+  TextEditingController ctrCpf = TextEditingController();
   TextEditingController ctrPass = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool obscure = true;
@@ -50,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
                     MainTextFieldComponent(
                         controller: ctrCpf,
                         icon: LineIcons.user,
-                        hint: 'CPF/CNPJ'),
+                        hint: 'CPF ou Telefone'),
                     SizedBox(height: 10),
                     TextField(
                       controller: ctrPass,

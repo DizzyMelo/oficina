@@ -1,4 +1,7 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
@@ -37,6 +40,9 @@ class _EditUserViewState extends State<EditUserView> {
 
   rep.ReportServiceDataModel report;
 
+  String fileName = "Selecione uma foto";
+  List<int> image;
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool loading = false;
@@ -46,7 +52,7 @@ class _EditUserViewState extends State<EditUserView> {
   IconData iconPhone = LineIcons.phone;
   IconData iconPhone2 = LineIcons.phone;
 
-  double containerHeight = 500;
+  double containerHeight = 600;
   double containerWidth = 800;
 
   UserController _userController = UserController();
@@ -82,6 +88,45 @@ class _EditUserViewState extends State<EditUserView> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            Center(
+                                child: Stack(
+                              overflow: Overflow.visible,
+                              children: [
+                                Container(
+                                  height: 90,
+                                  width: 90,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          '${DotEnv().env['BASE_URL_IMG']}/user/${widget.user.photo}'),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: -12,
+                                  right: -12,
+                                  child: InkWell(
+                                    onTap: () {
+                                      _pickImage();
+                                    },
+                                    child: Container(
+                                      height: 35,
+                                      width: 35,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Style.secondaryColor),
+                                      child: Icon(
+                                        LineIcons.camera_retro,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
                             MainTextFieldComponent(
                               controller: ctrName,
                               icon: LineIcons.user,
@@ -91,7 +136,7 @@ class _EditUserViewState extends State<EditUserView> {
                             MainTextFieldComponent(
                                 controller: ctrCpf,
                                 icon: LineIcons.user,
-                                hint: 'CPF/CNPJ'),
+                                hint: 'CPF'),
                             PhoneTextFieldComponent(
                               controller: ctrPhone,
                               icon: iconPhone,
@@ -109,6 +154,29 @@ class _EditUserViewState extends State<EditUserView> {
                                 controller: ctrEmail,
                                 icon: LineIcons.envelope_o,
                                 hint: 'Email'),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                _pickImage();
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    LineIcons.camera_retro,
+                                    color: Style.primaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(fileName)
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             widget.user.role != 'cliente'
                                 ? SizedBox(
                                     height: 1,
@@ -140,17 +208,17 @@ class _EditUserViewState extends State<EditUserView> {
                                   )
                                 : MainButtomComponent(
                                     title: 'SALVAR', function: edit),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            loadingDelete
-                                ? Center(
-                                    child: LoadingComponent(
-                                      delete: true,
-                                    ),
-                                  )
-                                : CancelButtomComponent(
-                                    title: 'EXCLUIR', function: delete)
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            // loadingDelete
+                            //     ? Center(
+                            //         child: LoadingComponent(
+                            //           delete: true,
+                            //         ),
+                            //       )
+                            //     : CancelButtomComponent(
+                            //         title: 'EXCLUIR', function: delete)
                           ]),
                     ),
                     Container(
@@ -237,12 +305,13 @@ class _EditUserViewState extends State<EditUserView> {
       "name": ctrName.text,
       "email": ctrEmail.text,
       "cpfcnpj": ctrCpf.text,
-      "primaryphone": ctrPhone.text,
-      "secondaryphone": ctrPhone2.text,
+      "primaryphone": Utils.removeSpecialCharacters(ctrPhone.text),
+      "secondaryphone": Utils.removeSpecialCharacters(ctrPhone2.text),
     });
 
     this.changeLoadingState();
-    await _userController.edit(data, widget.user.id, false, _scaffoldKey);
+    await _userController.edit(
+        data, widget.user.id, image, fileName, _scaffoldKey);
     this.changeLoadingState();
   }
 
@@ -286,14 +355,14 @@ class _EditUserViewState extends State<EditUserView> {
     }
   }
 
-  delete() async {
-    Map<String, dynamic> data = {
-      "active": false,
-    };
-    this.changeLoadingDeleteState();
-    await _userController.edit(data, widget.user.id, true, _scaffoldKey);
-    this.changeLoadingDeleteState();
-  }
+  // delete() async {
+  //   Map<String, dynamic> data = {
+  //     "active": false,
+  //   };
+  //   this.changeLoadingDeleteState();
+  //   await _userController.edit(data, widget.user.id, true, _scaffoldKey);
+  //   this.changeLoadingDeleteState();
+  // }
 
   changeLoadingState() {
     setState(() {
@@ -351,6 +420,34 @@ class _EditUserViewState extends State<EditUserView> {
         });
       }
     }
+  }
+
+  _pickImage() async {
+    InputElement uploadInput = FileUploadInputElement();
+    uploadInput.click();
+
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      if (files.length == 1) {
+        final file = files[0];
+        FileReader reader = FileReader();
+
+        reader.onLoadEnd.listen((e) {
+          setState(() {
+            image = reader.result;
+            fileName = file.name;
+          });
+        });
+
+        reader.onError.listen((fileEvent) {
+          setState(() {
+            fileName = "Algo deu errado ao ler o arquivo";
+          });
+        });
+
+        reader.readAsArrayBuffer(file);
+      }
+    });
   }
 
   @override
