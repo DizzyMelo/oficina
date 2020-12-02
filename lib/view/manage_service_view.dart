@@ -373,8 +373,8 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   }
 
   removeProduct() async {
-    bool res = await _productServiceController.delete(addedProductId, context);
     Navigator.pop(context);
+    bool res = await _productServiceController.delete(addedProductId, context);
     addedProductId = '';
     if (res) this.getServiceDetails();
   }
