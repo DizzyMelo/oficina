@@ -224,8 +224,7 @@ class _StockViewState extends State<StockView> {
   }
 
   search(name) async {
-    SearchProductDataModel res =
-        await _productController.search(name, _scaffoldKey);
+    SearchProductDataModel res = await _productController.search(name, context);
 
     setState(() {
       _searchProductDataModel = res;

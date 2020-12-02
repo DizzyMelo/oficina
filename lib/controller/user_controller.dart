@@ -18,26 +18,24 @@ class UserController {
     CreateUserDataModel res = await requests.create(data);
 
     if (res != null) {
-      Utils.showInSnackBar(
-          'Usuário cadastrado com sucesso', Colors.green, scaffoldKey);
+      Utils.showMessage('Usuário cadastrado com sucesso', context,
+          color: Colors.green);
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o usuário', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar cadastrar o usuário', context);
       return null;
     }
   }
 
   Future edit(Map<String, dynamic> data, String id, List<int> image,
-      String fileName, scaffoldKey) async {
+      String fileName, BuildContext context) async {
     bool res = await requests.edit(data, id, image, fileName);
 
     if (res) {
-      Utils.showInSnackBar(
-          'Cliente editado com sucesso', Colors.green, scaffoldKey);
+      Utils.showMessage('Cliente editado com sucesso', context,
+          color: Colors.green);
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar editar o cliente', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar editar o cliente', context);
     }
   }
 
@@ -47,8 +45,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
     }
   }
 
@@ -59,8 +56,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
     }
   }
 
@@ -70,8 +66,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
     }
   }
 
@@ -83,8 +78,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
     }
   }
 
@@ -94,8 +88,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Nenhum veículo encontrado', Colors.red, scaffoldKey);
+      Utils.showMessage('Nenhum veículo encontrado', context);
 
       return null;
     }

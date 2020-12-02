@@ -177,10 +177,10 @@ class _NewCarViewState extends State<NewCarView> {
 
   bool validarInformacao() {
     if (ctrModel.text.isEmpty) {
-      Utils.showInSnackBar(
+      Utils.showMessage(
           'Informe o modelo do carro. Recomendamos o seguinte formato: MARCA MODELO ANO POTENCIA. EX.: FIAT UNO 2010 1.0',
-          Colors.red,
-          _scaffoldKey);
+          context,
+          width: 500);
       return false;
     }
     return true;

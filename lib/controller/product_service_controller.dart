@@ -10,26 +10,25 @@ class ProductServiceController {
     requests = ProductServiceRequests();
   }
 
-  Future<CreateProductServiceDataModel> create(data, scaffoldKey) async {
+  Future<CreateProductServiceDataModel> create(
+      data, BuildContext context) async {
     CreateProductServiceDataModel res = await requests.create(data);
     if (res != null) {
-      Utils.showInSnackBar('Produto adicionado!', Colors.green, scaffoldKey);
+      Utils.showMessage('Produto adicionado!', context, color: Colors.green);
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao adicionar o produto!', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao adicionar o produto!', context);
       return null;
     }
   }
 
-  Future<bool> delete(id, scaffoldKey) async {
+  Future<bool> delete(id, BuildContext context) async {
     bool res = await requests.delete(id);
     if (res) {
-      Utils.showInSnackBar('Produto removido!', Colors.green, scaffoldKey);
+      Utils.showMessage('Produto removido!', context, color: Colors.green);
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao remover o produto!', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao remover o produto!', context);
       return false;
     }
   }

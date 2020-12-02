@@ -103,7 +103,10 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                                             };
                                           });
                                         },
-                                        title: Text(user.name),
+                                        title: Text(
+                                          user.name,
+                                          style: Style.clientNameText,
+                                        ),
                                       );
                                     }),
                           ),
@@ -116,9 +119,12 @@ class _SelectColaboratorViewState extends State<SelectColaboratorView> {
                             ? Colors.red
                             : Style.primaryColor,
                       ),
-                      title: Text(colaborator == null
-                          ? 'Colaborador não selecionado'
-                          : 'Colaborador selecionado: ${colaborator.name}'),
+                      title: Text(
+                        colaborator == null
+                            ? 'Colaborador não selecionado'
+                            : 'Colaborador selecionado: ${colaborator.name}',
+                        style: Style.clientNameText,
+                      ),
                       trailing: colaborator == null
                           ? null
                           : IconButton(

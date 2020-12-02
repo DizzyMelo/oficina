@@ -191,7 +191,10 @@ class _ReportViewState extends State<ReportView> {
 
       return true;
     } catch (e) {
-      Utils.showInSnackBar('Data inválida', Colors.red, _scaffoldKey);
+      Utils.showMessage(
+        'Data inválida',
+        context,
+      );
       return false;
     }
   }
@@ -214,8 +217,7 @@ class _ReportViewState extends State<ReportView> {
     setState(() {
       loadingSearch = true;
     });
-    ReportServiceDataModel res =
-        await _serviceController.report(data, _scaffoldKey);
+    ReportServiceDataModel res = await _serviceController.report(data, context);
 
     setState(() {
       loadingSearch = false;
@@ -235,7 +237,7 @@ class _ReportViewState extends State<ReportView> {
       "date_final": "${Utils.formatDateReverse(ctrFinalDate.text)} 24:00:00",
     };
 
-    StatsDataModel res = await _paymentController.stats(data, _scaffoldKey);
+    StatsDataModel res = await _paymentController.stats(data, context);
 
     if (res != null) {
       double value = 0;

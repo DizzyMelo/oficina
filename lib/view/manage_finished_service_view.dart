@@ -115,8 +115,7 @@ class _ManageFinishedServiceViewState extends State<ManageFinishedServiceView> {
           if (service != null) {
             Printer.print(service);
           } else {
-            Utils.showInSnackBar(
-                'Serviço inválido para impressão', Colors.red, _scaffoldKey);
+            Utils.showMessage('Serviço inválido para impressão', context);
           }
         },
         child: Icon(LineIcons.print),
@@ -125,8 +124,8 @@ class _ManageFinishedServiceViewState extends State<ManageFinishedServiceView> {
   }
 
   getServiceDetails() async {
-    DetailServiceDataModel res = await _serviceController.getServiceDetails(
-        widget.serviceId, _scaffoldKey);
+    DetailServiceDataModel res =
+        await _serviceController.getServiceDetails(widget.serviceId, context);
 
     if (res != null) {
       setState(() {

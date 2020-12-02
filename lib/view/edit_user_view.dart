@@ -293,12 +293,11 @@ class _EditUserViewState extends State<EditUserView> {
 
   bool validateInfo() {
     if (ctrName.text.isEmpty) {
-      Utils.showInSnackBar(
-          'Informe o nome do cliente', Colors.red, _scaffoldKey);
+      Utils.showMessage('Informe o nome do cliente', context);
       return false;
     } else if (ctrPhone.text.isEmpty) {
-      Utils.showInSnackBar('Informe ao menos o primeiro número de contato',
-          Colors.red, _scaffoldKey);
+      Utils.showMessage(
+          'Informe ao menos o primeiro número de contato', context);
       return false;
     }
 
@@ -317,8 +316,7 @@ class _EditUserViewState extends State<EditUserView> {
     });
 
     this.changeLoadingState();
-    await _userController.edit(
-        data, widget.user.id, image, fileName, _scaffoldKey);
+    await _userController.edit(data, widget.user.id, image, fileName, context);
     this.changeLoadingState();
   }
 
@@ -329,7 +327,7 @@ class _EditUserViewState extends State<EditUserView> {
 
       return true;
     } catch (e) {
-      Utils.showInSnackBar('Data inválida', Colors.red, _scaffoldKey);
+      Utils.showMessage('Data inválida', context);
       return false;
     }
   }
@@ -349,7 +347,7 @@ class _EditUserViewState extends State<EditUserView> {
       loadingSearch = true;
     });
     rep.ReportServiceDataModel res =
-        await _serviceController.report(data, _scaffoldKey);
+        await _serviceController.report(data, context);
 
     setState(() {
       loadingSearch = false;

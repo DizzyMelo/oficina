@@ -405,20 +405,17 @@ class _FinishServiceViewState extends State<FinishServiceView> {
     });
 
     if (format == 0) {
-      Utils.showInSnackBar(
-          'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
+      Utils.showMessage('Selecione a forma de pagamento!', context);
       return;
     }
 
     if (valor == 0) {
-      Utils.showInSnackBar(
-          'O valor deve ser maior que 0!', Colors.red, _scaffoldKey);
+      Utils.showMessage('O valor deve ser maior que 0!', context);
       return;
     }
 
     if (selectedFormat == null) {
-      Utils.showInSnackBar(
-          'Selecione a forma de pagamento!', Colors.red, _scaffoldKey);
+      Utils.showMessage('Selecione a forma de pagamento!', context);
       return;
     }
 
@@ -427,7 +424,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
 
     if (res != null) {
       double t = 0;
-      Utils.showInSnackBar('Pagamento adicionado', Colors.green, _scaffoldKey);
+      Utils.showMessage('Pagamento adicionado', context, color: Colors.green);
 
       setState(() {
         res.forEach((element) {
@@ -440,8 +437,7 @@ class _FinishServiceViewState extends State<FinishServiceView> {
         });
       });
     } else {
-      Utils.showInSnackBar(
-          'Erro ao adicionar pagamento', Colors.red, _scaffoldKey);
+      Utils.showMessage('Erro ao adicionar pagamento', context);
     }
   }
 
@@ -465,8 +461,10 @@ class _FinishServiceViewState extends State<FinishServiceView> {
         w.selected = true;
       });
     } else {
-      Utils.showInSnackBar(
-          'Erro ao adicionar garantia', Colors.red, _scaffoldKey);
+      Utils.showMessage(
+        'Erro ao adicionar garantia',
+        context,
+      );
     }
   }
 
@@ -474,10 +472,12 @@ class _FinishServiceViewState extends State<FinishServiceView> {
     bool res = await ServiceService.conclude(widget.service.idServico, 4);
 
     if (res) {
-      Utils.showInSnackBar('Serviço concluído!', Colors.green, _scaffoldKey);
+      Utils.showMessage('Serviço concluído!', context, color: Colors.green);
     } else {
-      Utils.showInSnackBar(
-          'Erro ao concluir serviço!', Colors.red, _scaffoldKey);
+      Utils.showMessage(
+        'Erro ao concluir serviço!',
+        context,
+      );
     }
   }
 

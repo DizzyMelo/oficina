@@ -215,12 +215,11 @@ class _ColaboratorViewState extends State<ColaboratorView> {
 
   bool validateInfo() {
     if (ctrName.text.isEmpty) {
-      Utils.showInSnackBar(
-          'Informe o nome do cliente', Colors.red, _scaffoldKey);
+      Utils.showMessage('Informe o nome do cliente', context);
       return false;
     } else if (ctrPhone.text.isEmpty) {
-      Utils.showInSnackBar('Informe ao menos o primeiro número de contato',
-          Colors.red, _scaffoldKey);
+      Utils.showMessage(
+          'Informe ao menos o primeiro número de contato', context);
       return false;
     }
 

@@ -98,7 +98,10 @@ class _SelectCarViewState extends State<SelectCarView> {
                                               };
                                             });
                                           },
-                                          title: Text(v.name),
+                                          title: Text(
+                                            v.name,
+                                            style: Style.clientNameText,
+                                          ),
                                         );
                                       }),
                                 ),
@@ -111,9 +114,12 @@ class _SelectCarViewState extends State<SelectCarView> {
                                   ? Colors.red
                                   : Style.primaryColor,
                             ),
-                            title: Text(vehicle == null
-                                ? 'Veículo não selecionado'
-                                : 'Veículo selecionado: ${vehicle.name}'),
+                            title: Text(
+                              vehicle == null
+                                  ? 'Veículo não selecionado'
+                                  : 'Veículo selecionado: ${vehicle.name}',
+                              style: Style.clientNameText,
+                            ),
                             trailing: vehicle == null
                                 ? null
                                 : IconButton(

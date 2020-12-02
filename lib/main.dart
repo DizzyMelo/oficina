@@ -22,6 +22,7 @@ import 'package:oficina/view/select_colaborator_view.dart';
 import 'package:oficina/view/select_colaborator_waiting_view.dart';
 import 'package:oficina/view/service_view.dart';
 import 'package:oficina/view/settings_view.dart';
+import 'package:oficina/view/splash_view.dart';
 import 'package:oficina/view/stock_view.dart';
 import 'package:oficina/view/colaborator_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,18 +30,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'shared/style.dart';
 
 void main() async {
-  final prefs = await SharedPreferences.getInstance();
-  String token = prefs.getString('token');
-  SessionVariables.token = token;
   await DotEnv().load('config.env');
-  runApp(MyApp(token));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  final String token;
 
-  MyApp(this.token);
+  MyApp();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,8 +48,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: token == null || token.isEmpty ? '/login' : '/main',
-      //initialRoute: '/login',
+      //initialRoute: token == null || token.isEmpty ? '/login' : '/main',
+      initialRoute: '/splash',
       onGenerateRoute: (RouteSettings settings) {
         var page;
 
@@ -60,17 +57,14 @@ class MyApp extends StatelessWidget {
           case "/land":
             page = MaterialPageRoute(builder: (context) => LandView());
             break;
+          case "/splash":
+            page = MaterialPageRoute(builder: (context) => SplashView());
+            break;
           case "/login":
             page = MaterialPageRoute(builder: (context) => LoginView());
             break;
           case "/main":
-            String userId = settings.arguments == null
-                ? JwtDecoder.decode(token)['id']
-                : settings.arguments;
-            page = MaterialPageRoute(
-                builder: (context) => MainView(
-                      userId: userId,
-                    ));
+            page = MaterialPageRoute(builder: (context) => MainView());
             break;
           case "/service":
             page = MaterialPageRoute(

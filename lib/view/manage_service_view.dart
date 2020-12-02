@@ -366,15 +366,14 @@ class _ManageServiceViewState extends State<ManageServiceView> {
 
     Navigator.pop(context);
     CreateProductServiceDataModel res =
-        await _productServiceController.create(data, _scaffoldKey);
+        await _productServiceController.create(data, context);
 
     if (res != null) this.getServiceDetails();
     productId = '';
   }
 
   removeProduct() async {
-    bool res =
-        await _productServiceController.delete(addedProductId, _scaffoldKey);
+    bool res = await _productServiceController.delete(addedProductId, context);
     Navigator.pop(context);
     addedProductId = '';
     if (res) this.getServiceDetails();
@@ -383,7 +382,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   editServiceHow() async {
     Map<String, dynamic> data = {'how': Utils.clearPrice(ctrHow.text)};
     bool res = await _serviceController.edit(
-        data, widget.serviceId, 'update-how', _scaffoldKey);
+        data, widget.serviceId, 'update-how', context);
 
     if (res) this.getServiceDetails();
   }
@@ -393,7 +392,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
       'discount': Utils.clearPrice(ctrDiscount.text)
     };
     bool res = await _serviceController.edit(
-        data, widget.serviceId, 'update-discount', _scaffoldKey);
+        data, widget.serviceId, 'update-discount', context);
 
     if (res) this.getServiceDetails();
   }
@@ -404,7 +403,7 @@ class _ManageServiceViewState extends State<ManageServiceView> {
       'date_end': DateTime.now().toString()
     };
     bool res =
-        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+        await _serviceController.edit(data, widget.serviceId, '', context);
 
     if (res) {}
   }
@@ -412,21 +411,20 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   updateObservation() async {
     Map<String, dynamic> data = {'observation': ctrObservation.text};
     bool res =
-        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+        await _serviceController.edit(data, widget.serviceId, '', context);
 
     if (res) {}
   }
 
   updateService(data) async {
     bool res =
-        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+        await _serviceController.edit(data, widget.serviceId, '', context);
 
     if (res) this.getServiceDetails();
   }
 
   searchProducts(name) async {
-    SearchProductDataModel res =
-        await _productController.search(name, _scaffoldKey);
+    SearchProductDataModel res = await _productController.search(name, context);
     if (res != null) {
       setState(() {
         _searchProductDataModel = res;
@@ -437,8 +435,8 @@ class _ManageServiceViewState extends State<ManageServiceView> {
   }
 
   getServiceDetails() async {
-    DetailServiceDataModel res = await _serviceController.getServiceDetails(
-        widget.serviceId, _scaffoldKey);
+    DetailServiceDataModel res =
+        await _serviceController.getServiceDetails(widget.serviceId, context);
 
     if (res != null) {
       setState(() {

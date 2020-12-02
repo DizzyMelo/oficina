@@ -16,8 +16,7 @@ class VehicleController {
     if (res != null) {
       return res;
     } else {
-      Utils.showInSnackBar(
-          'Erro ao tentar cadastrar o cliente', Colors.red, scaffoldKey);
+      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
       return null;
     }
   }

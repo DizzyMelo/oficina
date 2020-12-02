@@ -69,7 +69,10 @@ class _SelectColaboratorWaitingViewState
                                         colaborator = user;
                                       });
                                     },
-                                    title: Text(user.name),
+                                    title: Text(
+                                      user.name,
+                                      style: Style.clientNameText,
+                                    ),
                                   );
                                 }),
                           ),
@@ -82,9 +85,12 @@ class _SelectColaboratorWaitingViewState
                             ? Colors.red
                             : Style.primaryColor,
                       ),
-                      title: Text(colaborator == null
-                          ? 'Colaborador não selecionado'
-                          : 'Colaborador selecionado: ${colaborator.name}'),
+                      title: Text(
+                        colaborator == null
+                            ? 'Colaborador não selecionado'
+                            : 'Colaborador selecionado: ${colaborator.name}',
+                        style: Style.clientNameText,
+                      ),
                       trailing: colaborator == null
                           ? null
                           : IconButton(
@@ -131,7 +137,7 @@ class _SelectColaboratorWaitingViewState
       'status': 'iniciado'
     };
     bool res =
-        await _serviceController.edit(data, widget.serviceId, '', _scaffoldKey);
+        await _serviceController.edit(data, widget.serviceId, '', context);
 
     if (res) {
       this.navigateToMain();

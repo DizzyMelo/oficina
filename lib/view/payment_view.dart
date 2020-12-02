@@ -242,8 +242,7 @@ class _PaymentViewState extends State<PaymentView> {
   bool validatePayment() {
     double value = Utils.clearPrice(ctrPaymentAmount.text);
     if (value <= 0) {
-      Utils.showInSnackBar(
-          'O valor precisa ser maior que zero', Colors.red, _scaffoldKey);
+      Utils.showMessage('O valor precisa ser maior que zero', context);
       return false;
     }
 
@@ -263,7 +262,7 @@ class _PaymentViewState extends State<PaymentView> {
     setState(() {
       loadingAddPayment = !loadingAddPayment;
     });
-    bool res = await _paymentController.create(data, _scaffoldKey);
+    bool res = await _paymentController.create(data, context);
 
     setState(() {
       loadingAddPayment = !loadingAddPayment;
@@ -278,13 +277,15 @@ class _PaymentViewState extends State<PaymentView> {
       "date_end": DateTime.now().toString()
     };
     bool res = await _serviceController.edit(
-        data, widget.service.data.data.id, '', _scaffoldKey);
+        data, widget.service.data.data.id, '', context);
 
     if (res) {
       navigateToMain();
     } else {
-      Utils.showInSnackBar('Algo não deu certo ao finalizar o serviço',
-          Colors.red, _scaffoldKey);
+      Utils.showMessage(
+        'Algo não deu certo ao finalizar o serviço',
+        context,
+      );
     }
   }
 
@@ -296,7 +297,7 @@ class _PaymentViewState extends State<PaymentView> {
 
   delete() async {
     Navigator.pop(context);
-    bool res = await _paymentController.delete(selectedPayment, _scaffoldKey);
+    bool res = await _paymentController.delete(selectedPayment, context);
 
     if (res) {
       this.getPayments();

@@ -335,7 +335,7 @@ class _ProfileViewState extends State<ProfileView> {
     setState(() {
       loadingEditShop = !loadingEditShop;
     });
-    await _shopController.edit(data, _scaffoldKey);
+    await _shopController.edit(data, context);
     setState(() {
       loadingEditShop = !loadingEditShop;
     });
@@ -352,12 +352,8 @@ class _ProfileViewState extends State<ProfileView> {
     setState(() {
       loadingEditUser = !loadingEditUser;
     });
-    await _userController.edit(
-        data,
-        SessionVariables.userDataModel.data.data.id,
-        image,
-        fileName,
-        _scaffoldKey);
+    await _userController.edit(data,
+        SessionVariables.userDataModel.data.data.id, image, fileName, context);
 
     await this.getUserInformation();
     setState(() {

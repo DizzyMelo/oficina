@@ -508,8 +508,7 @@ class _ServiceViewState extends State<ServiceView> {
 
   searchItems(String txt) async {
     if (txt.length < 3) {
-      Utils.showInSnackBar(
-          'Digite pelo menos três letras', Colors.red, _scaffoldKey);
+      Utils.showMessage('Digite pelo menos três letras', context);
       return;
     }
     List<ItemModel> tempItems = await ItemService.searchItems('1', txt);
@@ -696,10 +695,9 @@ class _ServiceViewState extends State<ServiceView> {
 
     Navigator.pop(context);
     if (res) {
-      Utils.showInSnackBar('Desconto adicionado', Colors.green, _scaffoldKey);
+      Utils.showMessage('Desconto adicionado', context, color: Colors.green);
     } else {
-      Utils.showInSnackBar(
-          'Erro ao adicionar desconto', Colors.red, _scaffoldKey);
+      Utils.showMessage('Erro ao adicionar desconto', context);
     }
   }
 
@@ -714,11 +712,9 @@ class _ServiceViewState extends State<ServiceView> {
 
     Navigator.pop(context);
     if (res) {
-      Utils.showInSnackBar(
-          'Mão de obra adicionada', Colors.green, _scaffoldKey);
+      Utils.showMessage('Mão de obra adicionada', context, color: Colors.green);
     } else {
-      Utils.showInSnackBar(
-          'Erro ao adicionar mão de obra', Colors.red, _scaffoldKey);
+      Utils.showMessage('Erro ao adicionar mão de obra', context);
     }
   }
 }

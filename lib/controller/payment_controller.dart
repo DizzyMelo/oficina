@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:oficina/api_requests/payment_requests.dart';
-import 'package:oficina/model/create_payment_data_model.dart';
 import 'package:oficina/model/get_payments_data_model.dart';
 import 'package:oficina/model/stats_data_model.dart';
 import 'package:oficina/shared/utils.dart';
@@ -12,39 +11,38 @@ class PaymentController {
     requests = PaymentRequests();
   }
 
-  Future<bool> create(data, scaffoldKey) async {
+  Future<bool> create(data, BuildContext context) async {
     bool res = await requests.create(data);
 
     if (res) {
-      Utils.showInSnackBar('Pagamento adicionado', Colors.green, scaffoldKey);
+      Utils.showMessage('Pagamento adicionado', context, color: Colors.green);
       return res;
     }
 
-    Utils.showInSnackBar(
-        'Erro ao adicionar pagamento', Colors.red, scaffoldKey);
+    Utils.showMessage('Erro ao adicionar pagamento', context);
     return false;
   }
 
-  Future<StatsDataModel> stats(data, scaffoldKey) async {
+  Future<StatsDataModel> stats(data, BuildContext context) async {
     StatsDataModel res = await requests.stats(data);
 
     if (res != null) {
       return res;
     }
 
-    Utils.showInSnackBar('Erro ao buscar dados', Colors.red, scaffoldKey);
+    Utils.showMessage('Erro ao buscar dados', context);
     return null;
   }
 
-  delete(id, scaffoldKey) async {
+  delete(id, BuildContext context) async {
     bool res = await requests.delete(id);
 
     if (res) {
-      Utils.showInSnackBar('Pagamento removido', Colors.green, scaffoldKey);
+      Utils.showMessage('Pagamento removido', context, color: Colors.green);
       return res;
     }
 
-    Utils.showInSnackBar('Erro ao remover pagamento', Colors.red, scaffoldKey);
+    Utils.showMessage('Erro ao remover pagamento', context);
     return false;
   }
 

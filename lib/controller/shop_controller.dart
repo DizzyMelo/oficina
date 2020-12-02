@@ -11,26 +11,25 @@ class ShopController {
     requests = ShopRequests();
   }
 
-  Future<GetServiceDataModel> getServices(scaffoldKey) async {
+  Future<GetServiceDataModel> getServices(BuildContext context) async {
     GetServiceDataModel res = await requests
         .getServices(SessionVariables.userDataModel.data.data.shop.id);
 
     if (res != null) return res;
-    Utils.showInSnackBar('Nenhum serviço encontrado', Colors.red, scaffoldKey);
+    Utils.showMessage('Nenhum serviço encontrado', context);
     return null;
   }
 
-  Future<bool> edit(data, scaffoldKey) async {
+  Future<bool> edit(data, BuildContext context) async {
     bool res = await requests.edit(
         data, SessionVariables.userDataModel.data.data.shop.id);
 
     if (res) {
-      Utils.showInSnackBar(
-          'Informações salvas com sucesso', Colors.green, scaffoldKey);
+      Utils.showMessage('Informações salvas com sucesso', context,
+          color: Colors.green);
       return res;
     }
-    Utils.showInSnackBar(
-        'Erro ao atualizar as informações', Colors.red, scaffoldKey);
+    Utils.showMessage('Erro ao atualizar as informações', context);
     return false;
   }
 }

@@ -17,10 +17,13 @@ class ProductController {
     CreateProductDataModel res = await requests.create(data);
 
     if (res != null) {
-      Utils.showInSnackBar('Produto adicionado!', Colors.green, scaffoldKey);
+      Utils.showMessage('Produto adicionado!', context, color: Colors.green);
       return res;
     }
-    Utils.showInSnackBar('Erro ao adicionar produto', Colors.red, scaffoldKey);
+    Utils.showMessage(
+      'Erro ao adicionar produto',
+      context,
+    );
     return null;
   }
 
@@ -33,14 +36,14 @@ class ProductController {
         delete ? 'Erro ao excluir produto!' : 'Erro ao editar produto!';
 
     if (res != null) {
-      Utils.showInSnackBar(messageSuccess, Colors.green, scaffoldKey);
+      Utils.showMessage(messageSuccess, context, color: Colors.green);
     }
 
-    Utils.showInSnackBar(messageError, Colors.red, scaffoldKey);
+    Utils.showMessage(messageError, context);
     return null;
   }
 
-  Future<SearchProductDataModel> search(name, scaffoldKey) async {
+  Future<SearchProductDataModel> search(name, BuildContext context) async {
     SearchProductDataModel res = await requests.search(
         name, SessionVariables.userDataModel.data.data.shop.id);
 
@@ -48,8 +51,7 @@ class ProductController {
         res.data == null ||
         res.data.data == null ||
         res.data.data.length == 0) return res;
-    Utils.showInSnackBar(
-        'A pesquisa não encontrou nenhum resultado', Colors.red, scaffoldKey);
+    Utils.showMessage('A pesquisa não encontrou nenhum resultado', context);
     return null;
   }
 }

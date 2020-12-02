@@ -83,7 +83,10 @@ class _SelectClientViewState extends State<SelectClientView> {
                                             };
                                           });
                                         },
-                                        title: Text(user.name),
+                                        title: Text(
+                                          user.name,
+                                          style: Style.clientNameText,
+                                        ),
                                       );
                                     }),
                           ),
@@ -92,9 +95,12 @@ class _SelectClientViewState extends State<SelectClientView> {
                         client == null ? LineIcons.warning : LineIcons.check,
                         color: client == null ? Colors.red : Style.primaryColor,
                       ),
-                      title: Text(client == null
-                          ? 'Cliente não selecionado'
-                          : 'Cliente selecionado: ${client.name}'),
+                      title: Text(
+                        client == null
+                            ? 'Cliente não selecionado'
+                            : 'Cliente selecionado: ${client.name}',
+                        style: Style.clientNameText,
+                      ),
                       trailing: client == null
                           ? null
                           : IconButton(
@@ -129,8 +135,7 @@ class _SelectClientViewState extends State<SelectClientView> {
 
   searchClients(String name) async {
     if (name.length < 3) {
-      Utils.showInSnackBar(
-          'Digite pelo menos três caracteres', Colors.red, _scaffoldKey);
+      Utils.showMessage('Digite pelo menos três caracteres', context);
       return;
     }
     this.changeLodingState();

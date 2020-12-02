@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
@@ -14,7 +15,7 @@ import 'package:oficina/shared/style.dart';
 import 'package:string_mask/string_mask.dart';
 
 class Utils {
-  static void showInSnackBar(
+  static void showInSnackBard(
       String value, Color color, GlobalKey<ScaffoldState> scaffoldKey) {
     scaffoldKey.currentState.showSnackBar(SnackBar(
       backgroundColor: color,
@@ -27,6 +28,23 @@ class Utils {
             scaffoldKey.currentState.hideCurrentSnackBar();
           }),
     ));
+  }
+
+  static showMessage(String message, BuildContext context,
+      {Color color = Colors.red, IconData icon, double width = 400}) {
+    Flushbar(
+      message: message,
+      backgroundColor: color ?? Colors.red,
+      duration: Duration(seconds: 4),
+      flushbarPosition: FlushbarPosition.TOP,
+      maxWidth: width,
+      margin: EdgeInsets.all(5),
+      borderRadius: 5,
+      icon: Icon(
+        icon ?? LineIcons.warning,
+        color: Colors.white,
+      ),
+    )..show(context);
   }
 
   static String formatFirstName(String name) {

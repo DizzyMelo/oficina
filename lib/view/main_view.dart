@@ -17,9 +17,6 @@ import 'package:oficina/shared/style.dart';
 import 'package:oficina/shared/utils.dart';
 
 class MainView extends StatefulWidget {
-  final String userId;
-
-  MainView({@required this.userId});
   @override
   _MainViewState createState() => _MainViewState();
 }
@@ -256,7 +253,7 @@ class _MainViewState extends State<MainView> {
 
   getUserInformation() async {
     GetUserDataModel res = await _userController.getUserInformation(
-        widget.userId, context, _scaffoldKey);
+        SessionVariables.userId, context, _scaffoldKey);
 
     if (res != null) {
       setState(() {
@@ -274,8 +271,7 @@ class _MainViewState extends State<MainView> {
       }
     };
 
-    ReportServiceDataModel res =
-        await _serviceController.report(data, _scaffoldKey);
+    ReportServiceDataModel res = await _serviceController.report(data, context);
 
     if (res != null) {
       setState(() {
