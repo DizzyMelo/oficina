@@ -134,6 +134,9 @@ class _EditUserViewState extends State<EditUserView> {
                                 ),
                               ],
                             )),
+                            SizedBox(
+                              height: 20,
+                            ),
                             MainTextFieldComponent(
                               controller: ctrName,
                               icon: LineIcons.user,
