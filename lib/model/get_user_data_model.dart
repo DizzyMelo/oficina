@@ -61,7 +61,6 @@ class DataData {
     this.cpfcnpj,
     this.secondaryphone,
     this.primaryphone,
-    this.v,
     this.dataId,
   });
 
@@ -76,7 +75,6 @@ class DataData {
   String cpfcnpj;
   String secondaryphone;
   String primaryphone;
-  int v;
   String dataId;
 
   factory DataData.fromJson(Map<String, dynamic> json) => DataData(
@@ -91,7 +89,6 @@ class DataData {
         cpfcnpj: json["cpfcnpj"],
         secondaryphone: json["secondaryphone"],
         primaryphone: json["primaryphone"],
-        v: json["__v"],
         dataId: json["id"],
       );
 
@@ -107,7 +104,6 @@ class DataData {
         "cpfcnpj": cpfcnpj,
         "secondaryphone": secondaryphone,
         "primaryphone": primaryphone,
-        "__v": v,
         "id": dataId,
       };
 }

@@ -45,7 +45,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
+      Utils.showMessage('Erro ao buscar usuário!', context);
     }
   }
 
@@ -56,7 +56,7 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
+      Utils.showMessage('Erro ao buscar o colaborador pelo nome', context);
     }
   }
 
@@ -66,19 +66,18 @@ class UserController {
     if (res != null) {
       return res;
     } else {
-      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
+      Utils.showMessage('Erro ao buscar colaborador', context);
     }
   }
 
   Future getUserInformation(id, context, scaffoldKey) async {
     GetUserDataModel res = await requests.getUserInformation(id);
 
-    SessionVariables.userDataModel = res;
-
     if (res != null) {
+      SessionVariables.userDataModel = res;
       return res;
     } else {
-      Utils.showMessage('Erro ao tentar cadastrar o cliente', context);
+      return null;
     }
   }
 

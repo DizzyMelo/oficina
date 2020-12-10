@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:oficina/components/appbar_component.dart';
 import 'package:oficina/components/loading_component.dart';
@@ -22,7 +23,7 @@ class SelectCarView extends StatefulWidget {
 class _SelectCarViewState extends State<SelectCarView> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController ctrName = TextEditingController();
-  TextEditingController ctrPlate = TextEditingController();
+  TextEditingController ctrPlate = MaskedTextController(mask: '***-0*00');
 
   UserController _userController;
   VehicleController _vehicleController;

@@ -259,6 +259,8 @@ class _MainViewState extends State<MainView> {
       setState(() {
         _userDataModel = res;
       });
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     }
   }
 
